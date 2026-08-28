@@ -34,7 +34,7 @@ function lessonmark_supports($feature) {
         FEATURE_MOD_INTRO => true,
         FEATURE_SHOW_DESCRIPTION => true,
         FEATURE_COMPLETION_TRACKS_VIEWS => true,
-        FEATURE_BACKUP_MOODLE2 => false,
+        FEATURE_BACKUP_MOODLE2 => true,
         FEATURE_MOD_PURPOSE => MOD_PURPOSE_CONTENT,
         default => null,
     };

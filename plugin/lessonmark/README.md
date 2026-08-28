@@ -16,7 +16,8 @@ LessonMark currently provides:
 - fenced code highlighting for the documented language set;
 - responsive tables and teaching-oriented screen and print typography;
 - Moodle-managed teaching images with draft editing and access-controlled display;
-- diagnostics for unresolved relative images and missing alternative text.
+- diagnostics for unresolved relative images and missing alternative text;
+- Moodle backup, restore, and course duplicate support for source, settings, and files.
 
 Upload teaching images with the activity's file manager and reference them as
 `![Alternative text](@@PLUGINFILE@@/image.png)`. Subfolders are supported.

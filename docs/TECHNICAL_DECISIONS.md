@@ -155,6 +155,17 @@ interface markdown_renderer_interface {
 - 見出しIDは表示文字列からUnicodeを保持したslugを作り、重複時は`-2`、`-3`を付加する。
 - 自動目次は見出しが2個以上ある場合に表示する。
 
+### TD-010: Moodle標準のbackup/restoreを教材移行境界とする
+
+- `backup/moodle2`のactivity taskとstructure stepを実装し、独自archive形式は作らない。
+- instance recordは`course`と派生HTMLを除く正本フィールドをbackupする。
+- File APIの`intro`および`content` file areaをmodule context間で復元する。
+- Markdown内の`@@PLUGINFILE@@`は正規参照としてそのまま保持し、復元後のcontextで解決する。
+- LessonMarkのcourse、course module、instanceを指す絶対URLはMoodleのcontent-link mappingで新IDへ変換する。
+- 通常の外部URLや他形式のMarkdown linkは書き換えない。
+- course duplicateは専用コピー処理を作らず、同じbackup/restore implementationを利用する。
+- backup/restoreとduplicateをMoodleのproduction APIによる統合テストで検証する。
+
 ## 3. データ境界
 
 v0.1で最低限保持するinstance dataは次のとおりとする。
