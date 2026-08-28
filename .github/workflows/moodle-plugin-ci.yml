@@ -108,7 +108,7 @@ jobs:
           cp build/mod_lessonmark.zip /tmp/mod_lessonmark.first.zip
           scripts/build-release.sh build/mod_lessonmark.zip
           cmp /tmp/mod_lessonmark.first.zip build/mod_lessonmark.zip
-          php scripts/verify-release.php build/mod_lessonmark.zip
+          php scripts/verify-release.php
 
       - name: Upload release candidate
         uses: actions/upload-artifact@v7

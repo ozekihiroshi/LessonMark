@@ -9,11 +9,6 @@
 if (PHP_SAPI !== 'cli') {
     exit(1);
 }
-$expected = $argv[1] ?? '';
-if (!preg_match('/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/D', $expected)) {
-    fwrite(STDERR, "Expected a semantic release version.\n");
-    exit(1);
-}
 $contents = file_get_contents(dirname(__DIR__) . '/plugin/lessonmark/version.php');
 if ($contents === false) {
     fwrite(STDERR, "Unable to read plugin version.php.\n");
@@ -31,10 +26,18 @@ foreach ($checks as $pattern => $description) {
         exit(1);
     }
 }
-if (preg_match('/\$plugin->release\s*=\s*\'([^\']+)\';/', $contents, $matches) !== 1
-        || !hash_equals($expected, $matches[1])) {
+if (preg_match('/\$plugin->release\s*=\s*\'([^\']+)\';/', $contents, $matches) !== 1) {
+    fwrite(STDERR, "Unable to read the release version.\n");
+    exit(1);
+}
+$actual = $matches[1];
+$expected = $argv[1] ?? $actual;
+if (!preg_match('/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/D', $expected)) {
+    fwrite(STDERR, "Expected a semantic release version.\n");
+    exit(1);
+}
+if (!hash_equals($expected, $actual)) {
     fwrite(STDERR, "Release version does not match version.php.\n");
     exit(1);
 }
-echo "Verified mod_lessonmark release metadata for {$expected}.\n";
-
+echo "Verified mod_lessonmark release metadata for {$actual}.\n";
