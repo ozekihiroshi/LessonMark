@@ -12,7 +12,7 @@ node_modules/
 .php-cs-fixer.cache
 .phpcs-cache
 coverage/
-build/
+/build/
 
 # Future Moodle development runtime data
 moodledata/
