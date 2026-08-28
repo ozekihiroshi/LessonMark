@@ -14,13 +14,14 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Dedicated Markdown editor with a save-free server preview.
+ * Dedicated Markdown editor with import and save-free server preview.
  *
  * @module     mod_lessonmark/editor
  * @copyright  2026 Hiroshi Ozeki
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+import Notification from 'core/notification';
 import {watchForm} from 'core_form/changechecker';
 import {highlight} from './syntax-highlighter';
 
@@ -45,6 +46,8 @@ export const init = config => {
     const editButton = container.querySelector('[data-action="show-editor"]');
     const previewButton = container.querySelector('[data-action="show-preview"]');
     const refreshButton = container.querySelector('[data-action="refresh-preview"]');
+    const importButton = container.querySelector('[data-action="import-markdown"]');
+    const importFile = container.querySelector('[data-action="import-file"]');
     const shell = document.createElement('div');
     shell.className = 'mod_lessonmark-editor__panes';
 
@@ -55,6 +58,12 @@ export const init = config => {
 
     let timer = null;
     let requestNumber = 0;
+
+    const setStatus = (message, type = '') => {
+        status.textContent = message;
+        status.classList.toggle('text-warning', type === 'warning');
+        status.classList.toggle('text-danger', type === 'error');
+    };
 
     const setMode = mode => {
         const showPreview = mode === 'preview';
@@ -67,7 +76,7 @@ export const init = config => {
 
     const render = async() => {
         const currentRequest = ++requestNumber;
-        status.textContent = config.strings.loading;
+        setStatus(config.strings.loading);
         refreshButton.disabled = true;
         const body = new URLSearchParams({
             sesskey: config.sesskey,
@@ -102,12 +111,10 @@ export const init = config => {
             const messages = Array.isArray(result.diagnostics) ? result.diagnostics
                 .map(diagnostic => diagnostic.message)
                 .filter(message => typeof message === 'string' && message) : [];
-            status.textContent = [config.strings.ready, ...messages].join(' ');
-            status.classList.toggle('text-warning', messages.length > 0);
+            setStatus([config.strings.ready, ...messages].join(' '), messages.length > 0 ? 'warning' : '');
         } catch (error) {
             if (currentRequest === requestNumber) {
-                status.textContent = config.strings.error;
-                status.classList.remove('text-warning');
+                setStatus(config.strings.error, 'error');
             }
         } finally {
             if (currentRequest === requestNumber) {
@@ -121,6 +128,47 @@ export const init = config => {
         timer = window.setTimeout(render, DEBOUNCE_MS);
     };
 
+    const importMarkdown = async file => {
+        if (!/\.md$/iu.test(file.name)) {
+            throw new Error('wrongtype');
+        }
+        if (file.size > config.maxSourceBytes + 3) {
+            throw new Error('toolarge');
+        }
+        let text;
+        try {
+            text = new TextDecoder('utf-8', {fatal: true}).decode(await file.arrayBuffer());
+        } catch (error) {
+            throw new Error('invalidutf8');
+        }
+        text = text.replace(/^\uFEFF/u, '').replace(/\r\n?/gu, '\n');
+        if (new TextEncoder().encode(text).length > config.maxSourceBytes) {
+            throw new Error('toolarge');
+        }
+        return text;
+    };
+
+    const applyImport = async file => {
+        importButton.disabled = true;
+        try {
+            source.value = await importMarkdown(file);
+            setMode('edit');
+            setStatus(config.strings.importReady);
+            source.dispatchEvent(new Event('input', {bubbles: true}));
+            source.focus();
+        } catch (error) {
+            const messages = {
+                invalidutf8: config.strings.importInvalidUtf8,
+                toolarge: config.strings.importTooLarge,
+                wrongtype: config.strings.importWrongType,
+            };
+            setStatus(messages[error.message] || config.strings.importError, 'error');
+        } finally {
+            importButton.disabled = false;
+            importFile.value = '';
+        }
+    };
+
     source.addEventListener('input', scheduleRender);
     refreshButton.addEventListener('click', render);
     editButton.addEventListener('click', () => setMode('edit'));
@@ -128,6 +176,32 @@ export const init = config => {
         setMode('preview');
         render();
     });
+    if (importButton && importFile) {
+        importButton.addEventListener('click', () => {
+            importFile.value = '';
+            importFile.click();
+        });
+        importFile.addEventListener('change', () => {
+            const file = importFile.files[0];
+            if (!file) {
+                return;
+            }
+            if (source.value === '') {
+                applyImport(file);
+                return;
+            }
+            Notification.confirm(
+                config.strings.importTitle,
+                config.strings.importConfirm,
+                config.strings.importContinue,
+                null,
+                () => applyImport(file),
+                () => {
+                    importFile.value = '';
+                }
+            );
+        });
+    }
     setMode('edit');
     render();
 };

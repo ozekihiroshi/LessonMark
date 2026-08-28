@@ -130,8 +130,13 @@ interface markdown_renderer_interface {
 - `.md` importはUTF-8本文を現在のeditorへ読み込む一度限りの操作とする。
 - import元との同期関係は保存しない。
 - import時に既存の未保存sourceがある場合は確認を求める。
-- UTF-8 BOMは受け入れて除去する。不正なUTF-8は保存せずエラーを表示する。
-- exportは現在保存されているsourceをUTF-8、拡張子`.md`で返す。
+- importはbrowser内で処理し、server側の一時import file areaや専用upload endpointを作らない。
+- UTF-8 BOMは受け入れて除去し、CRLFおよびCRはeditorと同じLFへ正規化する。
+- 不正なUTF-8、`.md`以外のfilename、正規化後512 KiBを超えるsourceは取り込まない。
+- import後のsourceは未保存変更として扱い、通常のform validationと保存処理を通す。
+- exportはDBに現在保存されているsourceを拡張子`.md`で返し、未保存sourceや画像は含めない。
+- export endpointはcourse login、module contextの`mod/lessonmark:edit`、sesskeyを検証する。
+- export filenameはMoodleのfilename sanitiserを通し、強制downloadかつ非cache responseとする。
 - source modeはv0.1では`Moodle managed`だけとする。
 
 ### TD-009: syntax highlightingは表示層の拡張とする

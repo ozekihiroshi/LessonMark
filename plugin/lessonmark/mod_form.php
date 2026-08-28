@@ -51,6 +51,7 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         $mform->addHelpButton('markdownsource', 'markdownsource', 'mod_lessonmark');
 
         $previewid = 'lessonmark-preview-' . random_int(1000, 999999);
+        $cmid = $this->_cm ? (int) $this->_cm->id : 0;
         $preview = html_writer::start_div('mod_lessonmark-editor', [
             'data-region' => 'lessonmark-editor',
             'data-preview-id' => $previewid,
@@ -73,6 +74,29 @@ class mod_lessonmark_mod_form extends moodleform_mod {
             'role' => 'tab',
             'aria-selected' => 'false',
         ]);
+        $preview .= html_writer::tag('button', get_string('importmarkdown', 'mod_lessonmark'), [
+            'type' => 'button',
+            'class' => 'btn btn-link',
+            'data-action' => 'import-markdown',
+        ]);
+        $preview .= html_writer::empty_tag('input', [
+            'type' => 'file',
+            'accept' => '.md,text/markdown,text/plain',
+            'hidden' => 'hidden',
+            'data-action' => 'import-file',
+            'aria-label' => get_string('importfilelabel', 'mod_lessonmark'),
+        ]);
+        if ($cmid > 0) {
+            $exporturl = new moodle_url('/mod/lessonmark/export.php', [
+                'id' => $cmid,
+                'sesskey' => sesskey(),
+            ]);
+            $preview .= html_writer::link(
+                $exporturl,
+                get_string('exportsavedmarkdown', 'mod_lessonmark'),
+                ['class' => 'btn btn-link', 'data-action' => 'export-markdown']
+            );
+        }
         $preview .= html_writer::tag('button', get_string('refreshpreview', 'mod_lessonmark'), [
             'type' => 'button',
             'class' => 'btn btn-link ml-auto',
@@ -105,7 +129,6 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         );
         $mform->addHelpButton(\mod_lessonmark\local\content_files::FORM_FIELD, 'imagefiles', 'mod_lessonmark');
 
-        $cmid = $this->_cm ? (int) $this->_cm->id : 0;
         $courseid = (int) ($this->current->course ?? 0);
         $PAGE->requires->js_call_amd('mod_lessonmark/editor', 'init', [[
             'endpoint' => (new moodle_url('/mod/lessonmark/preview.php'))->out(false),
@@ -115,11 +138,20 @@ class mod_lessonmark_mod_form extends moodleform_mod {
             'cmid' => $cmid,
             'courseid' => $courseid,
             'sesskey' => sesskey(),
+            'maxSourceBytes' => \mod_lessonmark\local\moodle_markdown_renderer::MAX_SOURCE_BYTES,
             'strings' => [
                 'loading' => get_string('previewloading', 'mod_lessonmark'),
                 'ready' => get_string('previewready', 'mod_lessonmark'),
                 'error' => get_string('previewerror', 'mod_lessonmark'),
                 'empty' => get_string('previewempty', 'mod_lessonmark'),
+                'importConfirm' => get_string('importconfirm', 'mod_lessonmark'),
+                'importContinue' => get_string('continue'),
+                'importTitle' => get_string('confirmation', 'admin'),
+                'importInvalidUtf8' => get_string('importinvalidutf8', 'mod_lessonmark'),
+                'importReady' => get_string('importready', 'mod_lessonmark'),
+                'importTooLarge' => get_string('importtoolarge', 'mod_lessonmark'),
+                'importWrongType' => get_string('importwrongtype', 'mod_lessonmark'),
+                'importError' => get_string('importerror', 'mod_lessonmark'),
             ],
         ]]);
         $this->standard_coursemodule_elements();

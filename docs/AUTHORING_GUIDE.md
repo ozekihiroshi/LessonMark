@@ -1,6 +1,6 @@
 # LessonMark authoring guide
 
-This guide defines the Markdown dialect supported by LessonMark 0.4. The
+This guide defines the Markdown dialect supported by LessonMark 0.5. The
 Markdown source remains the editable source of truth; rendered HTML is derived
 for preview and student display.
 
@@ -44,7 +44,25 @@ accepted per activity, subfolders are supported, and site upload limits apply.
 A relative reference such as `![Chart](images/chart.png)` does not upload or
 search for a local file. Preview reports it as unresolved. Upload the image and
 change the source to `@@PLUGINFILE@@/images/chart.png`. Markdown-and-images ZIP
-bundle import is not part of LessonMark 0.4.
+bundle import is not part of LessonMark 0.5.
+
+## Import and export
+
+Select **Import .md** to place an external Markdown file in the editor. The
+file must:
+
+- have a name ending in `.md`;
+- contain valid UTF-8 text;
+- remain within 512 KiB after BOM and line-ending normalisation.
+
+A leading UTF-8 BOM is removed and Windows or classic Mac line endings become
+LF. If the editor is not empty, LessonMark asks before replacing its content.
+The imported text remains unsaved until the activity form is saved. Import
+does not upload adjacent images or remain synchronized with the original file.
+
+For an existing activity, **Export saved .md** downloads the Markdown source
+currently stored in Moodle. Unsaved editor changes and image files are not
+included. Save first when the download must contain the latest edit.
 
 ## Callouts
 
@@ -110,7 +128,7 @@ Raw HTML is not an authoring feature. HTML-like input is displayed as text;
 scripts, iframes, inline styles, and event attributes are not accepted. Use a
 fenced code block when HTML is the subject of the lesson.
 
-Preview does not save the Markdown source or publish uploaded draft files. Save
-the activity to publish the current source and images. Preview and student
-display call the same server-side rendering pipeline; syntax colour is then
-applied in the browser without changing the stored source.
+Preview and import do not save the Markdown source or publish uploaded draft
+files. Save the activity to publish the current source and images. Preview and
+student display call the same server-side rendering pipeline; syntax colour is
+then applied in the browser without changing the stored source.
