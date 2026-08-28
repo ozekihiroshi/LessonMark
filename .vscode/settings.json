@@ -1,0 +1,10 @@
+{
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "editor.formatOnSave": false,
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  }
+}
+

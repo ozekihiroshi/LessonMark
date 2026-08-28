@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "name": "LessonMark",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "files.trimFinalNewlines": true,
+    "files.insertFinalNewline": true,
+    "search.exclude": {
+      "**/vendor": true,
+      "**/node_modules": true,
+      "**/moodledata": true,
+      "**/db-data": true,
+      "**/docker-data": true
+    }
+  }
+}
+
