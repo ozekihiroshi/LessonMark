@@ -44,7 +44,7 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         $mform->addElement('textarea', 'markdownsource', get_string('markdownsource', 'mod_lessonmark'), [
             'rows' => 24,
             'cols' => 100,
-            'wrap' => 'off',
+            'wrap' => 'soft',
         ]);
         $mform->setType('markdownsource', PARAM_RAW);
         $mform->addRule('markdownsource', null, 'required', null, 'client');

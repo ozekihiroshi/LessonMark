@@ -65,7 +65,6 @@ if (str_contains($document->get_content_html(), 'language-')) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($lessonmark->name), 2);
 if (trim((string) $lessonmark->intro) !== '') {
     echo $OUTPUT->box(format_module_intro('lessonmark', $lessonmark, $cm->id), 'generalbox mod_introbox');
 }

@@ -1,5 +1,14 @@
 # Change log
 
+## 0.1.0-rc2 - 2026-08-29
+
+- Removed the duplicate activity name from the student document body while
+  retaining Moodle's standard activity header.
+- Expanded the desktop Markdown authoring surface, enabled non-destructive soft
+  wrapping, and reserved space above Moodle's fixed form actions.
+- Allowed compact tables to fit their container without an unnecessary
+  horizontal scrollbar while retaining overflow for genuinely wide content.
+
 ## 0.1.0-rc1 - 2026-08-28
 
 - Added Markdown-first activity creation, editing, save-free preview, and

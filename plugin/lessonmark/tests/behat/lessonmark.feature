@@ -15,6 +15,7 @@ Feature: Author and publish a LessonMark teaching resource
   @javascript @accessibility
   Scenario: Preview and publish an accessible teaching document
     Given I am on the "Lesson one" "lessonmark activity editing" page logged in as admin
+    Then the "wrap" attribute of "Markdown source" "field" should contain "soft"
     When I set the LessonMark Markdown source to:
       """
       # Updated lesson
@@ -40,4 +41,5 @@ Feature: Author and publish a LessonMark teaching resource
     Then I should see "Updated lesson"
     And I should see "Contents"
     And I should see "Note"
+    And "[role=\"main\"] > h2" "css_element" should not exist
     And the page should meet accessibility standards

@@ -10,6 +10,9 @@ Use ATX headings, paragraphs, emphasis, links, lists, blockquotes, inline code,
 fenced code blocks, and tables. Keep one H1 for the document title where
 practical and do not skip heading levels merely to obtain a visual size.
 
+The source editor visually wraps long prose lines without adding line breaks to
+the saved Markdown. Code blocks continue to preserve their source whitespace.
+
 ```markdown
 # Python conditions
 
