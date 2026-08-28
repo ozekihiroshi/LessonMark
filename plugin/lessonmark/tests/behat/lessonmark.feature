@@ -15,7 +15,23 @@ Feature: Author and publish a LessonMark teaching resource
   @javascript @accessibility
   Scenario: Preview and publish an accessible teaching document
     Given I am on the "Lesson one" "lessonmark activity editing" page logged in as admin
-    When I set the field "Markdown source" to "# Updated lesson\n\n## Example\n\n> [!NOTE]\n> Check this explanation.\n\n```python\nprint(\"Hello\")\n```\n\n| Item | Value |\n| --- | --- |\n| Answer | 42 |"
+    When I set the LessonMark Markdown source to:
+      """
+      # Updated lesson
+
+      ## Example
+
+      > [!NOTE]
+      > Check this explanation.
+
+      ```python
+      print("Hello")
+      ```
+
+      | Item | Value |
+      | --- | --- |
+      | Answer | 42 |
+      """
     And I press "Refresh preview"
     And I wait until "Preview updated." "text" exists
     Then I should see "Updated lesson" in the "[data-region=\"preview-content\"]" "css_element"
