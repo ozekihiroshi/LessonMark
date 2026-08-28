@@ -32,6 +32,8 @@ temporaryzip="$buildroot/mod_lessonmark.zip"
 trap 'rm -rf "$buildroot"' EXIT HUP INT TERM
 mkdir -p "$buildroot/lessonmark"
 git archive --format=tar HEAD:plugin/lessonmark | tar -xf - -C "$buildroot/lessonmark"
+committimestamp="$(git show -s --format=%ct HEAD)"
+find "$buildroot/lessonmark" -exec touch -d "@$committimestamp" {} +
 (
     cd "$buildroot"
     find lessonmark -type f -print | LC_ALL=C sort | zip -X -q "$temporaryzip" -@
