@@ -30,14 +30,48 @@ namespace mod_lessonmark\local;
 #[\PHPUnit\Framework\Attributes\CoversClass(moodle_markdown_renderer::class)]
 final class moodle_markdown_renderer_test extends \advanced_testcase {
     /**
-     * Tests conversion of basic Markdown to HTML.
+     * Tests conversion of basic Markdown to enhanced HTML.
      */
     public function test_renders_markdown(): void {
         $renderer = new moodle_markdown_renderer();
         $document = $renderer->render("# Heading\n\n**Strong**", \context_system::instance());
-        $this->assertStringContainsString('<h1>Heading</h1>', $document->get_content_html());
+        $this->assertStringContainsString('id="lessonmark-heading"', $document->get_content_html());
         $this->assertStringContainsString('<strong>Strong</strong>', $document->get_content_html());
-        $this->assertSame([], $document->get_toc());
+        $this->assertSame([
+            ['id' => 'lessonmark-heading', 'level' => 1, 'text' => 'Heading'],
+        ], $document->get_toc());
+        $this->assertSame([], $document->get_diagnostics());
+    }
+
+    /**
+     * Tests the integrated M3 teaching-material fixture.
+     */
+    public function test_renders_teaching_fixture(): void {
+        $source = <<<'MD'
+# Python basics
+
+## Example
+
+> [!WARNING]
+> Check the input first.
+
+```python
+print("hello")
+```
+
+| Item | Value |
+| --- | ---: |
+| Answer | 42 |
+MD;
+        $renderer = new moodle_markdown_renderer();
+        $document = $renderer->render($source, \context_system::instance());
+        $html = $document->get_content_html();
+
+        $this->assertStringContainsString('class="mod_lessonmark-toc"', $html);
+        $this->assertStringContainsString('mod_lessonmark-callout--warning', $html);
+        $this->assertStringContainsString('language-python', $html);
+        $this->assertStringContainsString('class="table mod_lessonmark-table"', $html);
+        $this->assertCount(2, $document->get_toc());
         $this->assertSame([], $document->get_diagnostics());
     }
 

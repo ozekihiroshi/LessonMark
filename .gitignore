@@ -5,6 +5,9 @@
 
 # PHP and JavaScript dependencies
 vendor/
+!plugin/lessonmark/vendor/
+!plugin/lessonmark/vendor/prism/
+!plugin/lessonmark/vendor/prism/**
 node_modules/
 
 # Test and tool output

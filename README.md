@@ -44,17 +44,22 @@ the ZIP layout, and produces byte-identical output for the same commit.
 
 ## Current status
 
-M1 and M2 are complete. LessonMark can be installed through Moodle's plugin
+M1 through M3 are complete. LessonMark can be installed through Moodle's plugin
 upload UI, stores Markdown without HTML conversion, renders a safe student
 view, and provides a dedicated two-pane editor with save-free shared preview.
-Development proceeds to M3: the formal teaching-material dialect and display.
+Teaching documents now include stable heading links, an automatic table of
+contents, NOTE/TIP/WARNING callouts, syntax-highlighted code, responsive tables,
+and teaching-oriented screen and print typography. Development proceeds to M4:
+images managed through Moodle's File API.
 
 ## Documents
 
 - [Product requirements](docs/PRODUCT_REQUIREMENTS.md)
 - [Technical decisions and milestones](docs/TECHNICAL_DECISIONS.md)
+- [Authoring guide](docs/AUTHORING_GUIDE.md)
 - [M1 implementation result](docs/M1_IMPLEMENTATION.md)
 - [M2 implementation result](docs/M2_IMPLEMENTATION.md)
+- [M3 implementation result](docs/M3_IMPLEMENTATION.md)
 
 ## GitHub
 

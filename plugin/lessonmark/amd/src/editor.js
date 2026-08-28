@@ -22,6 +22,7 @@
  */
 
 import {watchForm} from 'core_form/changechecker';
+import {highlight} from './syntax-highlighter';
 
 const DEBOUNCE_MS = 400;
 
@@ -95,6 +96,7 @@ export const init = config => {
                 preview.textContent = config.strings.empty;
                 preview.classList.add('text-muted');
             }
+            highlight(preview);
             status.textContent = config.strings.ready;
         } catch (error) {
             if (currentRequest === requestNumber) {

@@ -134,10 +134,17 @@ interface markdown_renderer_interface {
 
 - Markdown rendererは言語指定を`language-*` classとして安全に保持する。
 - highlightingは保存HTMLへ直接色付けする処理ではなく、表示層で適用する。
+- Moodle 5.2同梱の`filter_codehighlighter/prism`（PrismJS 1.29.0）を基礎runtimeとして再利用する。
+- Moodle coreに含まれないBash、JSON、SQLだけを、同じPrismJS 1.29.0の公式componentから同梱する。
 - highlighterはプラグインへ同梱し、外部CDNへ依存しない。
+- 同梱componentの上流SHA-256を生成scriptで検証し、生成AMDをcommitする。
 - ライブラリ、固定version、license、対象言語はM3開始時に監査し、`thirdpartylibs.xml`へ記録する。
 - 初期対象言語はplain text、Bash、CSS、HTML/XML、JavaScript、JSON、PHP、Python、SQLとする。
 - 未対応言語でもコード本文は失わず、plain code blockとして表示する。
+- highlight対象classは許可listから生成し、利用者入力を任意のclass名やmodule名として扱わない。
+- Prismのtoken classにはMoodle coreと同じ`prism-` prefixを使用し、教材CSSをplugin内へ閉じ込める。
+- 見出しIDは表示文字列からUnicodeを保持したslugを作り、重複時は`-2`、`-3`を付加する。
+- 自動目次は見出しが2個以上ある場合に表示する。
 
 ## 3. データ境界
 

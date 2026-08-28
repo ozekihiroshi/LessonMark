@@ -60,6 +60,10 @@ $event->trigger();
 $renderer = new \mod_lessonmark\local\moodle_markdown_renderer();
 $document = $renderer->render((string) $lessonmark->markdownsource, $context);
 
+if (str_contains($document->get_content_html(), 'language-')) {
+    $PAGE->requires->js_call_amd('mod_lessonmark/syntax-highlighter', 'init', ['.mod_lessonmark-content']);
+}
+
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($lessonmark->name), 2);
 if (trim((string) $lessonmark->intro) !== '') {

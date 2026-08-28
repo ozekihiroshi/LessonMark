@@ -1,16 +1,262 @@
 .mod_lessonmark-content {
-    max-width: 80rem;
+    max-width: 72rem;
+    margin-inline: auto;
+    color: var(--bs-body-color, #212529);
+    font-size: 1rem;
+    line-height: 1.75;
     overflow-wrap: anywhere;
 }
 
-.mod_lessonmark-content pre {
+.mod_lessonmark-content > :first-child {
+    margin-top: 0;
+}
+
+.mod_lessonmark-content > :last-child {
+    margin-bottom: 0;
+}
+
+.mod_lessonmark-content h1,
+.mod_lessonmark-content h2,
+.mod_lessonmark-content h3,
+.mod_lessonmark-content h4,
+.mod_lessonmark-content h5,
+.mod_lessonmark-content h6 {
+    margin-block: 2em .65em;
+    color: inherit;
+    font-weight: 650;
+    line-height: 1.3;
+    scroll-margin-top: 5rem;
+}
+
+.mod_lessonmark-content h1 {
+    padding-bottom: .35em;
+    border-bottom: 2px solid var(--bs-border-color, #dee2e6);
+    font-size: 2.25rem;
+}
+
+.mod_lessonmark-content h2 {
+    padding-bottom: .25em;
+    border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+    font-size: 1.75rem;
+}
+
+.mod_lessonmark-content h3 {
+    font-size: 1.35rem;
+}
+
+.mod_lessonmark-content p,
+.mod_lessonmark-content ul,
+.mod_lessonmark-content ol,
+.mod_lessonmark-content blockquote,
+.mod_lessonmark-content pre,
+.mod_lessonmark-content .mod_lessonmark-table-scroll {
+    margin-block: 1em;
+}
+
+.mod_lessonmark-content li + li {
+    margin-top: .3em;
+}
+
+.mod_lessonmark-content a {
+    text-decoration-thickness: .08em;
+    text-underline-offset: .18em;
+}
+
+.mod_lessonmark-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-block: 1.25rem;
+    border-radius: .25rem;
+}
+
+.mod_lessonmark-content :not(pre) > code {
+    padding: .12em .35em;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .25rem;
+    background: var(--bs-tertiary-bg, #f4f5f6);
+    color: inherit;
+    font-size: .9em;
+}
+
+.mod_lessonmark-content .mod_lessonmark-code {
+    max-width: 100%;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--bs-border-color, #d8dee4);
+    border-radius: .4rem;
+    background: var(--bs-tertiary-bg, #f6f8fa);
+    color: var(--bs-body-color, #24292f);
+    font-family: var(--font-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+    font-size: .9rem;
+    line-height: 1.55;
+    overflow-x: auto;
+    tab-size: 4;
+    white-space: pre;
+}
+
+.mod_lessonmark-content .mod_lessonmark-code code {
+    color: inherit;
+    font: inherit;
+    text-shadow: none;
+    white-space: inherit;
+}
+
+.mod_lessonmark-content .prism-token.prism-comment,
+.mod_lessonmark-content .prism-token.prism-prolog,
+.mod_lessonmark-content .prism-token.prism-doctype,
+.mod_lessonmark-content .prism-token.prism-cdata {
+    color: #65717c;
+}
+
+.mod_lessonmark-content .prism-token.prism-punctuation {
+    color: #57606a;
+}
+
+.mod_lessonmark-content .prism-token.prism-property,
+.mod_lessonmark-content .prism-token.prism-tag,
+.mod_lessonmark-content .prism-token.prism-boolean,
+.mod_lessonmark-content .prism-token.prism-number,
+.mod_lessonmark-content .prism-token.prism-constant,
+.mod_lessonmark-content .prism-token.prism-symbol,
+.mod_lessonmark-content .prism-token.prism-deleted {
+    color: #953800;
+}
+
+.mod_lessonmark-content .prism-token.prism-selector,
+.mod_lessonmark-content .prism-token.prism-attr-name,
+.mod_lessonmark-content .prism-token.prism-string,
+.mod_lessonmark-content .prism-token.prism-char,
+.mod_lessonmark-content .prism-token.prism-builtin,
+.mod_lessonmark-content .prism-token.prism-inserted {
+    color: #116329;
+}
+
+.mod_lessonmark-content .prism-token.prism-operator,
+.mod_lessonmark-content .prism-token.prism-entity,
+.mod_lessonmark-content .prism-token.prism-url,
+.mod_lessonmark-content .prism-token.prism-variable {
+    color: #0550ae;
+}
+
+.mod_lessonmark-content .prism-token.prism-atrule,
+.mod_lessonmark-content .prism-token.prism-attr-value,
+.mod_lessonmark-content .prism-token.prism-keyword {
+    color: #cf222e;
+}
+
+.mod_lessonmark-content .prism-token.prism-function,
+.mod_lessonmark-content .prism-token.prism-class-name,
+.mod_lessonmark-content .prism-token.prism-regex {
+    color: #8250df;
+}
+
+.mod_lessonmark-toc {
+    margin-block: 0 2rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--bs-border-color, #d8dee4);
+    border-radius: .5rem;
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.mod_lessonmark-toc__title {
+    margin: 0 0 .6rem;
+    font-weight: 700;
+}
+
+.mod_lessonmark-toc__list {
+    margin: 0;
+    padding-inline-start: 1.4rem;
+}
+
+.mod_lessonmark-toc__list li {
+    margin-block: .2rem;
+}
+
+.mod_lessonmark-toc__level--2 {
+    margin-inline-start: 1rem;
+}
+
+.mod_lessonmark-toc__level--3,
+.mod_lessonmark-toc__level--4,
+.mod_lessonmark-toc__level--5,
+.mod_lessonmark-toc__level--6 {
+    margin-inline-start: 2rem;
+}
+
+.mod_lessonmark-callout {
+    --lessonmark-callout-color: #0f6cbf;
+    --lessonmark-callout-bg: rgba(15, 108, 191, .08);
+    margin-block: 1.25rem;
+    padding: .9rem 1rem;
+    border: 0;
+    border-inline-start: .3rem solid var(--lessonmark-callout-color);
+    border-radius: .25rem;
+    background: var(--lessonmark-callout-bg);
+    color: inherit;
+}
+
+.mod_lessonmark-callout--tip {
+    --lessonmark-callout-color: #198754;
+    --lessonmark-callout-bg: rgba(25, 135, 84, .09);
+}
+
+.mod_lessonmark-callout--warning {
+    --lessonmark-callout-color: #b45309;
+    --lessonmark-callout-bg: rgba(180, 83, 9, .1);
+}
+
+.mod_lessonmark-callout__title {
+    margin: 0 0 .35rem;
+    color: var(--lessonmark-callout-color);
+    font-weight: 700;
+    letter-spacing: .01em;
+}
+
+.mod_lessonmark-callout__icon {
+    display: inline-flex;
+    width: 1.3em;
+    height: 1.3em;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    font-size: .78em;
+    line-height: 1;
+}
+
+.mod_lessonmark-callout > :last-child {
+    margin-bottom: 0;
+}
+
+.mod_lessonmark-table-scroll {
     max-width: 100%;
     overflow-x: auto;
 }
 
-.mod_lessonmark-content img,
-.mod_lessonmark-content table {
-    max-width: 100%;
+.mod_lessonmark-table-scroll:focus-visible {
+    outline: 3px solid rgba(15, 108, 191, .35);
+    outline-offset: 2px;
+}
+
+.mod_lessonmark-table {
+    width: 100%;
+    min-width: 32rem;
+    margin: 0;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-collapse: collapse;
+}
+
+.mod_lessonmark-table th,
+.mod_lessonmark-table td {
+    padding: .6rem .75rem;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    text-align: start;
+    vertical-align: top;
+}
+
+.mod_lessonmark-table thead th {
+    background: var(--bs-tertiary-bg, #f4f5f6);
+    font-weight: 700;
 }
 
 .mod_lessonmark-editor__panes {
@@ -64,6 +310,8 @@
 .mod_lessonmark-editor__preview {
     flex: 1;
     min-height: 0;
+    max-width: none;
+    margin: 0;
     padding: 1rem;
     overflow: auto;
 }
@@ -96,10 +344,46 @@
     .mod_lessonmark-editor {
         min-height: 24rem;
     }
+
+    .mod_lessonmark-table {
+        min-width: 26rem;
+    }
 }
 
 @media (min-width: 768px) {
     .mod_lessonmark-editor__tab {
         display: none;
+    }
+}
+
+@media print {
+    .mod_lessonmark-content {
+        max-width: none;
+        color: #000;
+        font-size: .875rem;
+    }
+
+    .mod_lessonmark-toc,
+    .mod_lessonmark-callout,
+    .mod_lessonmark-code,
+    .mod_lessonmark-table-scroll {
+        break-inside: avoid;
+    }
+
+    .mod_lessonmark-content .mod_lessonmark-code,
+    .mod_lessonmark-callout,
+    .mod_lessonmark-toc {
+        border-color: #777;
+        background: #fff;
+        color: #000;
+        text-shadow: none;
+    }
+
+    .mod_lessonmark-table-scroll {
+        overflow: visible;
+    }
+
+    .mod_lessonmark-table {
+        min-width: 0;
     }
 }

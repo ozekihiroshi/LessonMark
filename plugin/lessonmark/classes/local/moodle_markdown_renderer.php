@@ -34,13 +34,21 @@ final class moodle_markdown_renderer implements markdown_renderer_interface {
     /** @var source_normalizer Raw HTML neutraliser. */
     private source_normalizer $normalizer;
 
+    /** @var teaching_document_enhancer Teaching-document HTML enhancer. */
+    private teaching_document_enhancer $enhancer;
+
     /**
      * Creates a Moodle Markdown renderer.
      *
      * @param source_normalizer|null $normalizer Optional normaliser.
+     * @param teaching_document_enhancer|null $enhancer Optional teaching-document enhancer.
      */
-    public function __construct(?source_normalizer $normalizer = null) {
+    public function __construct(
+        ?source_normalizer $normalizer = null,
+        ?teaching_document_enhancer $enhancer = null
+    ) {
         $this->normalizer = $normalizer ?? new source_normalizer();
+        $this->enhancer = $enhancer ?? new teaching_document_enhancer();
     }
 
     /**
@@ -63,6 +71,7 @@ final class moodle_markdown_renderer implements markdown_renderer_interface {
             'para' => false,
             'allowid' => false,
         ]);
-        return new rendered_document(clean_text($html, FORMAT_HTML, ['allowid' => false]));
+        $safehtml = clean_text($html, FORMAT_HTML, ['allowid' => false]);
+        return $this->enhancer->enhance($safehtml);
     }
 }

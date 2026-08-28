@@ -39,6 +39,15 @@ final class source_normalizer_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that Markdown blockquote markers remain intact.
+     */
+    public function test_preserves_blockquotes(): void {
+        $normalizer = new source_normalizer();
+        $source = "> Quote\n\n> [!NOTE]\n> Callout";
+        $this->assertSame($source, $normalizer->neutralise_raw_html($source));
+    }
+
+    /**
      * Tests that inline code remains Markdown code syntax.
      */
     public function test_preserves_inline_code(): void {

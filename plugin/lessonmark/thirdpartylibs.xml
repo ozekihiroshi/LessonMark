@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<libraries>
+  <library>
+    <location>vendor/prism</location>
+    <name>PrismJS language components</name>
+    <description>Bash, JSON, and SQL language definitions matching Moodle 5.2 core PrismJS.</description>
+    <version>1.29.0</version>
+    <license>MIT</license>
+    <repository>https://github.com/PrismJS/prism</repository>
+    <copyrights>
+      <copyright>2012 Lea Verou</copyright>
+    </copyrights>
+  </library>
+</libraries>

@@ -99,6 +99,11 @@ final class source_normalizer {
      * @return string Escaped text.
      */
     private function escape_angles(string $text): string {
-        return str_replace(['<', '>'], ['&lt;', '&gt;'], $text);
+        $escaped = preg_replace_callback(
+            '/<(?=[\/!?A-Za-z])[^>\r\n]*>/u',
+            static fn(array $matches): string => str_replace(['<', '>'], ['&lt;', '&gt;'], $matches[0]),
+            $text
+        );
+        return $escaped ?? '';
     }
 }

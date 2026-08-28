@@ -21,6 +21,10 @@
  * @copyright 2026 Hiroshi Ozeki
  * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['calloutnote'] = '補足';
+$string['callouttip'] = 'ヒント';
+$string['calloutwarning'] = '注意';
+$string['codeblocklabel'] = '{$a}のコード';
 
 $string['editmode'] = '編集';
 $string['editormodes'] = 'Markdownエディタの表示モード';
@@ -48,3 +52,5 @@ $string['previewmode'] = 'プレビュー';
 $string['previewready'] = 'プレビューを更新しました。';
 $string['privacy:metadata'] = 'LessonMarkプラグインは教材内容を保存しますが、個人データは保存しません。';
 $string['refreshpreview'] = 'プレビューを更新';
+$string['scrollabletable'] = '横スクロール可能な表';
+$string['tableofcontents'] = '目次';
