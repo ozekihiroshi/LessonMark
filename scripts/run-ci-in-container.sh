@@ -54,4 +54,13 @@ moodle-plugin-ci phpcs --max-warnings 0
 moodle-plugin-ci phpdoc --max-warnings 0
 moodle-plugin-ci validate
 moodle-plugin-ci savepoints
+if ! moodle-plugin-ci grunt --max-lint-warnings 0; then
+    (cd "$cibase/moodle" && npx grunt amd --root=public/mod/lessonmark)
+    builddir="$cibase/moodle/public/mod/lessonmark/amd/build"
+    if [ ! -f "$builddir/editor.min.js" ] || [ ! -f "$builddir/editor.min.js.map" ]; then
+        exit 1
+    fi
+    cp "$builddir/editor.min.js" "$builddir/editor.min.js.map" /workspace/plugin/lessonmark/amd/build/
+    moodle-plugin-ci grunt --max-lint-warnings 0
+fi
 moodle-plugin-ci phpunit --fail-on-warning

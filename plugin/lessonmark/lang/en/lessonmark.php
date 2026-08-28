@@ -22,6 +22,8 @@
  * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['editmode'] = 'Edit';
+$string['editormodes'] = 'Markdown editor mode';
 $string['errorinvalidutf8'] = 'The Markdown source must be valid UTF-8.';
 $string['errorsourcetoolarge'] = 'The Markdown source must not exceed 512 KiB.';
 $string['eventcoursemoduleviewed'] = 'LessonMark resource viewed';
@@ -32,10 +34,17 @@ $string['lessonmarkname'] = 'Name';
 $string['markdownsource'] = 'Markdown source';
 $string['markdownsource_help'] = 'The source is stored unchanged and rendered when viewed. Raw HTML is displayed as text.';
 $string['missingidandcmid'] = 'A course-module id or LessonMark instance id is required.';
+$string['missingpreviewcontext'] = 'A course or LessonMark activity is required to preview this source.';
 $string['modulename'] = 'LessonMark';
 $string['modulename_help'] = 'Create and publish teaching material while retaining Markdown as the source of truth.';
 $string['modulenameplural'] = 'LessonMark resources';
 $string['noinstances'] = 'There are no LessonMark resources in this course.';
 $string['pluginadministration'] = 'LessonMark administration';
 $string['pluginname'] = 'LessonMark';
+$string['previewempty'] = 'The preview will appear here.';
+$string['previewerror'] = 'The preview could not be updated.';
+$string['previewloading'] = 'Updating preview…';
+$string['previewmode'] = 'Preview';
+$string['previewready'] = 'Preview updated.';
 $string['privacy:metadata'] = 'The LessonMark plugin stores resource content but does not store personal data.';
+$string['refreshpreview'] = 'Refresh preview';

@@ -33,6 +33,8 @@ class mod_lessonmark_mod_form extends moodleform_mod {
      * Defines form elements.
      */
     public function definition(): void {
+        global $PAGE;
+
         $mform = $this->_form;
         $mform->addElement('text', 'name', get_string('lessonmarkname', 'mod_lessonmark'), ['size' => 64]);
         $mform->setType('name', PARAM_TEXT);
@@ -47,6 +49,69 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         $mform->setType('markdownsource', PARAM_RAW);
         $mform->addRule('markdownsource', null, 'required', null, 'client');
         $mform->addHelpButton('markdownsource', 'markdownsource', 'mod_lessonmark');
+
+        $previewid = 'lessonmark-preview-' . random_int(1000, 999999);
+        $preview = html_writer::start_div('mod_lessonmark-editor', [
+            'data-region' => 'lessonmark-editor',
+            'data-preview-id' => $previewid,
+        ]);
+        $preview .= html_writer::start_div('mod_lessonmark-editor__toolbar', [
+            'role' => 'tablist',
+            'aria-label' => get_string('editormodes', 'mod_lessonmark'),
+        ]);
+        $preview .= html_writer::tag('button', get_string('editmode', 'mod_lessonmark'), [
+            'type' => 'button',
+            'class' => 'btn btn-secondary mod_lessonmark-editor__tab is-active',
+            'data-action' => 'show-editor',
+            'role' => 'tab',
+            'aria-selected' => 'true',
+        ]);
+        $preview .= html_writer::tag('button', get_string('previewmode', 'mod_lessonmark'), [
+            'type' => 'button',
+            'class' => 'btn btn-secondary mod_lessonmark-editor__tab',
+            'data-action' => 'show-preview',
+            'role' => 'tab',
+            'aria-selected' => 'false',
+        ]);
+        $preview .= html_writer::tag('button', get_string('refreshpreview', 'mod_lessonmark'), [
+            'type' => 'button',
+            'class' => 'btn btn-link ml-auto',
+            'data-action' => 'refresh-preview',
+        ]);
+        $preview .= html_writer::end_div();
+        $preview .= html_writer::div(
+            get_string('previewempty', 'mod_lessonmark'),
+            'mod_lessonmark-editor__preview mod_lessonmark-content text-muted',
+            [
+                'id' => $previewid,
+                'data-region' => 'preview-content',
+                'role' => 'tabpanel',
+            ]
+        );
+        $preview .= html_writer::div('', 'mod_lessonmark-editor__status', [
+            'data-region' => 'preview-status',
+            'role' => 'status',
+            'aria-live' => 'polite',
+        ]);
+        $preview .= html_writer::end_div();
+        $mform->addElement('html', $preview);
+
+        $cmid = $this->_cm ? (int) $this->_cm->id : 0;
+        $courseid = (int) ($this->current->course ?? 0);
+        $PAGE->requires->js_call_amd('mod_lessonmark/editor', 'init', [[
+            'endpoint' => (new moodle_url('/mod/lessonmark/preview.php'))->out(false),
+            'sourceSelector' => '#id_markdownsource',
+            'containerSelector' => '[data-preview-id="' . $previewid . '"]',
+            'cmid' => $cmid,
+            'courseid' => $courseid,
+            'sesskey' => sesskey(),
+            'strings' => [
+                'loading' => get_string('previewloading', 'mod_lessonmark'),
+                'ready' => get_string('previewready', 'mod_lessonmark'),
+                'error' => get_string('previewerror', 'mod_lessonmark'),
+                'empty' => get_string('previewempty', 'mod_lessonmark'),
+            ],
+        ]]);
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }

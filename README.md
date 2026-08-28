@@ -30,7 +30,9 @@ scripts/build-release.sh
 ```
 
 The local CI runner creates and removes only its own temporary Docker network,
-database container, and PHP test container. Use PHP 8.4 explicitly with:
+database container, and PHP test container. It runs the Moodle PHP gates,
+Grunt JavaScript/CSS checks, AMD generation consistency, and PHPUnit. Use PHP
+8.4 explicitly with:
 
 ```sh
 LESSONMARK_CI_PHP_VERSION=8.4 scripts/run-ci-local.sh
@@ -42,16 +44,17 @@ the ZIP layout, and produces byte-identical output for the same commit.
 
 ## Current status
 
-M1 is complete: installable skeleton, source persistence, safe student view,
-administrator upload/uninstall/reinstall lifecycle, live smoke coverage, and
-Moodle Plugin CI are in place. Development now proceeds to M2, the dedicated
-Markdown editor and shared live preview.
+M1 and M2 are complete. LessonMark can be installed through Moodle's plugin
+upload UI, stores Markdown without HTML conversion, renders a safe student
+view, and provides a dedicated two-pane editor with save-free shared preview.
+Development proceeds to M3: the formal teaching-material dialect and display.
 
 ## Documents
 
 - [Product requirements](docs/PRODUCT_REQUIREMENTS.md)
 - [Technical decisions and milestones](docs/TECHNICAL_DECISIONS.md)
 - [M1 implementation result](docs/M1_IMPLEMENTATION.md)
+- [M2 implementation result](docs/M2_IMPLEMENTATION.md)
 
 ## GitHub
 

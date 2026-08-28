@@ -45,7 +45,7 @@ done
 
 docker run --rm \
     --network "$network" \
-    -v "$repositoryroot:/workspace:ro" \
+    -v "$repositoryroot:/workspace" \
     -e DB_HOST="$database" \
     -e DB_PASSWORD="$dbpassword" \
     "moodlehq/moodle-php-apache:$phpversion" \
