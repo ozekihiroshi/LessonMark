@@ -1,6 +1,6 @@
 # LessonMark authoring guide
 
-This guide defines the Markdown dialect supported by LessonMark 0.3. The
+This guide defines the Markdown dialect supported by LessonMark 0.4. The
 Markdown source remains the editable source of truth; rendered HTML is derived
 for preview and student display.
 
@@ -21,6 +21,30 @@ Explain how `if` selects a branch.
 LessonMark assigns stable IDs to headings. Duplicate headings receive `-2`,
 `-3`, and so on. A table of contents is displayed when the document has two or
 more headings. Changing a heading changes its generated link.
+
+## Images
+
+Upload teaching images in the **Teaching images** file manager, then reference
+the exact uploaded path with LessonMark's canonical placeholder:
+
+```markdown
+![Network topology](@@PLUGINFILE@@/network.png)
+![Request flow](@@PLUGINFILE@@/diagrams/request-flow.png)
+```
+
+The text inside `[]` is the alternative text. Describe the instructional
+meaning of the image; Preview reports an empty or missing alternative text.
+Decorative-image semantics are not inferred in the current dialect.
+
+Moodle stores the images. LessonMark keeps `@@PLUGINFILE@@` in the Markdown
+source and resolves it to a temporary draft URL in Preview or an
+access-controlled module URL after save. Up to 50 Moodle `web_image` files are
+accepted per activity, subfolders are supported, and site upload limits apply.
+
+A relative reference such as `![Chart](images/chart.png)` does not upload or
+search for a local file. Preview reports it as unresolved. Upload the image and
+change the source to `@@PLUGINFILE@@/images/chart.png`. Markdown-and-images ZIP
+bundle import is not part of LessonMark 0.4.
 
 ## Callouts
 
@@ -86,11 +110,7 @@ Raw HTML is not an authoring feature. HTML-like input is displayed as text;
 scripts, iframes, inline styles, and event attributes are not accepted. Use a
 fenced code block when HTML is the subject of the lesson.
 
-Images managed through Moodle's File API are planned for M4. The current M3
-renderer makes Markdown images responsive, but importing a relative image such
-as `images/example.png` does not upload that file.
-
-Preview does not save the draft. Save the activity to publish the current
-source. Preview and student display call the same server-side rendering
-pipeline; syntax colour is then applied in the browser without changing the
-stored source.
+Preview does not save the Markdown source or publish uploaded draft files. Save
+the activity to publish the current source and images. Preview and student
+display call the same server-side rendering pipeline; syntax colour is then
+applied in the browser without changing the stored source.

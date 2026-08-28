@@ -44,13 +44,14 @@ the ZIP layout, and produces byte-identical output for the same commit.
 
 ## Current status
 
-M1 through M3 are complete. LessonMark can be installed through Moodle's plugin
-upload UI, stores Markdown without HTML conversion, renders a safe student
-view, and provides a dedicated two-pane editor with save-free shared preview.
-Teaching documents now include stable heading links, an automatic table of
-contents, NOTE/TIP/WARNING callouts, syntax-highlighted code, responsive tables,
-and teaching-oriented screen and print typography. Development proceeds to M4:
-images managed through Moodle's File API.
+M1 through M4 are complete. LessonMark can be installed through Moodle's plugin
+upload UI, stores Markdown without HTML conversion, and provides a dedicated
+two-pane editor with save-free shared preview. Teaching documents include
+stable heading links, an automatic table of contents, NOTE/TIP/WARNING
+callouts, syntax-highlighted code, responsive tables, and teaching typography.
+Images now follow Moodle's draft and permanent File API lifecycle, use canonical
+`@@PLUGINFILE@@` references, and are checked for relative paths and missing
+alternative text. Development proceeds to M5: `.md` import and export.
 
 ## Documents
 
@@ -60,9 +61,10 @@ images managed through Moodle's File API.
 - [M1 implementation result](docs/M1_IMPLEMENTATION.md)
 - [M2 implementation result](docs/M2_IMPLEMENTATION.md)
 - [M3 implementation result](docs/M3_IMPLEMENTATION.md)
+- [M4 implementation result](docs/M4_IMPLEMENTATION.md)
 
 ## GitHub
 
-The workflow is ready in `.github/workflows/moodle-plugin-ci.yml`. This local
-repository does not yet have a GitHub remote; Actions will begin after the
-owner chooses the repository name and visibility and pushes it.
+The repository is published at <https://github.com/ozekihiroshi/LessonMark>.
+`.github/workflows/moodle-plugin-ci.yml` runs the Moodle quality and release
+gates for pushes and pull requests.

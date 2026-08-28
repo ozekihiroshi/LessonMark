@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $source = required_param('markdownsource', PARAM_RAW);
 $cmid = optional_param('cmid', 0, PARAM_INT);
 $courseid = optional_param('courseid', 0, PARAM_INT);
+$draftitemid = optional_param('draftitemid', 0, PARAM_INT);
 
 if ($cmid > 0) {
     $cm = get_coursemodule_from_id('lessonmark', $cmid, 0, false, MUST_EXIST);
@@ -50,12 +51,24 @@ if ($cmid > 0) {
     throw new moodle_exception('missingpreviewcontext', 'mod_lessonmark');
 }
 
-$renderer = new \mod_lessonmark\local\moodle_markdown_renderer();
+$renderer = new \mod_lessonmark\local\moodle_markdown_renderer(
+    draftitemid: $draftitemid > 0 ? $draftitemid : null
+);
 $document = $renderer->render($source, $context);
+$diagnostics = array_map(static function (array $diagnostic): array {
+    $value = (string) ($diagnostic['language'] ?? $diagnostic['path'] ?? '');
+    $diagnostic['message'] = match ($diagnostic['type'] ?? '') {
+        'unsupportedlanguage' => get_string('diagnosticunsupportedlanguage', 'mod_lessonmark', $value),
+        'unresolvedrelativeimage' => get_string('diagnosticrelativeimage', 'mod_lessonmark', $value),
+        'missingimagealt' => get_string('diagnosticmissingalt', 'mod_lessonmark', $value),
+        default => get_string('diagnosticrendering', 'mod_lessonmark'),
+    };
+    return $diagnostic;
+}, $document->get_diagnostics());
 
 header('Content-Type: application/json; charset=utf-8');
 echo json_encode([
     'html' => $document->get_content_html(),
     'toc' => $document->get_toc(),
-    'diagnostics' => $document->get_diagnostics(),
+    'diagnostics' => $diagnostics,
 ], JSON_THROW_ON_ERROR);

@@ -95,6 +95,15 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         ]);
         $preview .= html_writer::end_div();
         $mform->addElement('html', $preview);
+        $mform->addElement('header', 'imagessection', get_string('imagessection', 'mod_lessonmark'));
+        $mform->addElement(
+            'filemanager',
+            \mod_lessonmark\local\content_files::FORM_FIELD,
+            get_string('imagefiles', 'mod_lessonmark'),
+            null,
+            \mod_lessonmark\local\content_files::options()
+        );
+        $mform->addHelpButton(\mod_lessonmark\local\content_files::FORM_FIELD, 'imagefiles', 'mod_lessonmark');
 
         $cmid = $this->_cm ? (int) $this->_cm->id : 0;
         $courseid = (int) ($this->current->course ?? 0);
@@ -102,6 +111,7 @@ class mod_lessonmark_mod_form extends moodleform_mod {
             'endpoint' => (new moodle_url('/mod/lessonmark/preview.php'))->out(false),
             'sourceSelector' => '#id_markdownsource',
             'containerSelector' => '[data-preview-id="' . $previewid . '"]',
+            'filesSelector' => '#id_' . \mod_lessonmark\local\content_files::FORM_FIELD,
             'cmid' => $cmid,
             'courseid' => $courseid,
             'sesskey' => sesskey(),
@@ -114,6 +124,24 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         ]]);
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
+    }
+
+    /**
+     * Copies existing teaching images into the user's editing draft area.
+     *
+     * @param array $defaultvalues Form defaults.
+     */
+    public function data_preprocessing(&$defaultvalues): void {
+        if (!$this->current->instance) {
+            return;
+        }
+        $field = \mod_lessonmark\local\content_files::FORM_FIELD;
+        $draftitemid = file_get_submitted_draft_itemid($field);
+        \mod_lessonmark\local\content_files::prepare_draft_area(
+            $draftitemid,
+            $this->context
+        );
+        $defaultvalues[$field] = $draftitemid;
     }
 
     /**

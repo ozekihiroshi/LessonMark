@@ -113,10 +113,14 @@ interface markdown_renderer_interface {
 ### TD-007: v0.1の画像はMoodle管理ファイルに限定する
 
 - 画像はMoodle File APIを使用し、自前ディレクトリへ保存しない。
-- 編集中はdraft file area、保存後はcourse module contextの`mod_lessonmark`教材用file areaを使用する。
+- 永続領域はcourse module context、component `mod_lessonmark`、file area `content`、item ID `0`に固定する。
+- 編集中は利用者のdraft file areaを使用し、保存・再編集はMoodle標準のdraft lifecycleに従う。
+- file managerは`web_image`、subdirectory、最大50ファイルを許可し、internal copyだけを受け入れる。
 - Markdown source内の正規参照は`@@PLUGINFILE@@/path/to/file.png`形式とする。
-- 表示時にMoodleのFile APIを使って`pluginfile.php` URLへ解決する。
-- `mod_lessonmark_pluginfile()`でcontext、login、course module visibility、capabilityを確認する。
+- Previewは`draftfile.php`、保存後の表示は`pluginfile.php`へ同じrenderer内で解決する。
+- `mod_lessonmark_pluginfile()`でmodule context、file area、item ID、login、course module visibility、`mod/lessonmark:view`を確認する。
+- inline配信には制限的なContent Security Policyを付与する。
+- 空または欠落した代替テキストはPreview diagnosticsとして教師へ通知する。
 - `.md`単体importに含まれる`images/example.png`などの相対参照は自動取得しない。
 - 未解決の相対画像はPreview diagnosticsとして教師へ通知する。
 - 相対画像とフォルダを含むZIP bundleはv0.2で扱う。
@@ -270,13 +274,8 @@ v0.1で最低限保持するinstance dataは次のとおりとする。
 
 ## 7. 実装開始前に残る小さな確認事項
 
-以下は製品境界を変えないため、該当マイルストーン内で決める。
+以下は製品境界を変えず、該当マイルストーン内で決める。
 
-- instance table名と`displayoptions`の具体的なschema
-- 見出しIDの重複解消規則
-- 目次を表示する最低見出し数
-- 同梱syntax highlighterの製品と固定version
-- 教材用file area名
 - editor pane幅を利用者設定として保持するか
 
 これらの決定によってv0.1の機能範囲を増やしてはならない。

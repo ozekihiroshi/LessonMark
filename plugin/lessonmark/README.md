@@ -12,7 +12,12 @@ LessonMark currently provides:
 - stable heading links and an automatic table of contents;
 - NOTE, TIP, and WARNING callouts;
 - fenced code highlighting for the documented language set;
-- responsive tables and teaching-oriented screen and print typography.
+- responsive tables and teaching-oriented screen and print typography;
+- Moodle-managed teaching images with draft editing and access-controlled display;
+- diagnostics for unresolved relative images and missing alternative text.
+
+Upload teaching images with the activity's file manager and reference them as
+`![Alternative text](@@PLUGINFILE@@/image.png)`. Subfolders are supported.
 
 See `docs/AUTHORING_GUIDE.md` in the source repository for the supported authoring syntax.
 
@@ -24,4 +29,3 @@ See `docs/AUTHORING_GUIDE.md` in the source repository for the supported authori
 ## License
 
 GNU GPL v3 or later.
-

@@ -50,11 +50,22 @@ function lessonmark_supports($feature) {
 function lessonmark_add_instance(stdClass $lessonmark, $mform = null): int {
     global $DB;
 
+    $cmid = (int) ($lessonmark->coursemodule ?? 0);
+    $draftitemid = (int) ($lessonmark->lessonmarkfiles ?? 0);
     $now = time();
     $lessonmark->timecreated = $now;
     $lessonmark->timemodified = $now;
     $lessonmark->displayoptions = $lessonmark->displayoptions ?? null;
-    return $DB->insert_record('lessonmark', $lessonmark);
+    $id = $DB->insert_record('lessonmark', $lessonmark);
+
+    if ($cmid > 0) {
+        $DB->set_field('course_modules', 'instance', $id, ['id' => $cmid]);
+        if ($draftitemid > 0) {
+            $context = context_module::instance($cmid);
+            \mod_lessonmark\local\content_files::save_draft_area($draftitemid, $context);
+        }
+    }
+    return $id;
 }
 
 /**
@@ -67,10 +78,18 @@ function lessonmark_add_instance(stdClass $lessonmark, $mform = null): int {
 function lessonmark_update_instance(stdClass $lessonmark, $mform = null): bool {
     global $DB;
 
+    $cmid = (int) ($lessonmark->coursemodule ?? 0);
+    $draftitemid = (int) ($lessonmark->lessonmarkfiles ?? 0);
     $lessonmark->id = $lessonmark->instance;
     $lessonmark->timemodified = time();
     $lessonmark->displayoptions = $lessonmark->displayoptions ?? null;
-    return $DB->update_record('lessonmark', $lessonmark);
+    $updated = $DB->update_record('lessonmark', $lessonmark);
+
+    if ($updated && $cmid > 0 && $draftitemid > 0) {
+        $context = context_module::instance($cmid);
+        \mod_lessonmark\local\content_files::save_draft_area($draftitemid, $context);
+    }
+    return $updated;
 }
 
 /**
@@ -87,6 +106,56 @@ function lessonmark_delete_instance($id): bool {
     }
     $DB->delete_records('lessonmark', ['id' => $id]);
     return true;
+}
+
+/**
+ * Lists the browsable LessonMark file areas.
+ *
+ * @param stdClass $course Course record.
+ * @param stdClass $cm Course-module record.
+ * @param context $context Module context.
+ * @return array File area labels.
+ */
+function lessonmark_get_file_areas($course, $cm, $context): array {
+    return [
+        \mod_lessonmark\local\content_files::FILEAREA => get_string('imagefiles', 'mod_lessonmark'),
+    ];
+}
+
+/**
+ * Serves teaching images from the module context after access checks.
+ *
+ * @param stdClass $course Course record.
+ * @param stdClass $cm Course-module record.
+ * @param context $context Module context.
+ * @param string $filearea Requested file area.
+ * @param array $args Path arguments, beginning with the item ID.
+ * @param bool $forcedownload Whether download should be forced.
+ * @param array $options Additional send options.
+ * @return bool False when the request is invalid; valid files are sent directly.
+ */
+function lessonmark_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []): bool {
+    if (
+        $context->contextlevel !== CONTEXT_MODULE ||
+        $filearea !== \mod_lessonmark\local\content_files::FILEAREA
+    ) {
+        return false;
+    }
+
+    require_course_login($course, true, $cm);
+    if (!has_capability('mod/lessonmark:view', $context)) {
+        return false;
+    }
+
+    $file = \mod_lessonmark\local\content_files::get_file($context, $args);
+    if (!$file) {
+        return false;
+    }
+    if (!$forcedownload) {
+        header("Content-Security-Policy: default-src 'none'; img-src 'self'");
+    }
+    send_stored_file($file, DAYSECS, 0, $forcedownload, $options);
+    return false;
 }
 
 /**

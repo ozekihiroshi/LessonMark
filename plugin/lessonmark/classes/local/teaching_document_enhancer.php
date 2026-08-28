@@ -100,6 +100,7 @@ final class teaching_document_enhancer {
         $this->enhance_callouts($dom, $root);
         $diagnostics = $this->enhance_code_blocks($root);
         $this->enhance_tables($dom, $root);
+        $diagnostics = array_merge($diagnostics, $this->diagnose_images($root));
         if (count($toc) > 1) {
             $this->prepend_toc($dom, $root, $toc);
         }
@@ -334,6 +335,41 @@ final class teaching_document_enhancer {
         }
     }
 
+    /**
+     * Reports image references that cannot be published safely as-is.
+     *
+     * @param \DOMElement $root Root element.
+     * @return array Image diagnostics.
+     */
+    private function diagnose_images(\DOMElement $root): array {
+        $diagnostics = [];
+        foreach ($root->getElementsByTagName('img') as $image) {
+            if (!$image instanceof \DOMElement) {
+                continue;
+            }
+            $source = trim($image->getAttribute('src'));
+            if (!$image->hasAttribute('alt') || trim($image->getAttribute('alt')) === '') {
+                $diagnostics[] = [
+                    'type' => 'missingimagealt',
+                    'path' => $source,
+                ];
+            }
+            if ($source === '') {
+                continue;
+            }
+            $isresolved = preg_match(
+                '~^(?:[a-z][a-z0-9+.-]*:|//|/|#|@@PLUGINFILE@@/)~i',
+                $source
+            ) === 1;
+            if (!$isresolved) {
+                $diagnostics[] = [
+                    'type' => 'unresolvedrelativeimage',
+                    'path' => $source,
+                ];
+            }
+        }
+        return $diagnostics;
+    }
     /**
      * Prepends an automatic table of contents.
      *

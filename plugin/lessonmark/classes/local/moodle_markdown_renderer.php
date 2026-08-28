@@ -37,18 +37,24 @@ final class moodle_markdown_renderer implements markdown_renderer_interface {
     /** @var teaching_document_enhancer Teaching-document HTML enhancer. */
     private teaching_document_enhancer $enhancer;
 
+    /** @var int|null Draft item ID used only for unsaved Preview. */
+    private ?int $draftitemid;
+
     /**
      * Creates a Moodle Markdown renderer.
      *
      * @param source_normalizer|null $normalizer Optional normaliser.
      * @param teaching_document_enhancer|null $enhancer Optional teaching-document enhancer.
+     * @param int|null $draftitemid Optional current-user draft item ID.
      */
     public function __construct(
         ?source_normalizer $normalizer = null,
-        ?teaching_document_enhancer $enhancer = null
+        ?teaching_document_enhancer $enhancer = null,
+        ?int $draftitemid = null
     ) {
         $this->normalizer = $normalizer ?? new source_normalizer();
         $this->enhancer = $enhancer ?? new teaching_document_enhancer();
+        $this->draftitemid = $draftitemid;
     }
 
     /**
@@ -72,6 +78,12 @@ final class moodle_markdown_renderer implements markdown_renderer_interface {
             'allowid' => false,
         ]);
         $safehtml = clean_text($html, FORMAT_HTML, ['allowid' => false]);
-        return $this->enhancer->enhance($safehtml);
+        $document = $this->enhancer->enhance($safehtml);
+        $content = content_files::rewrite_urls(
+            $document->get_content_html(),
+            $context,
+            $this->draftitemid
+        );
+        return new rendered_document($content, $document->get_toc(), $document->get_diagnostics());
     }
 }

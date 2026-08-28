@@ -38,6 +38,7 @@ export const init = config => {
         return;
     }
 
+    const files = config.filesSelector ? document.querySelector(config.filesSelector) : null;
     const sourceField = source.closest('.fitem');
     const preview = container.querySelector('[data-region="preview-content"]');
     const status = container.querySelector('[data-region="preview-status"]');
@@ -73,6 +74,7 @@ export const init = config => {
             markdownsource: source.value,
             cmid: String(config.cmid),
             courseid: String(config.courseid),
+            draftitemid: files ? files.value : '0',
         });
 
         try {
@@ -97,10 +99,15 @@ export const init = config => {
                 preview.classList.add('text-muted');
             }
             highlight(preview);
-            status.textContent = config.strings.ready;
+            const messages = Array.isArray(result.diagnostics) ? result.diagnostics
+                .map(diagnostic => diagnostic.message)
+                .filter(message => typeof message === 'string' && message) : [];
+            status.textContent = [config.strings.ready, ...messages].join(' ');
+            status.classList.toggle('text-warning', messages.length > 0);
         } catch (error) {
             if (currentRequest === requestNumber) {
                 status.textContent = config.strings.error;
+                status.classList.remove('text-warning');
             }
         } finally {
             if (currentRequest === requestNumber) {

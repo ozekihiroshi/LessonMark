@@ -75,6 +75,28 @@ final class teaching_document_enhancer_test extends \advanced_testcase {
             ['type' => 'unsupportedlanguage', 'language' => 'brainfuck'],
         ], $document->get_diagnostics());
     }
+    /**
+     * Tests relative-image and alternative-text diagnostics.
+     */
+    public function test_reports_image_diagnostics(): void {
+        $enhancer = new teaching_document_enhancer();
+        $document = $enhancer->enhance(
+            '<img src="images/local.png">'
+            . '<img src="@@PLUGINFILE@@/managed.png" alt="Managed">'
+            . '<img src="https://example.com/external.png" alt="">'
+        );
+
+        $this->assertSame([
+            ['type' => 'missingimagealt', 'path' => 'images/local.png'],
+            ['type' => 'unresolvedrelativeimage', 'path' => 'images/local.png'],
+            ['type' => 'missingimagealt', 'path' => 'https://example.com/external.png'],
+        ], $document->get_diagnostics());
+        $this->assertStringContainsString(
+            'src="@@PLUGINFILE@@/managed.png" alt="Managed"',
+            $document->get_content_html()
+        );
+    }
+
 
     /**
      * Tests that Moodle-merged callout paragraphs become separate callouts.
