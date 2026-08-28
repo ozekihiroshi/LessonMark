@@ -10,8 +10,8 @@
 ## Automated gates
 
 - Run Moodle Plugin CI on PHP 8.3 and PHP 8.4 against Moodle 5.2.
-- Pass PHP lint, Moodle Code Checker, PHPDoc, copy/paste detection, plugin
-  validation, savepoints, Grunt, and PHPUnit.
+- Pass PHP lint, Moodle Code Checker, PHPDoc, plugin validation, savepoints,
+  Grunt, and PHPUnit.
 - Pass the Chrome Behat flow for authoring, preview, publishing, and automated
   accessibility checks.
 - Treat Moodle `main` results as informational until the corresponding stable

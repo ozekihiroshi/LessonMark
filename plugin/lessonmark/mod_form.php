@@ -159,21 +159,6 @@ class mod_lessonmark_mod_form extends moodleform_mod {
             'courseid' => $courseid,
             'sesskey' => sesskey(),
             'maxSourceBytes' => \mod_lessonmark\local\moodle_markdown_renderer::MAX_SOURCE_BYTES,
-            'strings' => [
-                'loading' => get_string('previewloading', 'mod_lessonmark'),
-                'ready' => get_string('previewready', 'mod_lessonmark'),
-                'previewLabel' => get_string('previewmode', 'mod_lessonmark'),
-                'error' => get_string('previewerror', 'mod_lessonmark'),
-                'empty' => get_string('previewempty', 'mod_lessonmark'),
-                'importConfirm' => get_string('importconfirm', 'mod_lessonmark'),
-                'importContinue' => get_string('continue'),
-                'importTitle' => get_string('confirmation', 'admin'),
-                'importInvalidUtf8' => get_string('importinvalidutf8', 'mod_lessonmark'),
-                'importReady' => get_string('importready', 'mod_lessonmark'),
-                'importTooLarge' => get_string('importtoolarge', 'mod_lessonmark'),
-                'importWrongType' => get_string('importwrongtype', 'mod_lessonmark'),
-                'importError' => get_string('importerror', 'mod_lessonmark'),
-            ],
         ]]);
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();

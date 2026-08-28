@@ -8,8 +8,8 @@ probe rather than a support claim.
 ## Delivered controls
 
 - Moodle Plugin CI matrix for supported PHP versions, with lint, coding style,
-  PHPDoc, duplication detection, validation, savepoints, Grunt, PHPUnit, and
-  Chrome Behat acceptance/accessibility gates.
+  PHPDoc, validation, savepoints, Grunt, PHPUnit, and Chrome Behat
+  acceptance/accessibility gates.
 - Keyboard-operable Edit/Preview tabs on narrow screens, roving tab focus,
   labelled panels, preview busy state, and responsive two-pane semantics.
 - Regression tests for raw HTML neutralisation, unsafe link schemes, invalid

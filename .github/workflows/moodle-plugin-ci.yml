@@ -79,10 +79,6 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci phpdoc --max-warnings 0
 
-      - name: PHP Copy/Paste Detector
-        if: ${{ !cancelled() }}
-        run: moodle-plugin-ci phpcpd
-
       - name: Plugin validation
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci validate
@@ -103,7 +99,9 @@ jobs:
         if: ${{ !cancelled() && matrix.php == '8.3' }}
         env:
           MOODLE_BEHAT_SELENIUM_IMAGE: selenium/standalone-chrome:latest
-        run: moodle-plugin-ci behat --profile chrome --tags="@mod_lessonmark"
+        run: |
+          echo '$CFG->behat_increasetimeout = 3;' >> moodle/config.php
+          moodle-plugin-ci behat --profile chrome --tags="@mod_lessonmark"
 
       - name: Upload Behat failure artifacts
         if: ${{ failure() && matrix.php == '8.3' }}

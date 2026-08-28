@@ -22,22 +22,49 @@
  */
 
 import Notification from 'core/notification';
+import {getStrings} from 'core/str';
 import {watchForm} from 'core_form/changechecker';
 import {highlight} from './syntax-highlighter';
 
 const DEBOUNCE_MS = 400;
+const STRING_DEFINITIONS = [
+    {name: 'loading', key: 'previewloading', component: 'mod_lessonmark'},
+    {name: 'ready', key: 'previewready', component: 'mod_lessonmark'},
+    {name: 'previewLabel', key: 'previewmode', component: 'mod_lessonmark'},
+    {name: 'error', key: 'previewerror', component: 'mod_lessonmark'},
+    {name: 'empty', key: 'previewempty', component: 'mod_lessonmark'},
+    {name: 'importConfirm', key: 'importconfirm', component: 'mod_lessonmark'},
+    {name: 'importContinue', key: 'continue', component: 'moodle'},
+    {name: 'importTitle', key: 'confirmation', component: 'admin'},
+    {name: 'importInvalidUtf8', key: 'importinvalidutf8', component: 'mod_lessonmark'},
+    {name: 'importReady', key: 'importready', component: 'mod_lessonmark'},
+    {name: 'importTooLarge', key: 'importtoolarge', component: 'mod_lessonmark'},
+    {name: 'importWrongType', key: 'importwrongtype', component: 'mod_lessonmark'},
+    {name: 'importError', key: 'importerror', component: 'mod_lessonmark'},
+];
+
+/**
+ * Load editor strings through Moodle's string service instead of AMD arguments.
+ *
+ * @returns {Promise<Object>} Strings keyed for editor use.
+ */
+const loadStrings = async() => {
+    const values = await getStrings(STRING_DEFINITIONS.map(({key, component}) => ({key, component})));
+    return Object.fromEntries(STRING_DEFINITIONS.map(({name}, index) => [name, values[index]]));
+};
 
 /**
  * Initialise one LessonMark editor.
  *
  * @param {Object} config Editor configuration.
  */
-export const init = config => {
+export const init = async config => {
     const source = document.querySelector(config.sourceSelector);
     const container = document.querySelector(config.containerSelector);
     if (!source || !container) {
         return;
     }
+    const strings = await loadStrings();
 
     const files = config.filesSelector ? document.querySelector(config.filesSelector) : null;
     const sourceField = source.closest('.fitem');
@@ -89,7 +116,7 @@ export const init = config => {
         sourceField.removeAttribute('role');
         sourceField.removeAttribute('aria-labelledby');
         preview.setAttribute('role', 'region');
-        preview.setAttribute('aria-label', config.strings.previewLabel);
+        preview.setAttribute('aria-label', strings.previewLabel);
         preview.removeAttribute('aria-labelledby');
     };
 
@@ -133,7 +160,7 @@ export const init = config => {
 
     const render = async() => {
         const currentRequest = ++requestNumber;
-        setStatus(config.strings.loading);
+        setStatus(strings.loading);
         refreshButton.disabled = true;
         preview.setAttribute('aria-busy', 'true');
         const body = new URLSearchParams({
@@ -162,17 +189,17 @@ export const init = config => {
                 preview.innerHTML = result.html;
                 preview.classList.remove('text-muted');
             } else {
-                preview.textContent = config.strings.empty;
+                preview.textContent = strings.empty;
                 preview.classList.add('text-muted');
             }
             highlight(preview);
             const messages = Array.isArray(result.diagnostics) ? result.diagnostics
                 .map(diagnostic => diagnostic.message)
                 .filter(message => typeof message === 'string' && message) : [];
-            setStatus([config.strings.ready, ...messages].join(' '), messages.length > 0 ? 'warning' : '');
+            setStatus([strings.ready, ...messages].join(' '), messages.length > 0 ? 'warning' : '');
         } catch (error) {
             if (currentRequest === requestNumber) {
-                setStatus(config.strings.error, 'error');
+                setStatus(strings.error, 'error');
             }
         } finally {
             if (currentRequest === requestNumber) {
@@ -212,16 +239,16 @@ export const init = config => {
         try {
             source.value = await importMarkdown(file);
             setMode('edit');
-            setStatus(config.strings.importReady);
+            setStatus(strings.importReady);
             source.dispatchEvent(new Event('input', {bubbles: true}));
             source.focus();
         } catch (error) {
             const messages = {
-                invalidutf8: config.strings.importInvalidUtf8,
-                toolarge: config.strings.importTooLarge,
-                wrongtype: config.strings.importWrongType,
+                invalidutf8: strings.importInvalidUtf8,
+                toolarge: strings.importTooLarge,
+                wrongtype: strings.importWrongType,
             };
-            setStatus(messages[error.message] || config.strings.importError, 'error');
+            setStatus(messages[error.message] || strings.importError, 'error');
         } finally {
             importButton.disabled = false;
             importFile.value = '';
@@ -253,9 +280,9 @@ export const init = config => {
                 return;
             }
             Notification.confirm(
-                config.strings.importTitle,
-                config.strings.importConfirm,
-                config.strings.importContinue,
+                strings.importTitle,
+                strings.importConfirm,
+                strings.importContinue,
                 null,
                 () => applyImport(file),
                 () => {

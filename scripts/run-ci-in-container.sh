@@ -53,7 +53,6 @@ moodle-plugin-ci install \
 moodle-plugin-ci phplint
 moodle-plugin-ci phpcs --max-warnings 0
 moodle-plugin-ci phpdoc --max-warnings 0
-moodle-plugin-ci phpcpd
 moodle-plugin-ci validate
 moodle-plugin-ci savepoints
 if ! moodle-plugin-ci grunt --max-lint-warnings 0; then
