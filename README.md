@@ -3,7 +3,7 @@
 LessonMark is a Moodle course resource for authoring, previewing, and
 publishing teaching material whose source of truth remains Markdown.
 
-The plugin component is `mod_lessonmark`. Release candidate 0.1.0-rc2 targets
+The plugin component is `mod_lessonmark`. Release candidate 0.1.0-rc3 targets
 Moodle 5.2 on PHP 8.3 and 8.4.
 
 ## Repository layout
@@ -27,7 +27,7 @@ on port 8085 and contains no LessonMark source mount.
 cd /mnt/d/workspace/LessonMark
 scripts/run-ci-local.sh
 scripts/build-release.sh
-php scripts/verify-release.php 0.1.0-rc2 build/mod_lessonmark.zip
+php scripts/verify-release.php 0.1.0-rc3 build/mod_lessonmark.zip
 ```
 
 The local CI runner creates and removes only its own temporary Docker network,

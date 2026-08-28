@@ -1,5 +1,10 @@
 # Change log
 
+## 0.1.0-rc3 - 2026-08-29
+
+- Kept the Markdown source field aligned to the top of its Preview column when
+  rendered content is taller.
+
 ## 0.1.0-rc2 - 2026-08-29
 
 - Removed the duplicate activity name from the student document body while

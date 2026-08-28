@@ -271,6 +271,12 @@
     min-width: 0;
 }
 
+/* Keep Moodle's wrapped form rows at the top when the preview is taller. */
+.mod_lessonmark-editor__source {
+    align-content: flex-start;
+    align-self: start;
+}
+
 .mod_lessonmark-editor__source .col-md-3,
 .mod_lessonmark-editor__source .col-md-9 {
     flex: 0 0 100%;

@@ -1,4 +1,4 @@
-LessonMark 0.1.0-rc2
+LessonMark 0.1.0-rc3
 =====================
 
 LessonMark is a Moodle activity module for authoring, previewing, and publishing

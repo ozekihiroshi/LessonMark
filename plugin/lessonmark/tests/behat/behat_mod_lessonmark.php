@@ -42,4 +42,41 @@ class behat_mod_lessonmark extends behat_base {
 
         $field->setValue($source->getRaw());
     }
+
+    /**
+     * Confirms that a tall preview does not push the source textarea down.
+     *
+     * @Then /^the LessonMark source editor should stay aligned with its preview$/
+     */
+    public function source_editor_should_stay_aligned_with_preview(): void {
+        $gap = $this->getSession()->evaluateScript(<<<'JS'
+            const source = document.querySelector('#id_markdownsource');
+            const sourceField = source?.closest('.mod_lessonmark-editor__source');
+            const preview = document.querySelector('.mod_lessonmark-editor');
+
+            if (!source || !sourceField || !preview) {
+                return null;
+            }
+
+            const originalMinHeight = preview.style.minHeight;
+            preview.style.minHeight = '80rem';
+            const gap = source.getBoundingClientRect().top - sourceField.getBoundingClientRect().top;
+            preview.style.minHeight = originalMinHeight;
+
+            return gap;
+            JS);
+
+        if (!is_numeric($gap)) {
+            throw new \RuntimeException('The LessonMark editor panes were not found.');
+        }
+
+        $maximumgap = 120.0;
+        if ((float) $gap > $maximumgap) {
+            throw new \RuntimeException(sprintf(
+                'The Markdown source started %.1f pixels below its pane; expected at most %.1f pixels.',
+                (float) $gap,
+                $maximumgap,
+            ));
+        }
+    }
 }

@@ -36,6 +36,7 @@ Feature: Author and publish a LessonMark teaching resource
     And I press "Refresh preview"
     And I wait until "Preview updated." "text" exists
     Then I should see "Updated lesson" in the "[data-region=\"preview-content\"]" "css_element"
+    And the LessonMark source editor should stay aligned with its preview
     And the page should meet accessibility standards
     When I press "Save and display"
     Then I should see "Updated lesson"
