@@ -3,15 +3,15 @@
 LessonMark is a Moodle course resource for authoring, previewing, and
 publishing teaching material whose source of truth remains Markdown.
 
-The plugin component is `mod_lessonmark`. The initial target is Moodle 5.2 on
-PHP 8.3 and 8.4.
+The plugin component is `mod_lessonmark`. Release candidate 0.1.0-rc1 targets
+Moodle 5.2 on PHP 8.3 and 8.4.
 
 ## Repository layout
 
 ```text
 LessonMark/
 ├── .github/workflows/     GitHub Actions quality and release gates
-├── docs/                  Product, technical, and implementation records
+├── docs/                  Product, technical, user, and release records
 ├── plugin/lessonmark/     Installable mod_lessonmark source
 ├── scripts/               Release, smoke, and local CI runners
 └── LessonMark.code-workspace
@@ -27,16 +27,15 @@ on port 8085 and contains no LessonMark source mount.
 cd /mnt/d/workspace/LessonMark
 scripts/run-ci-local.sh
 scripts/build-release.sh
+php scripts/verify-release.php 0.1.0-rc1 build/mod_lessonmark.zip
 ```
 
 The local CI runner creates and removes only its own temporary Docker network,
 database container, and PHP test container. It runs the Moodle PHP gates,
-Grunt JavaScript/CSS checks, AMD generation consistency, and PHPUnit. Use PHP
-8.4 explicitly with:
-
-```sh
-LESSONMARK_CI_PHP_VERSION=8.4 scripts/run-ci-local.sh
-```
+Grunt JavaScript/CSS checks, AMD generation consistency, and PHPUnit. Select a
+supported PHP version with `LESSONMARK_CI_PHP_VERSION=8.4`. An informational
+Moodle development-branch probe can be run with
+`LESSONMARK_CI_MOODLE_BRANCH=main`; it is not a production support claim.
 
 The release artifact is written to `build/mod_lessonmark.zip`. The builder
 requires a clean Git worktree, archives only committed plugin files, validates
@@ -44,29 +43,27 @@ the ZIP layout, and produces byte-identical output for the same commit.
 
 ## Current status
 
-M1 through M6 are complete. LessonMark can be installed through Moodle's plugin
-upload UI, stores Markdown without HTML conversion, and provides a dedicated
-two-pane editor with save-free shared preview. Teaching documents include
-stable heading links, an automatic table of contents, NOTE/TIP/WARNING
-callouts, syntax-highlighted code, responsive tables, and teaching typography.
-Images follow Moodle's draft and permanent File API lifecycle and use canonical
-`@@PLUGINFILE@@` references. Teachers can import a validated UTF-8 `.md` into
-the editor and export the source saved in Moodle with capability and sesskey
-checks. Moodle backup, restore, and course duplicate preserve the Markdown,
-settings, File API assets, and remapped internal LessonMark links. Development
-proceeds to M7: release quality and compatibility closure.
+M1 through M7 are implemented. LessonMark provides Markdown source storage, a
+responsive Edit/Preview authoring surface, shared safe preview and student
+rendering, teaching-document presentation, Moodle File API images, `.md`
+import/export, and complete activity backup/restore and duplicate behavior.
+
+M7 adds release-candidate metadata, keyboard and screen-reader editor behavior,
+Behat acceptance/accessibility coverage, security and privacy regression tests,
+expanded static analysis, package inspection, and install/release operations.
+The exact candidate is released only after supported-matrix CI, upload lifecycle,
+reproducibility, and GitHub Actions pass for the same commit.
 
 ## Documents
 
 - [Product requirements](docs/PRODUCT_REQUIREMENTS.md)
 - [Technical decisions and milestones](docs/TECHNICAL_DECISIONS.md)
 - [Authoring guide](docs/AUTHORING_GUIDE.md)
-- [M1 implementation result](docs/M1_IMPLEMENTATION.md)
-- [M2 implementation result](docs/M2_IMPLEMENTATION.md)
-- [M3 implementation result](docs/M3_IMPLEMENTATION.md)
-- [M4 implementation result](docs/M4_IMPLEMENTATION.md)
-- [M5 implementation result](docs/M5_IMPLEMENTATION.md)
-- [M6 implementation result](docs/M6_IMPLEMENTATION.md)
+- [Installation and upgrade](docs/INSTALLATION.md)
+- [Release checklist](docs/RELEASE_CHECKLIST.md)
+- [Security policy](SECURITY.md)
+- [M7 implementation result](docs/M7_IMPLEMENTATION.md)
+- [Documentation index](docs/README.md)
 
 ## GitHub
 

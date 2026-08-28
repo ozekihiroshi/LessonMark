@@ -25,8 +25,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_lessonmark';
-$plugin->version = 2026082805;
+$plugin->version = 2026082806;
 $plugin->requires = 2026042000;
 $plugin->supported = [502, 502];
-$plugin->maturity = MATURITY_ALPHA;
-$plugin->release = '0.6.0-dev';
+$plugin->maturity = MATURITY_RC;
+$plugin->release = '0.1.0-rc1';

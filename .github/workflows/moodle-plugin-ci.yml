@@ -3,6 +3,7 @@ name: Moodle Plugin CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,6 +16,7 @@ jobs:
   test:
     name: Moodle 5.2 / PHP ${{ matrix.php }}
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     services:
       mariadb:
         image: mariadb:11.8
@@ -77,6 +79,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci phpdoc --max-warnings 0
 
+      - name: PHP Copy/Paste Detector
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpcpd
+
       - name: Plugin validation
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci validate
@@ -92,6 +98,21 @@ jobs:
       - name: PHPUnit
         if: ${{ !cancelled() }}
         run: moodle-plugin-ci phpunit --fail-on-warning
+
+      - name: Behat browser acceptance and accessibility
+        if: ${{ !cancelled() && matrix.php == '8.3' }}
+        env:
+          MOODLE_BEHAT_SELENIUM_IMAGE: selenium/standalone-chrome:latest
+        run: moodle-plugin-ci behat --profile chrome --tags="@mod_lessonmark"
+
+      - name: Upload Behat failure artifacts
+        if: ${{ failure() && matrix.php == '8.3' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: lessonmark-behat-failures-${{ github.sha }}
+          path: moodledata/behat_dump/**
+          if-no-files-found: ignore
+          retention-days: 7
 
   release-zip:
     name: Reproducible release ZIP

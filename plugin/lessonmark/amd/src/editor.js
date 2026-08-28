@@ -41,23 +41,30 @@ export const init = config => {
 
     const files = config.filesSelector ? document.querySelector(config.filesSelector) : null;
     const sourceField = source.closest('.fitem');
+    const toolbar = container.querySelector('.mod_lessonmark-editor__toolbar');
     const preview = container.querySelector('[data-region="preview-content"]');
     const status = container.querySelector('[data-region="preview-status"]');
-    const editButton = container.querySelector('[data-action="show-editor"]');
-    const previewButton = container.querySelector('[data-action="show-preview"]');
+    const editButton = document.getElementById(config.editTabId);
+    const previewButton = document.getElementById(config.previewTabId);
     const refreshButton = container.querySelector('[data-action="refresh-preview"]');
     const importButton = container.querySelector('[data-action="import-markdown"]');
     const importFile = container.querySelector('[data-action="import-file"]');
+    if (!sourceField || !toolbar || !preview || !status || !editButton || !previewButton || !refreshButton) {
+        return;
+    }
     const shell = document.createElement('div');
     shell.className = 'mod_lessonmark-editor__panes';
 
     sourceField.parentNode.insertBefore(shell, sourceField);
-    shell.append(sourceField, container);
+    shell.append(toolbar, sourceField, container);
     sourceField.classList.add('mod_lessonmark-editor__source');
+    sourceField.id = config.sourcePanelId;
     watchForm(source);
 
     let timer = null;
     let requestNumber = 0;
+    let activeMode = 'edit';
+    const mobileQuery = window.matchMedia('(max-width: 767.98px)');
 
     const setStatus = (message, type = '') => {
         status.textContent = message;
@@ -65,19 +72,70 @@ export const init = config => {
         status.classList.toggle('text-danger', type === 'error');
     };
 
+    const updatePanelVisibility = () => {
+        if (mobileQuery.matches) {
+            const showPreview = activeMode === 'preview';
+            sourceField.hidden = showPreview;
+            container.hidden = !showPreview;
+            sourceField.setAttribute('role', 'tabpanel');
+            sourceField.setAttribute('aria-labelledby', config.editTabId);
+            preview.setAttribute('role', 'tabpanel');
+            preview.setAttribute('aria-labelledby', config.previewTabId);
+            preview.removeAttribute('aria-label');
+            return;
+        }
+        sourceField.hidden = false;
+        container.hidden = false;
+        sourceField.removeAttribute('role');
+        sourceField.removeAttribute('aria-labelledby');
+        preview.setAttribute('role', 'region');
+        preview.setAttribute('aria-label', config.strings.previewLabel);
+        preview.removeAttribute('aria-labelledby');
+    };
+
     const setMode = mode => {
         const showPreview = mode === 'preview';
+        activeMode = mode;
         shell.dataset.mobileMode = mode;
         editButton.classList.toggle('is-active', !showPreview);
         previewButton.classList.toggle('is-active', showPreview);
         editButton.setAttribute('aria-selected', String(!showPreview));
         previewButton.setAttribute('aria-selected', String(showPreview));
+        editButton.tabIndex = showPreview ? -1 : 0;
+        previewButton.tabIndex = showPreview ? 0 : -1;
+        updatePanelVisibility();
+    };
+
+    const handleTabKeydown = event => {
+        const tabs = [editButton, previewButton];
+        let target = null;
+        switch (event.key) {
+            case 'Home':
+                target = tabs[0];
+                break;
+            case 'End':
+                target = tabs[1];
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+            case 'ArrowRight':
+            case 'ArrowDown':
+                target = event.currentTarget === editButton ? previewButton : editButton;
+                break;
+        }
+        if (!target) {
+            return;
+        }
+        event.preventDefault();
+        target.focus();
+        target.click();
     };
 
     const render = async() => {
         const currentRequest = ++requestNumber;
         setStatus(config.strings.loading);
         refreshButton.disabled = true;
+        preview.setAttribute('aria-busy', 'true');
         const body = new URLSearchParams({
             sesskey: config.sesskey,
             markdownsource: source.value,
@@ -119,6 +177,7 @@ export const init = config => {
         } finally {
             if (currentRequest === requestNumber) {
                 refreshButton.disabled = false;
+                preview.setAttribute('aria-busy', 'false');
             }
         }
     };
@@ -172,6 +231,9 @@ export const init = config => {
     source.addEventListener('input', scheduleRender);
     refreshButton.addEventListener('click', render);
     editButton.addEventListener('click', () => setMode('edit'));
+    editButton.addEventListener('keydown', handleTabKeydown);
+    previewButton.addEventListener('keydown', handleTabKeydown);
+    mobileQuery.addEventListener('change', updatePanelVisibility);
     previewButton.addEventListener('click', () => {
         setMode('preview');
         render();

@@ -3,6 +3,7 @@ set -eu
 
 : "${DB_HOST:?DB_HOST is required}"
 : "${DB_PASSWORD:?DB_PASSWORD is required}"
+: "${MOODLE_BRANCH:=MOODLE_502_STABLE}"
 
 cibase="$(mktemp -d /tmp/lessonmark-plugin-ci.XXXXXX)"
 trap 'rm -rf "$cibase"' EXIT HUP INT TERM
@@ -39,7 +40,7 @@ php "$composerphar" create-project \
 PATH="$cibase/ci/bin:$cibase/ci/vendor/bin:$PATH"
 export PATH
 export DB=mariadb
-export MOODLE_BRANCH=MOODLE_502_STABLE
+export MOODLE_BRANCH
 export LANG=C.UTF-8
 
 moodle-plugin-ci install \
@@ -52,6 +53,7 @@ moodle-plugin-ci install \
 moodle-plugin-ci phplint
 moodle-plugin-ci phpcs --max-warnings 0
 moodle-plugin-ci phpdoc --max-warnings 0
+moodle-plugin-ci phpcpd
 moodle-plugin-ci validate
 moodle-plugin-ci savepoints
 if ! moodle-plugin-ci grunt --max-lint-warnings 0; then

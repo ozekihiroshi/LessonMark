@@ -296,11 +296,27 @@
 }
 
 .mod_lessonmark-editor__toolbar {
+    grid-column: 1 / -1;
     display: flex;
+    flex-wrap: wrap;
     gap: .25rem;
     align-items: center;
     padding: .5rem;
-    border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .375rem;
+    background: var(--bs-body-bg, #fff);
+}
+
+.mod_lessonmark-editor__tabs,
+.mod_lessonmark-editor__actions {
+    display: flex;
+    gap: .25rem;
+    align-items: center;
+}
+
+.mod_lessonmark-editor__actions {
+    flex-wrap: wrap;
+    margin-inline-start: auto;
 }
 
 .mod_lessonmark-editor__tab.is-active {
@@ -351,7 +367,7 @@
 }
 
 @media (min-width: 768px) {
-    .mod_lessonmark-editor__tab {
+    .mod_lessonmark-editor__tabs {
         display: none;
     }
 }

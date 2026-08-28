@@ -50,30 +50,43 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         $mform->addRule('markdownsource', null, 'required', null, 'client');
         $mform->addHelpButton('markdownsource', 'markdownsource', 'mod_lessonmark');
 
-        $previewid = 'lessonmark-preview-' . random_int(1000, 999999);
+        $editorsuffix = random_int(1000, 999999);
+        $previewid = 'lessonmark-preview-' . $editorsuffix;
+        $sourcepanelid = 'lessonmark-source-' . $editorsuffix;
+        $edittabid = 'lessonmark-edit-tab-' . $editorsuffix;
+        $previewtabid = 'lessonmark-preview-tab-' . $editorsuffix;
         $cmid = $this->_cm ? (int) $this->_cm->id : 0;
         $preview = html_writer::start_div('mod_lessonmark-editor', [
             'data-region' => 'lessonmark-editor',
             'data-preview-id' => $previewid,
         ]);
-        $preview .= html_writer::start_div('mod_lessonmark-editor__toolbar', [
+        $preview .= html_writer::start_div('mod_lessonmark-editor__toolbar');
+        $preview .= html_writer::start_div('mod_lessonmark-editor__tabs', [
             'role' => 'tablist',
             'aria-label' => get_string('editormodes', 'mod_lessonmark'),
         ]);
         $preview .= html_writer::tag('button', get_string('editmode', 'mod_lessonmark'), [
+            'id' => $edittabid,
             'type' => 'button',
             'class' => 'btn btn-secondary mod_lessonmark-editor__tab is-active',
             'data-action' => 'show-editor',
             'role' => 'tab',
             'aria-selected' => 'true',
+            'aria-controls' => $sourcepanelid,
+            'tabindex' => '0',
         ]);
         $preview .= html_writer::tag('button', get_string('previewmode', 'mod_lessonmark'), [
+            'id' => $previewtabid,
             'type' => 'button',
             'class' => 'btn btn-secondary mod_lessonmark-editor__tab',
             'data-action' => 'show-preview',
             'role' => 'tab',
             'aria-selected' => 'false',
+            'aria-controls' => $previewid,
+            'tabindex' => '-1',
         ]);
+        $preview .= html_writer::end_div();
+        $preview .= html_writer::start_div('mod_lessonmark-editor__actions');
         $preview .= html_writer::tag('button', get_string('importmarkdown', 'mod_lessonmark'), [
             'type' => 'button',
             'class' => 'btn btn-link',
@@ -99,9 +112,10 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         }
         $preview .= html_writer::tag('button', get_string('refreshpreview', 'mod_lessonmark'), [
             'type' => 'button',
-            'class' => 'btn btn-link ml-auto',
+            'class' => 'btn btn-link',
             'data-action' => 'refresh-preview',
         ]);
+        $preview .= html_writer::end_div();
         $preview .= html_writer::end_div();
         $preview .= html_writer::div(
             get_string('previewempty', 'mod_lessonmark'),
@@ -109,7 +123,10 @@ class mod_lessonmark_mod_form extends moodleform_mod {
             [
                 'id' => $previewid,
                 'data-region' => 'preview-content',
-                'role' => 'tabpanel',
+                'role' => 'region',
+                'aria-label' => get_string('previewmode', 'mod_lessonmark'),
+                'aria-busy' => 'false',
+                'tabindex' => '0',
             ]
         );
         $preview .= html_writer::div('', 'mod_lessonmark-editor__status', [
@@ -134,6 +151,9 @@ class mod_lessonmark_mod_form extends moodleform_mod {
             'endpoint' => (new moodle_url('/mod/lessonmark/preview.php'))->out(false),
             'sourceSelector' => '#id_markdownsource',
             'containerSelector' => '[data-preview-id="' . $previewid . '"]',
+            'sourcePanelId' => $sourcepanelid,
+            'editTabId' => $edittabid,
+            'previewTabId' => $previewtabid,
             'filesSelector' => '#id_' . \mod_lessonmark\local\content_files::FORM_FIELD,
             'cmid' => $cmid,
             'courseid' => $courseid,
@@ -142,6 +162,7 @@ class mod_lessonmark_mod_form extends moodleform_mod {
             'strings' => [
                 'loading' => get_string('previewloading', 'mod_lessonmark'),
                 'ready' => get_string('previewready', 'mod_lessonmark'),
+                'previewLabel' => get_string('previewmode', 'mod_lessonmark'),
                 'error' => get_string('previewerror', 'mod_lessonmark'),
                 'empty' => get_string('previewempty', 'mod_lessonmark'),
                 'importConfirm' => get_string('importconfirm', 'mod_lessonmark'),

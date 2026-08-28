@@ -3,10 +3,18 @@ set -eu
 
 repositoryroot="$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)"
 phpversion="${LESSONMARK_CI_PHP_VERSION:-8.3}"
+moodlebranch="${LESSONMARK_CI_MOODLE_BRANCH:-MOODLE_502_STABLE}"
 case "$phpversion" in
     8.3|8.4) ;;
     *)
         echo "LESSONMARK_CI_PHP_VERSION must be 8.3 or 8.4." >&2
+        exit 1
+        ;;
+esac
+case "$moodlebranch" in
+    MOODLE_502_STABLE|main) ;;
+    *)
+        echo "LESSONMARK_CI_MOODLE_BRANCH must be MOODLE_502_STABLE or main." >&2
         exit 1
         ;;
 esac
@@ -48,5 +56,6 @@ docker run --rm \
     -v "$repositoryroot:/workspace" \
     -e DB_HOST="$database" \
     -e DB_PASSWORD="$dbpassword" \
+    -e MOODLE_BRANCH="$moodlebranch" \
     "moodlehq/moodle-php-apache:$phpversion" \
     sh /workspace/scripts/run-ci-in-container.sh
