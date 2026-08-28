@@ -50,20 +50,22 @@ class behat_mod_lessonmark extends behat_base {
      */
     public function source_editor_should_stay_aligned_with_preview(): void {
         $gap = $this->getSession()->evaluateScript(<<<'JS'
-            const source = document.querySelector('#id_markdownsource');
-            const sourceField = source?.closest('.mod_lessonmark-editor__source');
-            const preview = document.querySelector('.mod_lessonmark-editor');
+            (function() {
+                var source = document.querySelector('#id_markdownsource');
+                var sourceField = source ? source.closest('.mod_lessonmark-editor__source') : null;
+                var preview = document.querySelector('.mod_lessonmark-editor');
 
-            if (!source || !sourceField || !preview) {
-                return null;
-            }
+                if (!source || !sourceField || !preview) {
+                    return null;
+                }
 
-            const originalMinHeight = preview.style.minHeight;
-            preview.style.minHeight = '80rem';
-            const gap = source.getBoundingClientRect().top - sourceField.getBoundingClientRect().top;
-            preview.style.minHeight = originalMinHeight;
+                var originalMinHeight = preview.style.minHeight;
+                preview.style.minHeight = '80rem';
+                var gap = source.getBoundingClientRect().top - sourceField.getBoundingClientRect().top;
+                preview.style.minHeight = originalMinHeight;
 
-            return gap;
+                return gap;
+            }())
             JS);
 
         if (!is_numeric($gap)) {
