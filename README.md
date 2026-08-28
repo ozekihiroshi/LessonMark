@@ -1,57 +1,60 @@
 # LessonMark
 
-LessonMark is a Moodle course resource for authoring, previewing, and publishing teaching material whose source of truth remains Markdown.
+LessonMark is a Moodle course resource for authoring, previewing, and
+publishing teaching material whose source of truth remains Markdown.
 
-The first release is planned as the Moodle activity module `mod_lessonmark`.
-
-## Repository status
-
-This repository currently contains only the initial project structure and planning documents. The Moodle plugin and local Docker test environment have not been implemented yet.
+The plugin component is `mod_lessonmark`. The initial target is Moodle 5.2 on
+PHP 8.3 and 8.4.
 
 ## Repository layout
 
 ```text
 LessonMark/
-├── docs/                  Product and technical decisions
-├── plugin/
-│   └── lessonmark/        Future mod_lessonmark source
-├── .vscode/               Shared VS Code settings
+├── .github/workflows/     GitHub Actions quality and release gates
+├── docs/                  Product, technical, and implementation records
+├── plugin/lessonmark/     Installable mod_lessonmark source
+├── scripts/               Release, smoke, and local CI runners
 └── LessonMark.code-workspace
 ```
 
-The local Moodle/Docker environment will be added separately in a later step. It is expected to live under a dedicated development directory rather than being mixed into the plugin source.
+The reusable Moodle Docker environments remain in the separate
+`D:\workspace\moodle-rescue` repository. The UI upload environment is exposed
+on port 8085 and contains no LessonMark source mount.
 
-## Development assumptions
+## WSL workflow
 
-- Host OS: Windows
-- Development shell: WSL
-- Project path in Windows: `D:\workspace\LessonMark`
-- Project path in WSL: `/mnt/d/workspace/LessonMark`
-- Editor: VS Code with WSL support
-- Containers: Docker Engine running inside WSL
-- Docker Desktop: not used
-- Initial Moodle target: Moodle 5.2
-- Initial PHP targets: PHP 8.3 and 8.4
-
-Open the repository from WSL:
-
-```bash
+```sh
 cd /mnt/d/workspace/LessonMark
-code LessonMark.code-workspace
+scripts/run-ci-local.sh
+scripts/build-release.sh
 ```
+
+The local CI runner creates and removes only its own temporary Docker network,
+database container, and PHP test container. Use PHP 8.4 explicitly with:
+
+```sh
+LESSONMARK_CI_PHP_VERSION=8.4 scripts/run-ci-local.sh
+```
+
+The release artifact is written to `build/mod_lessonmark.zip`. The builder
+requires a clean Git worktree, archives only committed plugin files, validates
+the ZIP layout, and produces byte-identical output for the same commit.
+
+## Current status
+
+M1 is complete: installable skeleton, source persistence, safe student view,
+administrator upload/uninstall/reinstall lifecycle, live smoke coverage, and
+Moodle Plugin CI are in place. Development now proceeds to M2, the dedicated
+Markdown editor and shared live preview.
 
 ## Documents
 
 - [Product requirements](docs/PRODUCT_REQUIREMENTS.md)
 - [Technical decisions and milestones](docs/TECHNICAL_DECISIONS.md)
-
-## Planned next step
-
-Add a WSL-native Moodle Docker test environment, then mount or link `plugin/lessonmark` into Moodle as `mod/lessonmark`.
-
-The development environment must keep generated Moodle data, database data, secrets, and local configuration outside Git.
+- [M1 implementation result](docs/M1_IMPLEMENTATION.md)
 
 ## GitHub
 
-The repository is prepared for Git. A GitHub remote is intentionally not created until the owner, visibility, and repository name are confirmed.
-
+The workflow is ready in `.github/workflows/moodle-plugin-ci.yml`. This local
+repository does not yet have a GitHub remote; Actions will begin after the
+owner chooses the repository name and visibility and pushes it.

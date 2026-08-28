@@ -22,8 +22,6 @@
  * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Reports the Moodle features supported by LessonMark.
  *
@@ -111,4 +109,3 @@ function lessonmark_get_coursemodule_info($coursemodule): ?cached_cm_info {
     }
     return $info;
 }
-

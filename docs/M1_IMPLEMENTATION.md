@@ -1,52 +1,79 @@
 # M1 implementation result
 
+## Status
+
+M1 is complete. `mod_lessonmark` can be installed from the release ZIP,
+uninstalled with its database data and code directory removed, reinstalled,
+and exercised as a Moodle course resource.
+
 ## Scope completed
 
-- `mod_lessonmark` activity-module skeleton
-- installable XMLDB schema and CRUD callbacks
-- Markdown source stored without HTML conversion
-- shared Moodle-core Markdown renderer adapter
+- installable activity-module skeleton and XMLDB schema
+- capability-aware CRUD and student-facing view
+- Markdown source retained without HTML conversion
+- one shared Moodle-core renderer adapter for display and future preview
 - raw HTML neutralisation outside inline and fenced code
-- student-facing `view.php`
-- capability, privacy, completion, and viewed-event integration
-- PHPUnit test sources
-- deterministic release ZIP builder
-- Moodle 5.2.2 integration smoke script
+- privacy, completion, and viewed-event integration
+- deterministic release ZIP builder and verifier
+- PHPUnit, Moodle Code Checker, PHPDoc, validation, and savepoint gates
+- GitHub Actions matrix for Moodle 5.2 on PHP 8.3 and PHP 8.4
 
-## Local verification
+## Administrator upload lifecycle
 
-Environment: `moodle-rescue` UI test Compose project, Moodle 5.2.2, PHP 8.3, MariaDB 11.8.
+Environment: `moodle-rescue` UI test site on `http://localhost:8085`, Moodle
+5.2.2, PHP 8.3, and MariaDB 11.8.
 
-The release ZIP installed as `mod_lessonmark`. A fixture course and activity were created through Moodle APIs with the following successful checks:
+The generated `mod_lessonmark.zip` completed the conventional administrator
+workflow through Moodle's own web forms and File API:
 
-- Markdown source preserved
-- heading rendered
-- strong emphasis rendered
-- raw script element not executable
-- raw HTML visible as text
-- inline HTML example rendered as code
-- authenticated student-facing HTTP response returned 200
+1. authenticated as the site administrator;
+2. uploaded the ZIP to the install form draft area;
+3. passed package validation as `mod_lessonmark`;
+4. completed the Moodle database upgrade with `mod_lessonmark Success`;
+5. uninstalled the plugin and deleted its database data;
+6. confirmed and removed `/var/www/html/public/mod/lessonmark`;
+7. verified that both the code directory and installed-plugin registration were absent;
+8. uploaded and installed the same release ZIP again; and
+9. reran the live M1 rendering and safety smoke test successfully.
 
-## Release artifact
+The in-app browser could not start because of the host Windows ACL failure.
+The lifecycle was therefore driven over the same authenticated administrator
+HTTP forms, including the multipart File API upload, rather than by visual
+click automation. It did not use Moodle's CLI installer.
 
-Run from WSL:
+## Automated verification
+
+`scripts/run-ci-local.sh` creates an isolated Docker network and temporary
+MariaDB, then runs Moodle Plugin CI 4.5.11 in Moodle's official PHP image. It
+does not modify the running `moodle-rescue` sites. Node.js, NVM, and Composer
+used by this runner are versioned and SHA-256 verified.
+
+The Moodle 5.2 / PHP 8.3 run completed with:
+
+- PHP lint: 18/18 files
+- Moodle CodeSniffer: no errors or warnings
+- Moodle PHPDoc Checker: passed
+- plugin validation: passed
+- upgrade savepoint check: passed; the initial empty upgrade function has no savepoint yet
+- PHPUnit: 7 tests, 15 assertions
+
+PHPUnit coverage metadata uses PHPUnit 11 attributes rather than deprecated
+docblock annotations.
+
+## CI and release artifact
+
+`.github/workflows/moodle-plugin-ci.yml` runs the same gates on PHP 8.3 and
+8.4 and separately builds the release ZIP twice, compares the bytes, verifies
+the archive layout, and publishes it as a workflow artifact.
+
+Run locally from WSL:
 
 ```sh
 cd /mnt/d/workspace/LessonMark
+scripts/run-ci-local.sh
 scripts/build-release.sh
 ```
 
-The builder requires a clean Git repository, archives only committed `plugin/lessonmark` source, validates the ZIP layout, and prints the artifact SHA-256.
-
-Two consecutive builds must be byte-identical before release.
-
-## UI environment adjustment
-
-The `moodle-rescue` UI test image originally allowed web installation only below `public/admin/tool`. Its UI-only Docker target now also grants the web installer ownership of `public/mod`. Local source-mounted and production-shaped images are unchanged.
-
-## Remaining verification
-
-The in-app Browser could not start because of the host ACL failure affecting browser automation. The ZIP was therefore placed in the same UI test container and installed with Moodle's official CLI upgrade path. The conventional administrator multipart-upload screen remains a manual lifecycle check.
-
-The PHPUnit test files are present but were not executed because this disposable UI image is not configured as a PHPUnit development installation. Their behavior was covered by the live Moodle smoke test; formal PHPUnit execution remains part of CI setup.
-
+Set `LESSONMARK_CI_PHP_VERSION=8.4` to repeat the local gate on PHP 8.4.
+The GitHub workflow will start after this repository is connected and pushed
+to its GitHub remote.

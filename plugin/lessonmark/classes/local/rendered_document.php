@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
  * Rendered LessonMark document.
  *
@@ -9,33 +24,56 @@
 
 namespace mod_lessonmark\local;
 
-/** Holds safe HTML and renderer metadata. */
+/**
+ * Holds safe HTML and renderer metadata.
+ */
 final class rendered_document {
+    /** @var string Safe rendered HTML. */
+    private string $contenthtml;
+
+    /** @var array Table-of-contents data. */
+    private array $toc;
+
+    /** @var array Renderer diagnostics. */
+    private array $diagnostics;
+
     /**
+     * Creates an immutable rendering result.
+     *
      * @param string $contenthtml Safe rendered HTML.
      * @param array $toc Table-of-contents data.
      * @param array $diagnostics Renderer diagnostics.
      */
-    public function __construct(
-        private string $contenthtml,
-        private array $toc = [],
-        private array $diagnostics = [],
-    ) {
+    public function __construct(string $contenthtml, array $toc = [], array $diagnostics = []) {
+        $this->contenthtml = $contenthtml;
+        $this->toc = $toc;
+        $this->diagnostics = $diagnostics;
     }
 
-    /** @return string Safe HTML. */
+    /**
+     * Returns safe rendered HTML.
+     *
+     * @return string Safe HTML.
+     */
     public function get_content_html(): string {
         return $this->contenthtml;
     }
 
-    /** @return array Table-of-contents data. */
+    /**
+     * Returns table-of-contents data.
+     *
+     * @return array Table-of-contents data.
+     */
     public function get_toc(): array {
         return $this->toc;
     }
 
-    /** @return array Renderer diagnostics. */
+    /**
+     * Returns renderer diagnostics.
+     *
+     * @return array Renderer diagnostics.
+     */
     public function get_diagnostics(): array {
         return $this->diagnostics;
     }
 }
-

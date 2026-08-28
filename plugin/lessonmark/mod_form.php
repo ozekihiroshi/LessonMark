@@ -69,4 +69,3 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         return $errors;
     }
 }
-

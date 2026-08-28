@@ -1,0 +1,119 @@
+name: Moodle Plugin CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: moodle-plugin-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Moodle 5.2 / PHP ${{ matrix.php }}
+    runs-on: ubuntu-24.04
+    services:
+      mariadb:
+        image: mariadb:11.8
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "1"
+          MYSQL_CHARACTER_SET_SERVER: utf8mb4
+          MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3", "8.4"]
+    steps:
+      - name: Check out LessonMark
+        uses: actions/checkout@v6
+        with:
+          path: lessonmark-repository
+          persist-credentials: false
+
+      - name: Set up PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli, zip, gd, intl, soap
+          ini-values: max_input_vars=5000, opcache.enable_cli=1
+          coverage: none
+
+      - name: Install Moodle Plugin CI
+        run: |
+          composer create-project --no-interaction --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci 4.5.11
+          echo "$(pwd)/ci/bin" >> "$GITHUB_PATH"
+          echo "$(pwd)/ci/vendor/bin" >> "$GITHUB_PATH"
+          sudo locale-gen en_AU.UTF-8
+          echo "NVM_DIR=$HOME/.nvm" >> "$GITHUB_ENV"
+
+      - name: Install Moodle and LessonMark
+        env:
+          DB: mariadb
+          MOODLE_BRANCH: MOODLE_502_STABLE
+        run: >-
+          ci/bin/moodle-plugin-ci install
+          --plugin ./lessonmark-repository/plugin/lessonmark
+          --db-host=127.0.0.1
+
+      - name: PHP lint
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phplint
+
+      - name: Moodle Code Checker
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpcs --max-warnings 0
+
+      - name: Moodle PHPDoc Checker
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpdoc --max-warnings 0
+
+      - name: Plugin validation
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci validate
+
+      - name: Upgrade savepoints
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci savepoints
+
+      - name: JavaScript and CSS lint
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci grunt --max-lint-warnings 0
+
+      - name: PHPUnit
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpunit --fail-on-warning
+
+  release-zip:
+    name: Reproducible release ZIP
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out LessonMark
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Build twice and compare
+        run: |
+          scripts/build-release.sh build/mod_lessonmark.zip
+          cp build/mod_lessonmark.zip /tmp/mod_lessonmark.first.zip
+          scripts/build-release.sh build/mod_lessonmark.zip
+          cmp /tmp/mod_lessonmark.first.zip build/mod_lessonmark.zip
+          php scripts/verify-release.php build/mod_lessonmark.zip
+
+      - name: Upload release candidate
+        uses: actions/upload-artifact@v7
+        with:
+          name: mod_lessonmark-${{ github.sha }}
+          path: build/mod_lessonmark.zip
+          if-no-files-found: error
+          retention-days: 14
