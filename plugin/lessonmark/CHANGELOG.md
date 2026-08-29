@@ -1,5 +1,10 @@
 # Change log
 
+## 0.1.0-rc4 - 2026-08-29
+
+- Kept the Markdown source editor visible while teachers scroll through a long
+  Preview on desktop layouts.
+
 ## 0.1.0-rc3 - 2026-08-29
 
 - Kept the Markdown source field aligned to the top of its Preview column when

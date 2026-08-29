@@ -81,4 +81,55 @@ class behat_mod_lessonmark extends behat_base {
             ));
         }
     }
+
+    /**
+     * Confirms that the source remains available while the document scrolls.
+     *
+     * @Then /^the LessonMark source editor should remain visible while the preview scrolls$/
+     */
+    public function source_editor_should_remain_visible_while_preview_scrolls(): void {
+        $top = $this->getSession()->evaluateScript(<<<'JS'
+            (function() {
+                var source = document.querySelector('#id_markdownsource');
+                var sourceField = source ? source.closest('.mod_lessonmark-editor__source') : null;
+                var preview = document.querySelector('.mod_lessonmark-editor');
+                var panes = document.querySelector('.mod_lessonmark-editor__panes');
+
+                if (!sourceField || !preview || !panes) {
+                    return null;
+                }
+
+                var originalMinHeight = preview.style.minHeight;
+                var originalScrollBehavior = document.documentElement.style.scrollBehavior;
+                var originalScrollY = window.scrollY;
+                preview.style.minHeight = '160rem';
+                document.documentElement.style.scrollBehavior = 'auto';
+
+                var panesTop = panes.getBoundingClientRect().top + window.scrollY;
+                window.scrollTo(0, panesTop + 320);
+                var sourceTop = sourceField.getBoundingClientRect().top;
+
+                window.scrollTo(0, originalScrollY);
+                document.documentElement.style.scrollBehavior = originalScrollBehavior;
+                preview.style.minHeight = originalMinHeight;
+
+                return sourceTop;
+            }())
+            JS);
+
+        if (!is_numeric($top)) {
+            throw new \RuntimeException('The LessonMark editor panes were not found.');
+        }
+
+        $minimumtop = 0.0;
+        $maximumtop = 80.0;
+        if ((float) $top < $minimumtop || (float) $top > $maximumtop) {
+            throw new \RuntimeException(sprintf(
+                'The Markdown source was at %.1f pixels after scrolling; expected between %.1f and %.1f pixels.',
+                (float) $top,
+                $minimumtop,
+                $maximumtop,
+            ));
+        }
+    }
 }

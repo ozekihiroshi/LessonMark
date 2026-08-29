@@ -378,6 +378,17 @@
     .mod_lessonmark-editor__tabs {
         display: none;
     }
+
+    .mod_lessonmark-editor__source {
+        position: sticky;
+        top: 1rem;
+    }
+
+    .mod_lessonmark-editor__source textarea {
+        height: calc(100vh - 12rem);
+        min-height: 20rem;
+        max-height: calc(100vh - 8rem);
+    }
 }
 
 @media (min-width: 1200px) {
