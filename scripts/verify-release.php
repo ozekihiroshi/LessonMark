@@ -23,7 +23,7 @@ $checks = [
     '/\$plugin->version\s*=\s*\d{10};/' => 'build number',
     '/\$plugin->requires\s*=\s*2026042000;/' => 'Moodle requirement',
     '/\$plugin->supported\s*=\s*\[502,\s*502\];/' => 'support range',
-    '/\$plugin->maturity\s*=\s*MATURITY_RC;/' => 'release-candidate maturity',
+    '/\$plugin->maturity\s*=\s*MATURITY_STABLE;/' => 'stable maturity',
 ];
 foreach ($checks as $pattern => $description) {
     if (preg_match($pattern, $versioncontents) !== 1) {
@@ -54,6 +54,7 @@ $requiredfiles = [
     'vendor/prism/LICENSE',
     'amd/build/editor.min.js',
     'amd/build/prism-languages.min.js',
+    'vendor/prism/readme_moodle.txt',
     'amd/build/syntax-highlighter.min.js',
 ];
 foreach ($requiredfiles as $relativepath) {

@@ -5,6 +5,10 @@
 - `AUTHORING_GUIDE.md`: supported Markdown and teaching syntax
 - `INSTALLATION.md`: install, upgrade, and uninstall operations
 - `RELEASE_CHECKLIST.md`: release gates and evidence requirements
+- `MARKETPLACE_LISTING.md`: reusable public product description and links
+- `PUBLICATION_AUDIT.md`: Moodle Marketplace readiness evidence
+- `RELEASE_NOTES_0.1.0.md`: public notes for the first stable release
+- `screenshots/`: public authoring and student-view images
 - `M1_IMPLEMENTATION.md` through `M7_IMPLEMENTATION.md`: milestone records
 
 Product scope changes belong in the product requirements. Implementation

@@ -42,7 +42,12 @@ See the source repository for the authoring guide, installation details,
 security policy, release checklist, and reproducible build scripts:
 <https://github.com/ozekihiroshi/LessonMark>.
 
+Use <https://github.com/ozekihiroshi/LessonMark/issues> for reproducible
+non-security defects and feature discussions. Security reports must use the
+private process in the repository's `SECURITY.md`.
+
 ## License
 
 GNU GPL v3 or later. Bundled PrismJS assets are MIT licensed; see
-`vendor/prism/LICENSE` and `thirdpartylibs.xml`.
+`vendor/prism/LICENSE`, `vendor/prism/readme_moodle.txt`, and
+`thirdpartylibs.xml`.

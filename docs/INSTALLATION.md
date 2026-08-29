@@ -12,11 +12,12 @@ Moodle server. Those tools are development dependencies only.
 ## Install from the release ZIP
 
 1. Back up the database and `moodledata`.
-2. In Moodle, open **Site administration > Plugins > Install plugins**.
-3. Upload `mod_lessonmark.zip` and confirm the detected component is
+2. Verify the published SHA-256 checksum for `mod_lessonmark.zip`.
+3. In Moodle, open **Site administration > Plugins > Install plugins**.
+4. Upload `mod_lessonmark.zip` and confirm the detected component is
    `mod_lessonmark` at `mod/lessonmark`.
-4. Complete Moodle's database upgrade and review the plugin checks.
-5. Create a LessonMark activity in a test course, preview it, save it, and view
+5. Complete Moodle's database upgrade and review the plugin checks.
+6. Create a LessonMark activity in a test course, preview it, save it, and view
    it with a student role before enabling broader use.
 
 For a manual installation, extract the package so that `version.php` is at
@@ -36,3 +37,10 @@ Uninstalling removes LessonMark database records and Moodle-managed activity
 files. Course backups or exported `.md` files must be created before uninstall
 if the material is to be retained. Exported Markdown does not contain images;
 use Moodle course backup when a restorable activity including images is needed.
+
+## Support and security
+
+Report reproducible non-security defects at
+<https://github.com/ozekihiroshi/LessonMark/issues>. Security vulnerabilities
+must be reported privately using the process in
+<https://github.com/ozekihiroshi/LessonMark/security/policy>.

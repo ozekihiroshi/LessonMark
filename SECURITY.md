@@ -7,15 +7,15 @@ File API.
 
 ## Supported release
 
-Security fixes are currently prepared for the latest `0.1.x` release candidate
+Security fixes are currently prepared for the latest stable `0.1.x` release
 on Moodle 5.2 with PHP 8.3 or 8.4. Moodle 5.3 development builds may be tested
 for early compatibility, but are not a supported production target until
 Moodle 5.3 is released and the compatibility gate is completed.
 
 ## Reporting a vulnerability
 
-Use GitHub's private vulnerability reporting for the LessonMark repository
-when it is available. Otherwise contact the repository owner privately through
+Use [GitHub private vulnerability reporting](https://github.com/ozekihiroshi/LessonMark/security/advisories/new).
+If that channel is unavailable, contact the repository owner privately through
 their GitHub profile. Do not publish exploit details, credentials, private
 course content, or student data in a public issue.
 
