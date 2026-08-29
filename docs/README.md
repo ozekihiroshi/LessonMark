@@ -8,6 +8,7 @@
 - `MARKETPLACE_LISTING.md`: reusable public product description and links
 - `PUBLICATION_AUDIT.md`: Moodle Marketplace readiness evidence
 - `RELEASE_NOTES_0.1.0.md`: public notes for the first stable release
+- `RELEASE_EVIDENCE_0.1.0.md`: exact local acceptance evidence
 - `screenshots/`: public authoring and student-view images
 - `M1_IMPLEMENTATION.md` through `M7_IMPLEMENTATION.md`: milestone records
 

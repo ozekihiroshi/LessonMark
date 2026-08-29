@@ -22,6 +22,11 @@ Moodle server. Those tools are development dependencies only.
 
 For a manual installation, extract the package so that `version.php` is at
 `<moodle-root>/mod/lessonmark/version.php`, then run Moodle's normal upgrade.
+
+Run Moodle maintenance CLI commands as the same operating-system account used
+by the web process (commonly `www-data`). Running them as `root` can leave
+root-owned files in `moodledata/cache` or `moodledata/localcache` and prevent
+later web or CLI operations from creating cache directories.
 Do not leave a nested `lessonmark/lessonmark` directory.
 
 ## Upgrade
