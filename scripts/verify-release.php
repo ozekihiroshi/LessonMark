@@ -52,6 +52,8 @@ if (preg_match('/\$plugin->maturity\s*=\s*' . $expectedmaturity . ';/', $version
 
 $requiredfiles = [
     'README.md',
+    'export_pdf.php',
+    'classes/local/pdf_exporter.php',
     'CHANGELOG.md',
     'readme_moodle.txt',
     'thirdpartylibs.xml',

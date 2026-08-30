@@ -109,6 +109,15 @@ class mod_lessonmark_mod_form extends moodleform_mod {
                 get_string('exportsavedmarkdown', 'mod_lessonmark'),
                 ['class' => 'btn btn-link', 'data-action' => 'export-markdown']
             );
+            $pdfurl = new moodle_url('/mod/lessonmark/export_pdf.php', [
+                'id' => $cmid,
+                'sesskey' => sesskey(),
+            ]);
+            $preview .= html_writer::link(
+                $pdfurl,
+                get_string('exportsavedpdf', 'mod_lessonmark'),
+                ['class' => 'btn btn-link', 'data-action' => 'export-pdf']
+            );
         }
         $preview .= html_writer::tag('button', get_string('refreshpreview', 'mod_lessonmark'), [
             'type' => 'button',

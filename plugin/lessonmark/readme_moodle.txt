@@ -1,4 +1,4 @@
-LessonMark 0.1.0
+LessonMark 0.2.0-alpha2
 ================
 
 LessonMark is a Moodle activity module for authoring, previewing, and publishing
@@ -7,7 +7,7 @@ teaching material while preserving Markdown as the source of truth.
 Component: mod_lessonmark
 Moodle: 5.2
 PHP: 8.3 or 8.4
-Maturity: stable
+Maturity: alpha
 License: GNU GPL v3 or later
 
 Install the ZIP through Moodle's plugin installer, or extract it so that

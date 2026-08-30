@@ -67,6 +67,12 @@ For an existing activity, **Export saved .md** downloads the Markdown source
 currently stored in Moodle. Unsaved editor changes and image files are not
 included. Save first when the download must contain the latest edit.
 
+**Download saved PDF** produces a portable reading copy from the same saved
+source. Moodle-managed teaching images are embedded, ANSWER disclosures are
+expanded, and RESPONSE or CHOICE controls become blank printable working
+areas. Browser-local answers and unsaved editor changes are not included.
+Remote images are not fetched into the PDF.
+
 ## Callouts
 
 Use the portable blockquote form below. Names are case-insensitive.

@@ -9,9 +9,9 @@ publishing teaching material whose source of truth remains Markdown.
 The plugin component is `mod_lessonmark`. Stable release 0.1.0 targets Moodle
 5.2 on PHP 8.3 and 8.4.
 
-The `codex/self-check-blocks` development branch prepares 0.2.0-alpha1. It adds
-ungraded same-page working answers and answer disclosures without recreating
-Moodle Quiz, grading, submissions, or teacher-visible attempts.
+The 0.2 development line adds ungraded same-page working answers and answer
+disclosures without recreating Moodle Quiz, plus access-controlled PDF export
+of saved content with Moodle-managed images embedded.
 
 ![LessonMark Markdown editor and preview](docs/screenshots/lessonmark-authoring.png)
 

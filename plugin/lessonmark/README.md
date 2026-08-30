@@ -7,7 +7,7 @@ material while Markdown remains the source of truth.
 
 - create and edit Markdown inside Moodle without converting the saved source to HTML;
 - responsive split Edit/Preview UI with keyboard-operable mobile tabs;
-- one-time validated UTF-8 `.md` import and access-controlled source export;
+- one-time validated UTF-8 `.md` import, source export, and saved-content PDF download;
 - one safe rendering path for preview and student display;
 - stable heading links, automatic contents, NOTE/TIP/WARNING callouts,
   highlighted fenced code, responsive tables, and teaching typography;
@@ -18,8 +18,10 @@ material while Markdown remains the source of truth.
 
 Upload teaching images with the activity file manager and reference them as
 `![Alternative text](@@PLUGINFILE@@/image.png)`. Subfolders are supported.
-Import creates an unsaved editor change. Export downloads only the source
-already saved in Moodle and does not include images.
+Import creates an unsaved editor change. Markdown export downloads only the
+source already saved in Moodle and does not include images. PDF download uses
+the saved source, embeds Moodle-managed images, expands answer disclosures,
+and leaves browser-local working answers blank.
 
 Raw HTML is not supported authoring syntax. It is neutralised before Moodle's
 HTML cleaning boundary rather than executed.

@@ -1,5 +1,12 @@
 # Change log
 
+## 0.2.0-alpha2 - 2026-08-30
+
+- Added access-controlled PDF download for the content saved in Moodle.
+- Embedded Moodle-managed teaching images, expanded ANSWER disclosures, and
+  converted browser-local working answers to blank printable response areas.
+- Kept remote image fetching and browser-local answer export outside the PDF
+  boundary.
 ## 0.2.0-alpha1 - 2026-08-30
 
 - Added ungraded RESPONSE and CHOICE working-answer blocks that retain learner

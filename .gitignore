@@ -16,6 +16,8 @@ node_modules/
 .phpcs-cache
 coverage/
 /build/
+/output/
+/tmp/
 
 # Future Moodle development runtime data
 moodledata/
