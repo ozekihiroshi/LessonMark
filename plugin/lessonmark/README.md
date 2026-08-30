@@ -3,6 +3,11 @@
 LessonMark is a Moodle activity module for creating and publishing teaching
 material while Markdown remains the source of truth.
 
+The portable plain-text source also supports AI-assisted authoring: teachers
+can draft, translate, reorganise, or review a lesson with a chosen tool, inspect
+the change, and verify Moodle's actual Preview before publishing. LessonMark
+does not itself contact an AI service or send lesson content outside Moodle.
+
 ## Features
 
 - create and edit Markdown inside Moodle without converting the saved source to HTML;
