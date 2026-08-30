@@ -222,9 +222,8 @@ final class pdf_exporter {
         }
     }
 
-    /** Copies Moodle-managed images to a request-scoped directory for TCPDF. */
+    /** Embeds Moodle-managed images as data URIs for consistent web and CLI PDF output. */
     private function localise_images(\DOMDocument $dom, \DOMElement $root, \context_module $context): void {
-        $tempdir = make_request_directory();
         foreach (iterator_to_array($root->getElementsByTagName('img')) as $image) {
             if (!$image instanceof \DOMElement || !$image->parentNode instanceof \DOMNode) {
                 continue;
@@ -236,13 +235,11 @@ final class pdf_exporter {
                 $image->parentNode->replaceChild($replacement, $image);
                 continue;
             }
-            $extension = pathinfo($file->get_filename(), PATHINFO_EXTENSION);
-            $localpath = $tempdir . DIRECTORY_SEPARATOR . sha1($file->get_pathnamehash())
-                . ($extension === '' ? '' : '.' . clean_param($extension, PARAM_ALPHANUMEXT));
-            if (!$file->copy_content_to($localpath)) {
-                throw new \coding_exception('A LessonMark image could not be prepared for PDF export.');
+            $mimetype = strtolower(trim($file->get_mimetype()));
+            if (!str_starts_with($mimetype, 'image/')) {
+                throw new \coding_exception('A LessonMark PDF image has an invalid MIME type.');
             }
-            $image->setAttribute('src', $localpath);
+            $image->setAttribute('src', 'data:' . $mimetype . ';base64,' . base64_encode($file->get_content()));
             $image->removeAttribute('srcset');
             $image->removeAttribute('loading');
         }

@@ -43,6 +43,7 @@ final class pdf_exporter_test extends \advanced_testcase {
 
         $bytes = (new pdf_exporter())->generate($lessonmark, $course, $context);
         $this->assertStringStartsWith('%PDF-', $bytes);
+        $this->assertStringContainsString('/Subtype /Image', $bytes);
         $this->assertGreaterThan(1000, strlen($bytes));
     }
 
