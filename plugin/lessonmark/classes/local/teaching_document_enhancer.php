@@ -186,8 +186,10 @@ final class teaching_document_enhancer {
                     continue;
                 }
                 $firstnode = $child->firstChild;
-                if ($firstnode instanceof \DOMText
-                        && preg_match('/^\s*\[!(RESPONSE|CHOICE|ANSWER)\]\s*/iu', $firstnode->data, $matches) === 1) {
+                if (
+                    $firstnode instanceof \DOMText
+                    && preg_match('/^\s*\[!(RESPONSE|CHOICE|ANSWER)\]\s*/iu', $firstnode->data, $matches) === 1
+                ) {
                     $markers[] = [
                         'paragraph' => $child,
                         'type' => \core_text::strtolower($matches[1]),

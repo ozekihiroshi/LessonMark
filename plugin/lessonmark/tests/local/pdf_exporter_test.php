@@ -5,6 +5,14 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Tests for LessonMark PDF export preparation.
@@ -16,10 +24,14 @@
 
 namespace mod_lessonmark\local;
 
-/** Tests the printable transformation and binary generation. */
+/**
+ * Tests the printable transformation and binary generation.
+ */
 #[\PHPUnit\Framework\Attributes\CoversClass(pdf_exporter::class)]
 final class pdf_exporter_test extends \advanced_testcase {
-    /** Saved content produces a PDF with expanded answers and embedded images. */
+    /**
+     * Saved content produces a PDF with expanded answers and embedded images.
+     */
     public function test_generate_pdf_from_saved_activity(): void {
         $this->resetAfterTest();
         $this->setAdminUser();
@@ -27,7 +39,10 @@ final class pdf_exporter_test extends \advanced_testcase {
         $lessonmark = $this->getDataGenerator()->create_module('lessonmark', [
             'course' => $course->id,
             'name' => 'PDF lesson',
-            'markdownsource' => "# PDF lesson\n\n![Pixel](@@PLUGINFILE@@/pixel.png)\n\n> [!RESPONSE]\n> Explain.\n\n> [!ANSWER]\n> **Answer:** Evidence.",
+            'markdownsource' => "# PDF lesson\n\n"
+                . "![Pixel](@@PLUGINFILE@@/pixel.png)\n\n"
+                . "> [!RESPONSE]\n> Explain.\n\n"
+                . "> [!ANSWER]\n> **Answer:** Evidence.",
         ]);
         $cm = get_coursemodule_from_instance('lessonmark', $lessonmark->id, $course->id, false, MUST_EXIST);
         $context = \context_module::instance($cm->id);
@@ -47,7 +62,9 @@ final class pdf_exporter_test extends \advanced_testcase {
         $this->assertGreaterThan(1000, strlen($bytes));
     }
 
-    /** Export filenames are safe and always end in .pdf. */
+    /**
+     * Export filenames are safe and always end in .pdf.
+     */
     public function test_export_filename(): void {
         $this->assertSame('Lesson.pdf', pdf_exporter::export_filename('Lesson.pdf'));
         $this->assertSame('lessonmark.pdf', pdf_exporter::export_filename('...'));

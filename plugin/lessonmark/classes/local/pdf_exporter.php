@@ -5,6 +5,14 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Creates a portable PDF from one saved LessonMark activity.
@@ -135,7 +143,9 @@ final class pdf_exporter {
             . $body;
     }
 
-    /** Removes the source H1 when it repeats the Moodle activity title. */
+    /**
+     * Removes the source H1 when it repeats the Moodle activity title.
+     */
     private function remove_duplicate_title(\DOMElement $root, string $title): void {
         foreach ($root->childNodes as $child) {
             if (!$child instanceof \DOMElement || strtolower($child->tagName) !== 'h1') {
@@ -148,7 +158,9 @@ final class pdf_exporter {
         }
     }
 
-    /** Expands native ANSWER disclosures for print. */
+    /**
+     * Expands native ANSWER disclosures for print.
+     */
     private function expand_answers(\DOMDocument $dom, \DOMElement $root): void {
         foreach (iterator_to_array($root->getElementsByTagName('details')) as $details) {
             if (!$details instanceof \DOMElement || !$details->parentNode instanceof \DOMNode) {
@@ -168,7 +180,9 @@ final class pdf_exporter {
         }
     }
 
-    /** Replaces browser inputs with blank printable working areas. */
+    /**
+     * Replaces browser inputs with blank printable working areas.
+     */
     private function replace_response_controls(\DOMDocument $dom, \DOMElement $root): void {
         $xpath = new \DOMXPath($dom);
         $containers = $xpath->query('.//*[@data-self-check]', $root);
@@ -191,11 +205,19 @@ final class pdf_exporter {
                 if (!$textarea instanceof \DOMElement || !$textarea->parentNode instanceof \DOMNode) {
                     continue;
                 }
-                $space = $dom->createElement('p', "____________________________________________________________\n\n____________________________________________________________");
+                $space = $dom->createElement(
+                    'p',
+                    "____________________________________________________________\n\n"
+                        . '____________________________________________________________'
+                );
                 $textarea->parentNode->replaceChild($space, $textarea);
             }
             $xpath = new \DOMXPath($dom);
-            $options = $xpath->query('.//label[contains(concat(" ", normalize-space(@class), " "), " mod_lessonmark-selfcheck__option ")]', $container);
+            $options = $xpath->query(
+                './/label[contains(concat(" ", normalize-space(@class), " "), '
+                    . '" mod_lessonmark-selfcheck__option ")]',
+                $container
+            );
             if ($options !== false) {
                 foreach (iterator_to_array($options) as $option) {
                     if ($option->parentNode instanceof \DOMNode) {
@@ -206,7 +228,9 @@ final class pdf_exporter {
         }
     }
 
-    /** Removes controls and browser-only status text that have no print meaning. */
+    /**
+     * Removes controls and browser-only status text that have no print meaning.
+     */
     private function remove_nonprint_controls(\DOMElement $root): void {
         foreach (['button', 'script', 'style'] as $tagname) {
             foreach (iterator_to_array($root->getElementsByTagName($tagname)) as $node) {
@@ -214,7 +238,10 @@ final class pdf_exporter {
             }
         }
         $xpath = new \DOMXPath($root->ownerDocument);
-        $notes = $xpath->query('.//*[contains(concat(" ", normalize-space(@class), " "), " mod_lessonmark-selfcheck__note ")]', $root);
+        $notes = $xpath->query(
+            './/*[contains(concat(" ", normalize-space(@class), " "), " mod_lessonmark-selfcheck__note ")]',
+            $root
+        );
         if ($notes !== false) {
             foreach (iterator_to_array($notes) as $note) {
                 $note->parentNode?->removeChild($note);
@@ -222,7 +249,9 @@ final class pdf_exporter {
         }
     }
 
-    /** Embeds Moodle-managed images as data URIs for consistent web and CLI PDF output. */
+    /**
+     * Embeds Moodle-managed images as data URIs for consistent web and CLI PDF output.
+     */
     private function localise_images(\DOMDocument $dom, \DOMElement $root, \context_module $context): void {
         foreach (iterator_to_array($root->getElementsByTagName('img')) as $image) {
             if (!$image instanceof \DOMElement || !$image->parentNode instanceof \DOMNode) {
@@ -231,7 +260,10 @@ final class pdf_exporter {
             $file = $this->stored_file_from_url($image->getAttribute('src'), $context);
             if (!$file) {
                 $alt = trim($image->getAttribute('alt'));
-                $replacement = $dom->createElement('p', '[' . ($alt === '' ? get_string('pdfimageomitted', 'mod_lessonmark') : $alt) . ']');
+                $replacement = $dom->createElement(
+                    'p',
+                    '[' . ($alt === '' ? get_string('pdfimageomitted', 'mod_lessonmark') : $alt) . ']'
+                );
                 $image->parentNode->replaceChild($replacement, $image);
                 continue;
             }
@@ -239,13 +271,18 @@ final class pdf_exporter {
             if (!str_starts_with($mimetype, 'image/')) {
                 throw new \coding_exception('A LessonMark PDF image has an invalid MIME type.');
             }
-            $image->setAttribute('src', 'data:' . $mimetype . ';base64,' . base64_encode($file->get_content()));
+            $image->setAttribute(
+                'src',
+                'data:' . $mimetype . ';base64,' . base64_encode($file->get_content())
+            );
             $image->removeAttribute('srcset');
             $image->removeAttribute('loading');
         }
     }
 
-    /** Resolves only this activity's Moodle File API URLs; remote URLs are never fetched. */
+    /**
+     * Resolves only this activity's Moodle File API URLs; remote URLs are never fetched.
+     */
     private function stored_file_from_url(string $url, \context_module $context): ?\stored_file {
         $path = rawurldecode((string) parse_url($url, PHP_URL_PATH));
         $marker = "/pluginfile.php/{$context->id}/mod_lessonmark/" . content_files::FILEAREA . '/0/';
@@ -271,7 +308,9 @@ final class pdf_exporter {
         return $file && !$file->is_directory() ? $file : null;
     }
 
-    /** Keeps ordinary links but prevents TCPDF from following unsafe URI schemes. */
+    /**
+     * Keeps ordinary links but prevents TCPDF from following unsafe URI schemes.
+     */
     private function remove_unsafe_links(\DOMElement $root): void {
         foreach ($root->getElementsByTagName('a') as $link) {
             if (!$link instanceof \DOMElement) {
