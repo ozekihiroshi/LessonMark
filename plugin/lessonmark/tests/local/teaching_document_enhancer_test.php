@@ -112,4 +112,29 @@ final class teaching_document_enhancer_test extends \advanced_testcase {
         $this->assertStringContainsString('mod_lessonmark-callout--tip', $html);
         $this->assertStringContainsString('mod_lessonmark-callout--warning', $html);
     }
+
+    /**
+     * Tests ungraded response, choice, and answer disclosure blocks.
+     */
+    public function test_enhances_self_check_blocks(): void {
+        $enhancer = new teaching_document_enhancer();
+        $document = $enhancer->enhance(
+            '<blockquote><p>[!RESPONSE] Explain your reasoning.</p>'
+            . '<p>[!CHOICE] Select one.</p><ul><li>Alpha</li><li>Beta</li></ul>'
+            . '<p>[!ANSWER]</p><p><strong>Official answer:</strong> Beta</p></blockquote>'
+        );
+        $html = $document->get_content_html();
+
+        $this->assertStringContainsString('data-self-check="1"', $html);
+        $this->assertStringContainsString('data-self-check-input="response"', $html);
+        $this->assertStringContainsString('data-self-check="2"', $html);
+        $this->assertSame(2, substr_count($html, 'data-self-check-input="choice"'));
+        $this->assertLessThan(strpos($html, 'Select one.'), strpos($html, '<legend'));
+        $this->assertStringContainsString('<details class="mod_lessonmark-selfcheck__answer">', $html);
+        $this->assertStringContainsString('<summary>', $html);
+        $this->assertStringContainsString('<strong>Official answer:</strong> Beta', $html);
+        $this->assertStringNotContainsString('[!RESPONSE]', $html);
+        $this->assertStringNotContainsString('[!CHOICE]', $html);
+        $this->assertStringNotContainsString('[!ANSWER]', $html);
+    }
 }

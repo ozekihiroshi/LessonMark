@@ -23,7 +23,6 @@ $checks = [
     '/\$plugin->version\s*=\s*\d{10};/' => 'build number',
     '/\$plugin->requires\s*=\s*2026042000;/' => 'Moodle requirement',
     '/\$plugin->supported\s*=\s*\[502,\s*502\];/' => 'support range',
-    '/\$plugin->maturity\s*=\s*MATURITY_STABLE;/' => 'stable maturity',
 ];
 foreach ($checks as $pattern => $description) {
     if (preg_match($pattern, $versioncontents) !== 1) {
@@ -45,6 +44,11 @@ if (!hash_equals($expectedrelease, $actualrelease)) {
     fwrite(STDERR, "Release version does not match version.php.\n");
     exit(1);
 }
+$expectedmaturity = str_contains($actualrelease, '-') ? 'MATURITY_ALPHA' : 'MATURITY_STABLE';
+if (preg_match('/\$plugin->maturity\s*=\s*' . $expectedmaturity . ';/', $versioncontents) !== 1) {
+    fwrite(STDERR, "Release maturity does not match the semantic version.\n");
+    exit(1);
+}
 
 $requiredfiles = [
     'README.md',
@@ -54,6 +58,7 @@ $requiredfiles = [
     'vendor/prism/LICENSE',
     'amd/build/editor.min.js',
     'amd/build/prism-languages.min.js',
+    'amd/build/self-check.min.js',
     'vendor/prism/readme_moodle.txt',
     'amd/build/syntax-highlighter.min.js',
 ];

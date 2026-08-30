@@ -11,6 +11,8 @@ material while Markdown remains the source of truth.
 - one safe rendering path for preview and student display;
 - stable heading links, automatic contents, NOTE/TIP/WARNING callouts,
   highlighted fenced code, responsive tables, and teaching typography;
+- ungraded RESPONSE and CHOICE working-answer blocks with browser-local draft
+  retention, followed by native ANSWER disclosures on the same page;
 - Moodle File API images with access control and author diagnostics; and
 - backup, restore, course duplicate, and internal-link remapping.
 

@@ -85,6 +85,44 @@ Use the portable blockquote form below. Names are case-insensitive.
 Custom callout titles, nested callouts, and collapsible callouts are not part of
 the current dialect.
 
+## Self-check blocks
+
+Self-check blocks keep a short practice cycle inside one LessonMark page. They
+do not create Moodle quiz attempts, grades, submissions, or completion data.
+
+Use `RESPONSE` for a free-text working answer:
+
+```markdown
+> [!RESPONSE]
+> Explain your answer before opening the official answer.
+```
+
+Use `CHOICE` with a Markdown list for a single-choice working answer:
+
+```markdown
+> [!CHOICE]
+> Select one answer.
+>
+> - A. First option
+> - B. Second option
+```
+
+Place the official answer and explanation immediately after the response. The
+content is rendered as a closed disclosure:
+
+```markdown
+> [!ANSWER]
+> **Official answer: B**
+>
+> Explain why B follows from the source material.
+```
+
+Working answers are stored only in the current browser, scoped by Moodle user
+and LessonMark activity. They are not available to teachers and do not move to
+another browser or device. Learners can clear each saved answer. Use Moodle
+Quiz or Assignment when grading, submission, attempt history, or teacher review
+is required.
+
 ## Code
 
 Add a language after the opening fence.

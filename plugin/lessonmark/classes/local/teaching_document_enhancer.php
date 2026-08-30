@@ -97,6 +97,7 @@ final class teaching_document_enhancer {
         }
 
         $toc = $this->enhance_headings($dom, $root);
+        $this->enhance_self_checks($dom, $root);
         $this->enhance_callouts($dom, $root);
         $diagnostics = $this->enhance_code_blocks($root);
         $this->enhance_tables($dom, $root);
@@ -161,6 +162,172 @@ final class teaching_document_enhancer {
         $slug = preg_replace('/[^\p{L}\p{N}]+/u', '-', $slug) ?? '';
         $slug = trim($slug, '-');
         return $slug === '' ? 'section' : $slug;
+    }
+
+    /**
+     * Converts fixed Markdown blockquote markers into safe self-check controls.
+     *
+     * The controls are deliberately ungraded. Learner state is handled only in
+     * the browser and is never submitted as a Moodle quiz attempt.
+     *
+     * @param \DOMDocument $dom Document.
+     * @param \DOMElement $root Root element.
+     */
+    private function enhance_self_checks(\DOMDocument $dom, \DOMElement $root): void {
+        $blockquotes = iterator_to_array($root->getElementsByTagName('blockquote'));
+        $controlindex = 0;
+        foreach ($blockquotes as $blockquote) {
+            if (!$blockquote instanceof \DOMElement || !$blockquote->parentNode instanceof \DOMNode) {
+                continue;
+            }
+            $markers = [];
+            foreach ($blockquote->childNodes as $child) {
+                if (!$child instanceof \DOMElement || \core_text::strtolower($child->tagName) !== 'p') {
+                    continue;
+                }
+                $firstnode = $child->firstChild;
+                if ($firstnode instanceof \DOMText
+                        && preg_match('/^\s*\[!(RESPONSE|CHOICE|ANSWER)\]\s*/iu', $firstnode->data, $matches) === 1) {
+                    $markers[] = [
+                        'paragraph' => $child,
+                        'type' => \core_text::strtolower($matches[1]),
+                    ];
+                }
+            }
+            $firstparagraph = $this->first_direct_child($blockquote, 'p');
+            if ($markers === [] || $markers[0]['paragraph'] !== $firstparagraph) {
+                continue;
+            }
+
+            $blocks = [0 => $blockquote];
+            $insertionpoint = $blockquote->nextSibling;
+            for ($markerindex = count($markers) - 1; $markerindex >= 1; $markerindex--) {
+                $block = $dom->createElement('blockquote');
+                $node = $markers[$markerindex]['paragraph'];
+                while ($node !== null) {
+                    $nextnode = $node->nextSibling;
+                    $block->appendChild($node);
+                    $node = $nextnode;
+                }
+                $blockquote->parentNode?->insertBefore($block, $insertionpoint);
+                $insertionpoint = $block;
+                $blocks[$markerindex] = $block;
+            }
+
+            ksort($blocks);
+            foreach ($blocks as $markerindex => $block) {
+                $paragraph = $markers[$markerindex]['paragraph'];
+                $firstnode = $paragraph->firstChild;
+                if (!$firstnode instanceof \DOMText) {
+                    continue;
+                }
+                $type = $markers[$markerindex]['type'];
+                $firstnode->data = preg_replace(
+                    '/^\s*\[!(?:RESPONSE|CHOICE|ANSWER)\]\s*/iu',
+                    '',
+                    $firstnode->data
+                ) ?? '';
+                if (trim($paragraph->textContent) === '') {
+                    $block->removeChild($paragraph);
+                }
+                if ($type === 'answer') {
+                    $this->replace_with_answer_disclosure($dom, $block);
+                } else {
+                    $controlindex++;
+                    $this->replace_with_response_control($dom, $block, $type, $controlindex);
+                }
+            }
+        }
+    }
+
+    /**
+     * Replaces an ANSWER block with a native accessible disclosure.
+     *
+     * @param \DOMDocument $dom Document.
+     * @param \DOMElement $blockquote Source blockquote.
+     */
+    private function replace_with_answer_disclosure(\DOMDocument $dom, \DOMElement $blockquote): void {
+        $details = $dom->createElement('details');
+        $details->setAttribute('class', 'mod_lessonmark-selfcheck__answer');
+        $summary = $dom->createElement('summary', get_string('selfcheckreveal', 'mod_lessonmark'));
+        $details->appendChild($summary);
+        while ($blockquote->firstChild !== null) {
+            $details->appendChild($blockquote->firstChild);
+        }
+        $blockquote->parentNode?->replaceChild($details, $blockquote);
+    }
+
+    /**
+     * Replaces a RESPONSE or CHOICE block with an ungraded learner control.
+     *
+     * @param \DOMDocument $dom Document.
+     * @param \DOMElement $blockquote Source blockquote.
+     * @param string $type response or choice.
+     * @param int $index Stable sequence within the rendered document.
+     */
+    private function replace_with_response_control(
+        \DOMDocument $dom,
+        \DOMElement $blockquote,
+        string $type,
+        int $index
+    ): void {
+        $container = $dom->createElement($type === 'choice' ? 'fieldset' : 'div');
+        $container->setAttribute('class', 'mod_lessonmark-selfcheck mod_lessonmark-selfcheck--' . $type);
+        $container->setAttribute('data-self-check', (string) $index);
+
+        $label = get_string($type === 'choice' ? 'selfcheckchoice' : 'selfcheckresponse', 'mod_lessonmark');
+        if ($type === 'choice') {
+            $legend = $dom->createElement('legend', $label);
+            $legend->setAttribute('class', 'mod_lessonmark-selfcheck__label');
+            $container->appendChild($legend);
+            $items = $blockquote->getElementsByTagName('li');
+            foreach (iterator_to_array($items) as $itemindex => $item) {
+                if (!$item instanceof \DOMElement) {
+                    continue;
+                }
+                $option = $dom->createElement('label');
+                $option->setAttribute('class', 'mod_lessonmark-selfcheck__option');
+                $input = $dom->createElement('input');
+                $input->setAttribute('type', 'radio');
+                $input->setAttribute('name', 'lessonmark-selfcheck-' . $index);
+                $input->setAttribute('value', (string) $itemindex);
+                $input->setAttribute('data-self-check-input', 'choice');
+                $option->appendChild($input);
+                $option->appendChild($dom->createTextNode(' ' . trim($item->textContent)));
+                $container->appendChild($option);
+            }
+        } else {
+            $id = 'lessonmark-selfcheck-response-' . $index;
+            $labelnode = $dom->createElement('label', $label);
+            $labelnode->setAttribute('class', 'mod_lessonmark-selfcheck__label');
+            $labelnode->setAttribute('for', $id);
+            $container->appendChild($labelnode);
+            $textarea = $dom->createElement('textarea');
+            $textarea->setAttribute('id', $id);
+            $textarea->setAttribute('class', 'form-control mod_lessonmark-selfcheck__textarea');
+            $textarea->setAttribute('rows', '4');
+            $textarea->setAttribute('data-self-check-input', 'response');
+            $container->appendChild($textarea);
+        }
+
+        $instructionpoint = $type === 'choice'
+            ? $container->firstChild?->nextSibling
+            : $container->firstChild;
+        foreach (iterator_to_array($blockquote->childNodes) as $child) {
+            if ($child instanceof \DOMElement && \core_text::strtolower($child->tagName) === 'ul') {
+                continue;
+            }
+            $container->insertBefore($child, $instructionpoint);
+        }
+        $note = $dom->createElement('p', get_string('selfchecklocalnote', 'mod_lessonmark'));
+        $note->setAttribute('class', 'mod_lessonmark-selfcheck__note');
+        $container->appendChild($note);
+        $button = $dom->createElement('button', get_string('selfcheckclear', 'mod_lessonmark'));
+        $button->setAttribute('type', 'button');
+        $button->setAttribute('class', 'btn btn-secondary btn-sm');
+        $button->setAttribute('data-action', 'clear-self-check');
+        $container->appendChild($button);
+        $blockquote->parentNode?->replaceChild($container, $blockquote);
     }
 
     /**

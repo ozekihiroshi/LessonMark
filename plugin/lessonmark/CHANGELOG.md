@@ -1,5 +1,14 @@
 # Change log
 
+## 0.2.0-alpha1 - 2026-08-30
+
+- Added ungraded RESPONSE and CHOICE working-answer blocks that retain learner
+  drafts only in the current browser.
+- Added an ANSWER disclosure block for keeping official answers and commentary
+  immediately below each practice prompt without page navigation.
+- Kept Moodle Quiz, grading, submissions, and teacher-visible attempts outside
+  the LessonMark self-check feature.
+
 ## 0.1.0 - 2026-08-29
 
 - Published the first stable release for Moodle 5.2 on PHP 8.3 and 8.4.

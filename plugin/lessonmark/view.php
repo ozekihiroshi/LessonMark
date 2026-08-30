@@ -59,14 +59,21 @@ $event->trigger();
 
 $renderer = new \mod_lessonmark\local\moodle_markdown_renderer();
 $document = $renderer->render((string) $lessonmark->markdownsource, $context);
+$contenthtml = $document->get_content_html();
 
-if (str_contains($document->get_content_html(), 'language-')) {
+if (str_contains($contenthtml, 'language-')) {
     $PAGE->requires->js_call_amd('mod_lessonmark/syntax-highlighter', 'init', ['.mod_lessonmark-content']);
+}
+if (str_contains($contenthtml, 'data-self-check=')) {
+    $PAGE->requires->js_call_amd('mod_lessonmark/self-check', 'init', [[
+        'cmid' => (int) $cm->id,
+        'userId' => (int) $USER->id,
+    ]]);
 }
 
 echo $OUTPUT->header();
 if (trim((string) $lessonmark->intro) !== '') {
     echo $OUTPUT->box(format_module_intro('lessonmark', $lessonmark, $cm->id), 'generalbox mod_introbox');
 }
-echo html_writer::div($document->get_content_html(), 'mod_lessonmark-content');
+echo html_writer::div($contenthtml, 'mod_lessonmark-content');
 echo $OUTPUT->footer();

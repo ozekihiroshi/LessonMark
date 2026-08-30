@@ -401,6 +401,62 @@
     }
 }
 
+.mod_lessonmark-selfcheck {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .5rem;
+    background: var(--bs-tertiary-bg, #f8f9fa);
+}
+
+.mod_lessonmark-selfcheck__label {
+    display: block;
+    width: 100%;
+    margin-bottom: .5rem;
+    font-weight: 700;
+}
+
+.mod_lessonmark-selfcheck__textarea {
+    width: 100%;
+    margin-bottom: .5rem;
+    resize: vertical;
+}
+
+.mod_lessonmark-selfcheck__option {
+    display: block;
+    margin: .4rem 0;
+    font-weight: 400;
+}
+
+.mod_lessonmark-selfcheck__note {
+    margin: .75rem 0 .5rem;
+    color: var(--bs-secondary-color, #6c757d);
+    font-size: .875rem;
+}
+
+.mod_lessonmark-selfcheck__answer {
+    margin: 1rem 0 1.5rem;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .5rem;
+    background: var(--bs-body-bg, #fff);
+}
+
+.mod_lessonmark-selfcheck__answer > summary {
+    padding: .85rem 1rem;
+    color: var(--bs-link-color, #0f6cbf);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.mod_lessonmark-selfcheck__answer[open] > summary {
+    border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+}
+
+.mod_lessonmark-selfcheck__answer > :not(summary) {
+    margin-right: 1rem;
+    margin-left: 1rem;
+}
+
 @media print {
     .mod_lessonmark-content {
         max-width: none;
@@ -410,6 +466,8 @@
 
     .mod_lessonmark-toc,
     .mod_lessonmark-callout,
+    .mod_lessonmark-selfcheck,
+    .mod_lessonmark-selfcheck__answer,
     .mod_lessonmark-code,
     .mod_lessonmark-table-scroll {
         break-inside: avoid;

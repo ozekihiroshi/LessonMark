@@ -58,7 +58,7 @@ moodle-plugin-ci savepoints
 if ! moodle-plugin-ci grunt --max-lint-warnings 0; then
     (cd "$cibase/moodle" && npx grunt amd --root=public/mod/lessonmark)
     builddir="$cibase/moodle/public/mod/lessonmark/amd/build"
-    for module in editor prism-languages syntax-highlighter; do
+    for module in editor prism-languages self-check syntax-highlighter; do
         if [ ! -f "$builddir/$module.min.js" ] || [ ! -f "$builddir/$module.min.js.map" ]; then
             echo "Generated AMD artifacts for $module were not found." >&2
             exit 1
