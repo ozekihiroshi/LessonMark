@@ -145,6 +145,10 @@ final class pdf_exporter {
 
     /**
      * Removes the source H1 when it repeats the Moodle activity title.
+     *
+     * @param \DOMElement $root Printable document root.
+     * @param string $title Formatted activity title.
+     * @return void
      */
     private function remove_duplicate_title(\DOMElement $root, string $title): void {
         foreach ($root->childNodes as $child) {
@@ -160,6 +164,10 @@ final class pdf_exporter {
 
     /**
      * Expands native ANSWER disclosures for print.
+     *
+     * @param \DOMDocument $dom Printable document.
+     * @param \DOMElement $root Printable document root.
+     * @return void
      */
     private function expand_answers(\DOMDocument $dom, \DOMElement $root): void {
         foreach (iterator_to_array($root->getElementsByTagName('details')) as $details) {
@@ -182,6 +190,10 @@ final class pdf_exporter {
 
     /**
      * Replaces browser inputs with blank printable working areas.
+     *
+     * @param \DOMDocument $dom Printable document.
+     * @param \DOMElement $root Printable document root.
+     * @return void
      */
     private function replace_response_controls(\DOMDocument $dom, \DOMElement $root): void {
         $xpath = new \DOMXPath($dom);
@@ -230,6 +242,9 @@ final class pdf_exporter {
 
     /**
      * Removes controls and browser-only status text that have no print meaning.
+     *
+     * @param \DOMElement $root Printable document root.
+     * @return void
      */
     private function remove_nonprint_controls(\DOMElement $root): void {
         foreach (['button', 'script', 'style'] as $tagname) {
@@ -251,6 +266,11 @@ final class pdf_exporter {
 
     /**
      * Embeds Moodle-managed images as data URIs for consistent web and CLI PDF output.
+     *
+     * @param \DOMDocument $dom Printable document.
+     * @param \DOMElement $root Printable document root.
+     * @param \context_module $context Activity context.
+     * @return void
      */
     private function localise_images(\DOMDocument $dom, \DOMElement $root, \context_module $context): void {
         foreach (iterator_to_array($root->getElementsByTagName('img')) as $image) {
@@ -282,6 +302,10 @@ final class pdf_exporter {
 
     /**
      * Resolves only this activity's Moodle File API URLs; remote URLs are never fetched.
+     *
+     * @param string $url Image URL.
+     * @param \context_module $context Activity context.
+     * @return \stored_file|null Resolved file or null.
      */
     private function stored_file_from_url(string $url, \context_module $context): ?\stored_file {
         $path = rawurldecode((string) parse_url($url, PHP_URL_PATH));
@@ -310,6 +334,9 @@ final class pdf_exporter {
 
     /**
      * Keeps ordinary links but prevents TCPDF from following unsafe URI schemes.
+     *
+     * @param \DOMElement $root Printable document root.
+     * @return void
      */
     private function remove_unsafe_links(\DOMElement $root): void {
         foreach ($root->getElementsByTagName('a') as $link) {
