@@ -12,7 +12,7 @@
 - `RELEASE_NOTES_0.1.0.md`: public notes for the first stable release
 - `RELEASE_EVIDENCE_0.1.0.md`: exact local acceptance evidence
 - `screenshots/`: public authoring and student-view images
-- `M1_IMPLEMENTATION.md` through `M7_IMPLEMENTATION.md`: milestone records
+- `M1_IMPLEMENTATION.md` through `M9_IMPLEMENTATION.md`: milestone records
 
 Product scope changes belong in the product requirements. Implementation
 choices that do not change product scope belong in the technical decisions
