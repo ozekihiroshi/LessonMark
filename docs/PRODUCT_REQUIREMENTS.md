@@ -227,8 +227,12 @@ v0.1は、少なくとも次をすべて満たした時点で完成とする。
 
 ## 12. 将来の発展
 
-- v0.2: 画像・添付ファイルを含む教材bundle
-- v0.3: 複数Markdown、章構成、前後ナビゲーション
-- v0.4: course packageとfront matter
-- v0.5: Git repository同期、差分確認、更新方針
-- v0.6: AI-assisted authori
+- v0.2: 同一ページの自己確認、PDF出力、数式、Mermaid図
+- v0.3: 画像・添付ファイルを含む教材bundle
+- v0.4: 複数Markdown、章構成、前後ナビゲーション
+- v0.5: course packageとfront matter
+- v0.6: Git repository同期、差分確認、更新方針
+- v0.7: AI-assisted authoring
+
+v0.2の数式・図の正式要件は`MATH_AND_DIAGRAM_REQUIREMENTS.md`で管理する。
+この追加は、v0.1の非対象という履歴を変更するものではない。

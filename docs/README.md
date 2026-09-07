@@ -2,6 +2,8 @@
 
 - `PRODUCT_REQUIREMENTS.md`: v0.1 product scope and acceptance criteria
 - `TECHNICAL_DECISIONS.md`: architecture decisions and milestones
+- `MATH_AND_DIAGRAM_REQUIREMENTS.md`: accepted 0.2 mathematics and Mermaid
+  syntax, security boundaries, milestones, and acceptance criteria
 - `AUTHORING_GUIDE.md`: supported Markdown and teaching syntax
 - `INSTALLATION.md`: install, upgrade, and uninstall operations
 - `RELEASE_CHECKLIST.md`: release gates and evidence requirements

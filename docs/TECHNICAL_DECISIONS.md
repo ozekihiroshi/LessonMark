@@ -279,6 +279,13 @@ v0.1で最低限保持するinstance dataは次のとおりとする。
 
 完了条件: `PRODUCT_REQUIREMENTS.md`の受け入れ条件を満たし、公開候補packageを生成できる。
 
+### M8〜M10: 数式、Mermaid図、0.2リリース品質
+
+0.2系に追加するLaTeX/AsciiMath数式、Mermaid図、依存ライブラリ、
+安全性、アクセシビリティ、PDFおよびリリース品質の決定と完了条件は
+`MATH_AND_DIAGRAM_REQUIREMENTS.md`に定める。v0.1の共通renderer、正本、
+認可、安全化、File API、backup/restoreの境界は変更しない。
+
 ## 6. マイルストーン共通の完了基準
 
 - 新規・変更機能に自動テストがある。
