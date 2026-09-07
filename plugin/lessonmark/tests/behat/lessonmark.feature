@@ -48,6 +48,7 @@ Feature: Author and publish a LessonMark teaching resource
     And I wait until "Preview updated." "text" exists
     Then I should see "Updated lesson" in the "[data-region=\"preview-content\"]" "css_element"
     And ".ozmd-math .katex" "css_element" should exist in the "[data-region=\"preview-content\"]" "css_element"
+    And I wait until ".ozmd-mermaid svg" "css_element" exists
     And ".ozmd-mermaid svg" "css_element" should exist in the "[data-region=\"preview-content\"]" "css_element"
     And the "Copy LaTeX" "button" should exist
     And the LessonMark source editor should stay aligned with its preview
