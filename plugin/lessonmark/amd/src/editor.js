@@ -193,6 +193,9 @@ export const init = async config => {
                 preview.classList.add('text-muted');
             }
             highlight(preview);
+            if (typeof window.ozmdRenderMath === 'function') {
+                await window.ozmdRenderMath(preview);
+            }
             const messages = Array.isArray(result.diagnostics) ? result.diagnostics
                 .map(diagnostic => diagnostic.message)
                 .filter(message => typeof message === 'string' && message) : [];

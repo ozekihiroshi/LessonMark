@@ -25,6 +25,9 @@ $string['calloutnote'] = 'Note';
 $string['callouttip'] = 'Tip';
 $string['calloutwarning'] = 'Warning';
 $string['codeblocklabel'] = '{$a} code';
+$string['copied'] = 'Copied';
+$string['copyfailed'] = 'Copy failed';
+$string['copylatex'] = 'Copy LaTeX';
 
 $string['diagnosticmissingalt'] = 'Image "{$a}" needs non-empty alternative text.';
 $string['diagnosticrelativeimage'] = 'Relative image "{$a}" is not managed by Moodle. Upload it below and use an @@PLUGINFILE@@ reference.';
@@ -54,6 +57,7 @@ $string['lessonmark:view'] = 'View a LessonMark resource';
 $string['lessonmarkname'] = 'Name';
 $string['markdownsource'] = 'Markdown source';
 $string['markdownsource_help'] = 'The source is stored unchanged and rendered when viewed. Raw HTML is displayed as text.';
+$string['mathsourceblock'] = 'Formula source';
 $string['missingidandcmid'] = 'A course-module id or LessonMark instance id is required.';
 $string['missingpreviewcontext'] = 'A course or LessonMark activity is required to preview this source.';
 $string['modulename'] = 'LessonMark';

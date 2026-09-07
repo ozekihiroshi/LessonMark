@@ -157,6 +157,34 @@ The supported language identifiers are:
 An unknown identifier does not load code or a library dynamically. LessonMark
 keeps the code readable as plain text and reports a preview diagnostic.
 
+## Mathematics (0.2 alpha)
+
+Use a prefixed inline code span for a formula inside a sentence:
+
+```markdown
+The ratio is `math:\frac{a}{b}` and the beginner form is `asciimath:a/b`.
+```
+
+Use `math` or `latex` fenced blocks for displayed LaTeX, and `asciimath` for
+displayed AsciiMath:
+
+````markdown
+```math
+\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+```
+
+```asciimath
+sum_(i=1)^n i = (n(n+1))/2
+```
+````
+
+LessonMark renders formulas locally with bundled assets and provides a Copy
+LaTeX control. The saved Markdown is not replaced by the rendered formula. If
+a formula is invalid, its original code remains visible.
+
+The syntax is shared with Ozeki Markdown Documents. `math:` is the documented
+LaTeX prefix; `latex:` is also accepted for source compatibility.
+
 ## Tables
 
 ```markdown

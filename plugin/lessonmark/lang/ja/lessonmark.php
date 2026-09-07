@@ -25,6 +25,9 @@ $string['calloutnote'] = '補足';
 $string['callouttip'] = 'ヒント';
 $string['calloutwarning'] = '注意';
 $string['codeblocklabel'] = '{$a}のコード';
+$string['copied'] = 'コピーしました';
+$string['copyfailed'] = 'コピーできませんでした';
+$string['copylatex'] = 'LaTeXをコピー';
 
 $string['diagnosticmissingalt'] = '画像「{$a}」には空でない代替テキストが必要です。';
 $string['diagnosticrelativeimage'] = '相対パス画像「{$a}」はMoodleで管理されていません。下の画像欄へアップロードし、@@PLUGINFILE@@参照を使用してください。';
@@ -54,6 +57,7 @@ $string['lessonmark:view'] = 'LessonMark教材を閲覧する';
 $string['lessonmarkname'] = '名称';
 $string['markdownsource'] = 'Markdown原稿';
 $string['markdownsource_help'] = 'Markdown原稿を正本として保存し、表示時にレンダリングします。raw HTMLは文字として表示します。';
+$string['mathsourceblock'] = '数式の原稿';
 $string['missingidandcmid'] = 'コースモジュールIDまたはLessonMarkインスタンスIDが必要です。';
 $string['missingpreviewcontext'] = 'プレビューにはコースまたはLessonMark教材が必要です。';
 $string['modulename'] = 'LessonMark';

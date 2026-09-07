@@ -70,6 +70,17 @@ if (str_contains($contenthtml, 'data-self-check=')) {
         'userId' => (int) $USER->id,
     ]]);
 }
+if (preg_match('/(?:language-(?:math|latex|asciimath)|>(?:math|latex|asciimath):)/', $contenthtml) === 1) {
+    $PAGE->requires->data_for_js('ozmdMathConfig', [
+        'katexCssUrl' => (new moodle_url('/mod/lessonmark/vendor/katex/katex.min.css'))->out(false),
+        'labels' => [
+            'copy' => get_string('copylatex', 'mod_lessonmark'),
+            'copied' => get_string('copied', 'mod_lessonmark'),
+            'copyFailed' => get_string('copyfailed', 'mod_lessonmark'),
+        ],
+    ]);
+    $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/math/math-render.min.js'));
+}
 
 echo $OUTPUT->header();
 if (trim((string) $lessonmark->intro) !== '') {

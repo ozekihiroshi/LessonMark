@@ -458,6 +458,13 @@ final class teaching_document_enhancer {
             $sourceclass = trim(\core_text::strtolower($code->getAttribute('class')));
             $sourceclass = preg_replace('/^language-/', '', $sourceclass) ?? $sourceclass;
             $sourceclass = preg_split('/\s+/', $sourceclass, 2)[0] ?? '';
+            if (in_array($sourceclass, ['math', 'latex', 'asciimath'], true)) {
+                $languageclass = 'language-' . $sourceclass;
+                $pre->setAttribute('class', 'mod_lessonmark-math-source ' . $languageclass);
+                $pre->setAttribute('aria-label', get_string('mathsourceblock', 'mod_lessonmark'));
+                $code->setAttribute('class', $languageclass);
+                continue;
+            }
             $language = self::LANGUAGE_ALIASES[$sourceclass] ?? null;
             $pre->setAttribute('class', 'mod_lessonmark-code');
             $code->removeAttribute('class');

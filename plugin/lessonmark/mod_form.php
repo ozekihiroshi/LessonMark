@@ -156,6 +156,15 @@ class mod_lessonmark_mod_form extends moodleform_mod {
         $mform->addHelpButton(\mod_lessonmark\local\content_files::FORM_FIELD, 'imagefiles', 'mod_lessonmark');
 
         $courseid = (int) ($this->current->course ?? 0);
+        $PAGE->requires->data_for_js('ozmdMathConfig', [
+            'katexCssUrl' => (new moodle_url('/mod/lessonmark/vendor/katex/katex.min.css'))->out(false),
+            'labels' => [
+                'copy' => get_string('copylatex', 'mod_lessonmark'),
+                'copied' => get_string('copied', 'mod_lessonmark'),
+                'copyFailed' => get_string('copyfailed', 'mod_lessonmark'),
+            ],
+        ]);
+        $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/math/math-render.min.js'));
         $PAGE->requires->js_call_amd('mod_lessonmark/editor', 'init', [[
             'endpoint' => (new moodle_url('/mod/lessonmark/preview.php'))->out(false),
             'sourceSelector' => '#id_markdownsource',

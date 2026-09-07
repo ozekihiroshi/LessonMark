@@ -1,3 +1,72 @@
+.mod_lessonmark-content .ozmd-math {
+    position: relative;
+    max-width: 100%;
+}
+
+.mod_lessonmark-content .ozmd-math-display {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.mod_lessonmark-content .ozmd-math-inline {
+    display: inline-block;
+}
+
+.mod_lessonmark-content .ozmd-math-copy {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: .25rem;
+    inset-inline-end: .25rem;
+    padding: .15em .45em;
+    border: 1px solid currentColor;
+    border-radius: .2rem;
+    background: var(--bs-body-bg, #fff);
+    color: var(--bs-body-color, #212529);
+    font: inherit;
+    font-size: .72em;
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 120ms ease-in-out;
+}
+
+.mod_lessonmark-content .ozmd-math-inline .ozmd-math-copy {
+    inset-block-start: calc(100% + .2em);
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+}
+
+.mod_lessonmark-content .ozmd-math:hover > .ozmd-math-copy,
+.mod_lessonmark-content .ozmd-math:focus-within > .ozmd-math-copy {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.mod_lessonmark-content .ozmd-math-copy:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.mod_lessonmark-content .ozmd-math-error {
+    border-inline-start: 4px solid var(--bs-danger, #dc3545);
+}
+
+@media (hover: none), (pointer: coarse) {
+    .mod_lessonmark-content .ozmd-math-copy {
+        opacity: .8;
+        pointer-events: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mod_lessonmark-content .ozmd-math-copy {
+        transition: none;
+    }
+}
+
 .mod_lessonmark-content {
     max-width: 72rem;
     margin-inline: auto;

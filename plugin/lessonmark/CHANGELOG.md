@@ -1,5 +1,14 @@
 # Change log
 
+## 0.2.0-alpha3 - 2026-09-07
+
+- Added locally bundled LaTeX and AsciiMath rendering in author Preview and
+  student display while retaining Markdown as the source of truth.
+- Added accessible HTML and MathML output, keyboard-operable LaTeX copy
+  controls, bounded untrusted rendering, and readable invalid-source fallback.
+- Kept saved-content PDF export deterministic by retaining formula source when
+  browser-derived rendering is unavailable.
+
 ## 0.2.0-alpha2 - 2026-08-30
 
 - Added access-controlled PDF download for the content saved in Moodle.

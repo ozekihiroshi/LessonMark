@@ -75,6 +75,26 @@ final class teaching_document_enhancer_test extends \advanced_testcase {
             ['type' => 'unsupportedlanguage', 'language' => 'brainfuck'],
         ], $document->get_diagnostics());
     }
+
+    /**
+     * Tests that formula markers remain available to the local browser renderer.
+     */
+    public function test_preserves_formula_markers_without_code_diagnostics(): void {
+        $enhancer = new teaching_document_enhancer();
+        $document = $enhancer->enhance(
+            '<p>Inline <code>math:\\frac{a}{b}</code> and <code>asciimath:a/b</code>.</p>'
+            . '<pre><code class="language-math">x^2</code></pre>'
+            . '<pre><code class="language-latex">y^2</code></pre>'
+            . '<pre><code class="language-asciimath">sqrt(x)</code></pre>'
+        );
+        $html = $document->get_content_html();
+
+        $this->assertStringContainsString('<code>math:\\frac{a}{b}</code>', $html);
+        $this->assertStringContainsString('class="mod_lessonmark-math-source language-math"', $html);
+        $this->assertStringContainsString('class="language-latex"', $html);
+        $this->assertStringContainsString('class="language-asciimath"', $html);
+        $this->assertSame([], $document->get_diagnostics());
+    }
     /**
      * Tests relative-image and alternative-text diagnostics.
      */

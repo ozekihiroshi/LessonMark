@@ -11,4 +11,20 @@
       <copyright>2012 Lea Verou</copyright>
     </copyrights>
   </library>
+  <library>
+    <location>vendor/katex</location>
+    <name>KaTeX styles and fonts</name>
+    <description>Local formula styles and font assets.</description>
+    <version>0.18.5</version>
+    <license>MIT</license>
+    <repository>https://github.com/KaTeX/KaTeX</repository>
+  </library>
+  <library>
+    <location>vendor/math</location>
+    <name>KaTeX and asciimath-parser browser bundle</name>
+    <description>Local formula rendering, MathML output, and AsciiMath conversion.</description>
+    <version>KaTeX 0.18.5; asciimath-parser 0.6.11</version>
+    <license>MIT</license>
+    <repository>https://github.com/ozekihiroshi/ozeki-markdown-documents</repository>
+  </library>
 </libraries>
