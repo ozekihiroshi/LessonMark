@@ -62,3 +62,28 @@ Feature: Author and publish a LessonMark teaching resource
     And ".ozmd-mermaid svg" "css_element" should exist
     And the "Copy LaTeX" "button" should exist
     And the page should meet accessibility standards
+
+  @javascript
+  Scenario: Invalid formulas and diagrams retain their source
+    Given I am on the "Lesson one" "lessonmark activity editing" page logged in as admin
+    When I set the LessonMark Markdown source to:
+      """
+      # Invalid browser source
+
+      ```math
+      \\frac{
+      ```
+
+      ```mermaid
+      not a diagram
+      ```
+      """
+    And I press "Refresh preview"
+    And I wait until "Preview updated." "text" exists
+    And I wait until ".ozmd-math-error" "css_element" exists
+    And I wait until ".ozmd-mermaid-error" "css_element" exists
+    Then I should see "\\frac{" in the "[data-region=\"preview-content\"]" "css_element"
+    And I should see "not a diagram" in the "[data-region=\"preview-content\"]" "css_element"
+    When I press "Save and display"
+    Then I should see "\\frac{"
+    And I should see "not a diagram"

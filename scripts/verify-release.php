@@ -44,7 +44,13 @@ if (!hash_equals($expectedrelease, $actualrelease)) {
     fwrite(STDERR, "Release version does not match version.php.\n");
     exit(1);
 }
-$expectedmaturity = str_contains($actualrelease, '-') ? 'MATURITY_ALPHA' : 'MATURITY_STABLE';
+if (preg_match('/-rc(?:[.-]|\d|$)/i', $actualrelease) === 1) {
+    $expectedmaturity = 'MATURITY_RC';
+} elseif (str_contains($actualrelease, '-')) {
+    $expectedmaturity = 'MATURITY_ALPHA';
+} else {
+    $expectedmaturity = 'MATURITY_STABLE';
+}
 if (preg_match('/\$plugin->maturity\s*=\s*' . $expectedmaturity . ';/', $versioncontents) !== 1) {
     fwrite(STDERR, "Release maturity does not match the semantic version.\n");
     exit(1);
@@ -58,6 +64,14 @@ $requiredfiles = [
     'readme_moodle.txt',
     'thirdpartylibs.xml',
     'vendor/prism/LICENSE',
+    'vendor/katex/LICENSE',
+    'vendor/katex/katex.min.css',
+    'vendor/katex/fonts/KaTeX_Main-Regular.woff2',
+    'vendor/math/ASCIIMATH-LICENSE',
+    'vendor/math/math-render.min.js',
+    'vendor/mermaid/LICENSE',
+    'vendor/mermaid/mermaid.min.js',
+    'vendor/mermaid/mermaid-render.js',
     'amd/build/editor.min.js',
     'amd/build/prism-languages.min.js',
     'amd/build/self-check.min.js',
@@ -67,6 +81,20 @@ $requiredfiles = [
 foreach ($requiredfiles as $relativepath) {
     if (!is_file($pluginroot . '/' . $relativepath)) {
         fwrite(STDERR, "Required release file is missing: {$relativepath}\n");
+        exit(1);
+    }
+}
+
+$requiredhashes = [
+    'vendor/katex/katex.min.css' => '5bc44ab327592b75fcf2d412a1b396ebf20203bfe826a1966fb8ab03f8b08bb4',
+    'vendor/math/math-render.min.js' => '4d7aa10d349ebfe7fbba865ae262f26c00d0dc511b2ed13135b6986f7f0e4da0',
+    'vendor/mermaid/mermaid.min.js' => '581ed7d74bd9048d0e3a91363927d72ef22942d7722546b27f7cc29e35390eb8',
+    'vendor/mermaid/mermaid-render.js' => '10f2f1c654773fb8dae7434fff05b94e5a9a3de37d4cc09ddc5e769ccdd64fc0',
+];
+foreach ($requiredhashes as $relativepath => $expectedhash) {
+    $actualhash = hash_file('sha256', $pluginroot . '/' . $relativepath);
+    if ($actualhash === false || !hash_equals($expectedhash, $actualhash)) {
+        fwrite(STDERR, "Third-party browser asset hash mismatch: {$relativepath}\n");
         exit(1);
     }
 }
@@ -106,6 +134,17 @@ if (is_file($zippath)) {
             exit(1);
         }
     }
+    $zip = new ZipArchive();
+    $zip->open($zippath);
+    foreach ($requiredhashes as $relativepath => $expectedhash) {
+        $contents = $zip->getFromName('lessonmark/' . $relativepath);
+        if ($contents === false || !hash_equals($expectedhash, hash('sha256', $contents))) {
+            $zip->close();
+            fwrite(STDERR, "Third-party asset hash mismatch in release ZIP: {$relativepath}\n");
+            exit(1);
+        }
+    }
+    $zip->close();
 }
 
 echo "Verified mod_lessonmark {$actualrelease} release metadata and package contents.\n";

@@ -23,6 +23,19 @@ Moodle server. Those tools are development dependencies only.
 For a manual installation, extract the package so that `version.php` is at
 `<moodle-root>/mod/lessonmark/version.php`, then run Moodle's normal upgrade.
 
+## Offline mathematics and diagram smoke test
+
+After installing or upgrading the 0.2 line, create a test lesson containing an
+inline `math:x^2`, a fenced `asciimath` block, and a fenced `mermaid` flowchart.
+Confirm all three render in Preview and student display with the browser network
+panel set to Offline. Invalid source must remain visible with an error style.
+Download the saved PDF and confirm formula and diagram source remains readable.
+
+KaTeX, AsciiMath, and Mermaid assets are included in the release ZIP and are
+loaded only when the saved lesson needs them. The production Moodle server does
+not run npm and does not contact a CDN. Node.js is needed only by maintainers
+who reproduce or update the committed browser assets.
+
 Run Moodle maintenance CLI commands as the same operating-system account used
 by the web process (commonly `www-data`). Running them as `root` can leave
 root-owned files in `moodledata/cache` or `moodledata/localcache` and prevent

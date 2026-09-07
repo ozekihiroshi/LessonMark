@@ -18,6 +18,8 @@ does not itself contact an AI service or send lesson content outside Moodle.
   highlighted fenced code, responsive tables, and teaching typography;
 - ungraded RESPONSE and CHOICE working-answer blocks with browser-local draft
   retention, followed by native ANSWER disclosures on the same page;
+- local LaTeX, AsciiMath, and Mermaid rendering with accessible, readable
+  source fallback and no CDN dependency;
 - Moodle File API images with access control and author diagnostics; and
 - backup, restore, course duplicate, and internal-link remapping.
 
@@ -57,6 +59,6 @@ private process in the repository's `SECURITY.md`.
 
 ## License
 
-GNU GPL v3 or later. Bundled PrismJS assets are MIT licensed; see
-`vendor/prism/LICENSE`, `vendor/prism/readme_moodle.txt`, and
-`thirdpartylibs.xml`.
+GNU GPL v3 or later. Bundled PrismJS, KaTeX, AsciiMath parser, and Mermaid
+assets are MIT licensed. Exact versions and attribution are recorded in
+`thirdpartylibs.xml`; corresponding license files are included under `vendor/`.

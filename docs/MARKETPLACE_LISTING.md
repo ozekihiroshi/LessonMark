@@ -20,7 +20,7 @@ The plugin keeps Markdown—not generated HTML—as the editable source of truth
 This makes material practical to review, export, diff, translate, process with
 authoring tools, and reuse outside one Moodle database.
 
-Version 0.1.0 includes:
+LessonMark includes:
 
 - responsive split Markdown editor and preview, with mobile Edit/Preview tabs;
 - headings with stable IDs and an automatic table of contents;
@@ -30,6 +30,11 @@ Version 0.1.0 includes:
 - validated UTF-8 `.md` import and capability-protected source export;
 - shared safe rendering for preview and student display; and
 - activity backup, restore, course duplicate, and internal-link remapping.
+
+The 0.2 line also adds ungraded same-page self-check blocks, saved-content PDF,
+and locally bundled LaTeX, AsciiMath, and Mermaid rendering. Formulas and
+diagrams use progressive enhancement: invalid or unavailable browser rendering
+keeps readable source. No CDN is required.
 
 Raw HTML is not supported as authoring syntax. LessonMark does not contact an
 external service, require a subscription, or transfer personal data outside

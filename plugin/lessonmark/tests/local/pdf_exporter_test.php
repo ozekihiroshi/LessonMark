@@ -63,6 +63,35 @@ final class pdf_exporter_test extends \advanced_testcase {
     }
 
     /**
+     * Browser-only formulas and diagrams remain readable source in PDF HTML.
+     */
+    public function test_prepare_html_retains_math_and_mermaid_source(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course(['fullname' => 'Portable course']);
+        $lessonmark = $this->getDataGenerator()->create_module('lessonmark', [
+            'course' => $course->id,
+            'name' => 'Portable lesson',
+            'markdownsource' => '# Portable lesson',
+        ]);
+        $cm = get_coursemodule_from_instance('lessonmark', $lessonmark->id, $course->id, false, MUST_EXIST);
+        $context = \context_module::instance($cm->id);
+        $content = '<p><code>math:\\frac{a}{b}</code></p>'
+            . '<pre class="mod_lessonmark-math-source"><code class="language-math">x^2</code></pre>'
+            . '<pre class="mod_lessonmark-mermaid-source"><code class="language-mermaid">'
+            . 'flowchart LR; A--&gt;B</code></pre>';
+
+        $html = (new pdf_exporter())->prepare_html($content, 'Portable lesson', 'Portable course', $context);
+
+        $this->assertStringContainsString('math:\\frac{a}{b}', $html);
+        $this->assertStringContainsString('language-math', $html);
+        $this->assertStringContainsString('x^2', $html);
+        $this->assertStringContainsString('language-mermaid', $html);
+        $this->assertStringContainsString('flowchart LR; A--&gt;B', $html);
+        $this->assertStringNotContainsString('<svg', $html);
+    }
+
+    /**
      * Export filenames are safe and always end in .pdf.
      */
     public function test_export_filename(): void {

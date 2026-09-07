@@ -1,5 +1,15 @@
 # Change log
 
+## 0.2.0-rc1 - 2026-09-07
+
+- Added a pinned, self-contained Node build for the local KaTeX, AsciiMath,
+  and Mermaid browser assets and verified that it reproduces committed files.
+- Added exact release-package checks for third-party assets and licenses.
+- Tightened conditional browser-asset detection and added malformed-source and
+  PDF source-fallback regression coverage.
+- Extended the supported PHP matrix, browser acceptance, reproducible ZIP, and
+  installation lifecycle release gates for the 0.2 feature set.
+
 ## 0.2.0-alpha4 - 2026-09-07
 
 - Added locally bundled Mermaid diagram rendering to author Preview and

@@ -70,7 +70,7 @@ if (str_contains($contenthtml, 'data-self-check=')) {
         'userId' => (int) $USER->id,
     ]]);
 }
-if (preg_match('/(?:language-(?:math|latex|asciimath)|>(?:math|latex|asciimath):)/', $contenthtml) === 1) {
+if (\mod_lessonmark\local\browser_assets::requires_math($contenthtml)) {
     $PAGE->requires->data_for_js('ozmdMathConfig', [
         'katexCssUrl' => (new moodle_url('/mod/lessonmark/vendor/katex/katex.min.css'))->out(false),
         'labels' => [
@@ -81,7 +81,7 @@ if (preg_match('/(?:language-(?:math|latex|asciimath)|>(?:math|latex|asciimath):
     ]);
     $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/math/math-render.min.js'));
 }
-if (str_contains($contenthtml, 'language-mermaid')) {
+if (\mod_lessonmark\local\browser_assets::requires_mermaid($contenthtml)) {
     $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/mermaid/mermaid.min.js'));
     $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/mermaid/mermaid-render.js'));
 }

@@ -14,7 +14,7 @@ resource in Moodle without requiring Git, an external editor, Composer, or
 Node.js on the server.
 
 The plugin component is `mod_lessonmark`. Stable release 0.1.0 and the current
-0.2 alpha line target Moodle 5.2 on PHP 8.3 and 8.4.
+0.2 release candidate target Moodle 5.2 on PHP 8.3 and 8.4.
 
 ![LessonMark Markdown editor and preview](docs/screenshots/lessonmark-authoring.png)
 
@@ -177,9 +177,10 @@ the ZIP layout, and produces byte-identical output for the same commit.
 
 Release 0.1.0 established the Markdown authoring, rendering, File API,
 backup/restore, accessibility, security, and reproducible packaging base. The
-0.2 alpha line adds same-page ungraded self-check blocks, saved-content PDF,
-and locally bundled LaTeX, AsciiMath, and Mermaid rendering. These additions complement Moodle
-Quiz and Assignment.
+0.2 release candidate adds same-page ungraded self-check blocks, saved-content
+PDF, and locally bundled LaTeX, AsciiMath, and Mermaid rendering. Pinned Node
+dependencies and build scripts reproduce the committed browser assets without
+a CDN. These additions complement Moodle Quiz and Assignment.
 
 GitHub Actions tests Moodle 5.2 on PHP 8.3 and 8.4, including PHP lint,
 Moodle Code Checker, PHPDoc, plugin validation, upgrade savepoints, Grunt,
@@ -207,5 +208,7 @@ Report reproducible defects through
 security vulnerabilities privately as described in
 [SECURITY.md](SECURITY.md).
 
-LessonMark is licensed under GNU GPL v3 or later. Bundled PrismJS assets are
-MIT licensed; see the attribution files in the plugin package.
+LessonMark is licensed under GNU GPL v3 or later. Bundled PrismJS, KaTeX,
+AsciiMath parser, and Mermaid assets are MIT licensed; exact versions,
+attribution, and license files are included in the plugin package. Rebuild
+instructions are in [thirdparty-src/README.md](thirdparty-src/README.md).

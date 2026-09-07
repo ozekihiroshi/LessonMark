@@ -8,11 +8,12 @@
 - `INSTALLATION.md`: install, upgrade, and uninstall operations
 - `RELEASE_CHECKLIST.md`: release gates and evidence requirements
 - `MARKETPLACE_LISTING.md`: reusable public product description and links
-- `PUBLICATION_AUDIT.md`: Moodle Marketplace readiness evidence
+- `PUBLICATION_AUDIT.md`: Moodle Marketplace readiness evidence for 0.1
+- `PUBLICATION_AUDIT_0.2.0.md`: 0.2 release-candidate portability audit
 - `RELEASE_NOTES_0.1.0.md`: public notes for the first stable release
 - `RELEASE_EVIDENCE_0.1.0.md`: exact local acceptance evidence
 - `screenshots/`: public authoring and student-view images
-- `M1_IMPLEMENTATION.md` through `M9_IMPLEMENTATION.md`: milestone records
+- `M1_IMPLEMENTATION.md` through `M10_IMPLEMENTATION.md`: milestone records
 
 Product scope changes belong in the product requirements. Implementation
 choices that do not change product scope belong in the technical decisions

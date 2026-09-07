@@ -25,6 +25,21 @@ set +u
 set -u
 nvm use 22.23.2 >/dev/null
 
+(
+    cd /workspace
+    assetbaseline="$cibase/browser-assets-before"
+    mkdir -p "$assetbaseline"
+    cp -a plugin/lessonmark/vendor/katex "$assetbaseline/katex"
+    cp -a plugin/lessonmark/vendor/math "$assetbaseline/math"
+    cp -a plugin/lessonmark/vendor/mermaid "$assetbaseline/mermaid"
+    npm ci --no-audit
+    npm audit --audit-level=high
+    npm run build:assets
+    diff -ru "$assetbaseline/katex" plugin/lessonmark/vendor/katex
+    diff -ru "$assetbaseline/math" plugin/lessonmark/vendor/math
+    diff -ru "$assetbaseline/mermaid" plugin/lessonmark/vendor/mermaid
+)
+
 composerphar="$cibase/composer.phar"
 curl -fsSLo "$composerphar" https://getcomposer.org/download/2.10.3/composer.phar
 echo "7a2d379d5b8ffdaa028580ef26494c36d2feef4b178d3dd1473a4dbc5e17c8d6  $composerphar" | sha256sum -c -

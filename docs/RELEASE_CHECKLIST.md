@@ -9,11 +9,15 @@
 
 ## Automated gates
 
+- Run `npm ci`, `npm audit --audit-level=high`, and
+  `npm run build:assets`; require no diff in `plugin/lessonmark/vendor`.
+- Confirm the release verifier accepts the exact KaTeX, AsciiMath, and Mermaid
+  files, licenses, and SHA-256 hashes.
 - Run Moodle Plugin CI on PHP 8.3 and PHP 8.4 against Moodle 5.2.
 - Pass PHP lint, Moodle Code Checker, PHPDoc, plugin validation, savepoints,
   Grunt, and PHPUnit.
-- Pass the Chrome Behat flow for authoring, preview, publishing, and automated
-  accessibility checks.
+- Pass the Chrome Behat flow for authoring, preview, publishing, malformed
+  browser-rendered source, and automated accessibility checks.
 - Treat Moodle `main` results as informational until the corresponding stable
   release becomes a supported target.
 
@@ -26,6 +30,12 @@
   preferences, logging, or external data transfer is added.
 - Test keyboard-only editor tab operation, focus visibility, labels, semantic
   headings, callouts, code, tables, responsive layout, and screen-reader names.
+- Verify valid and malformed LaTeX, AsciiMath, and Mermaid on Preview and
+  the student page. A failure must keep readable source rather than empty output.
+- Verify formulas expose semantic MathML and diagrams expose an accessible name.
+- Verify narrow-screen, touch, supported Moodle theme, and print behavior.
+- Confirm formula and diagram assets load only when their fixed rendered
+  markers are present and that no CDN or external renderer request occurs.
 
 ## Package and lifecycle
 
@@ -37,6 +47,10 @@
 - Test a clean install, upgrade from the preceding version, activity creation,
   preview, student display, import/export, image access, backup/restore, course
   duplicate, and uninstall/reinstall when the release changes storage.
+- Include formula and Mermaid source in import/export, backup/restore, and
+  duplicate tests; confirm Markdown remains the source of truth.
+- Export a saved-content PDF and confirm formulas and diagrams remain readable
+  as source when browser rendering is unavailable.
 - Confirm no source repository, Composer install, or Node.js build is needed on
   the Moodle server.
 

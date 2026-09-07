@@ -121,6 +121,13 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Rebuild and audit local browser assets
+        run: |
+          npm ci --no-audit
+          npm audit --audit-level=high
+          npm run build:assets
+          git diff --exit-code -- plugin/lessonmark/vendor
+
       - name: Build twice and compare
         run: |
           scripts/build-release.sh build/mod_lessonmark.zip
