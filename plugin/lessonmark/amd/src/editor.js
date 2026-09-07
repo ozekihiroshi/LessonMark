@@ -27,6 +27,8 @@ import {watchForm} from 'core_form/changechecker';
 import {highlight} from './syntax-highlighter';
 
 const DEBOUNCE_MS = 400;
+const OPTIONAL_RENDERER_WAIT_MS = 3000;
+const OPTIONAL_RENDERER_POLL_MS = 50;
 const STRING_DEFINITIONS = [
     {name: 'loading', key: 'previewloading', component: 'mod_lessonmark'},
     {name: 'ready', key: 'previewready', component: 'mod_lessonmark'},
@@ -52,6 +54,35 @@ const loadStrings = async() => {
     const values = await getStrings(STRING_DEFINITIONS.map(({key, component}) => ({key, component})));
     return Object.fromEntries(STRING_DEFINITIONS.map(({name}, index) => [name, values[index]]));
 };
+
+/**
+ * Wait briefly for a non-AMD browser renderer requested by Moodle.
+ *
+ * Moodle may start the AMD editor while a large local script is still being
+ * evaluated. Poll only when the rendered document contains a matching feature.
+ *
+ * @param {string} name Window property containing the renderer function.
+ * @returns {Promise<Function|null>} Available renderer or null after timeout.
+ */
+const waitForOptionalRenderer = name => new Promise(resolve => {
+    if (typeof window[name] === 'function') {
+        resolve(window[name]);
+        return;
+    }
+
+    const started = Date.now();
+    const timer = window.setInterval(() => {
+        if (typeof window[name] === 'function') {
+            window.clearInterval(timer);
+            resolve(window[name]);
+            return;
+        }
+        if (Date.now() - started >= OPTIONAL_RENDERER_WAIT_MS) {
+            window.clearInterval(timer);
+            resolve(null);
+        }
+    }, OPTIONAL_RENDERER_POLL_MS);
+});
 
 /**
  * Initialise one LessonMark editor.
@@ -196,8 +227,11 @@ export const init = async config => {
             if (typeof window.ozmdRenderMath === 'function') {
                 await window.ozmdRenderMath(preview);
             }
-            if (typeof window.ozmdRenderMermaid === 'function') {
-                await window.ozmdRenderMermaid(preview);
+            if (preview.querySelector('code.language-mermaid')) {
+                const renderMermaid = await waitForOptionalRenderer('ozmdRenderMermaid');
+                if (renderMermaid) {
+                    await renderMermaid(preview);
+                }
             }
             const messages = Array.isArray(result.diagnostics) ? result.diagnostics
                 .map(diagnostic => diagnostic.message)
