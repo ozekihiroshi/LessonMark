@@ -12,6 +12,7 @@
 - `PUBLICATION_AUDIT_0.2.0.md`: 0.2 release-candidate portability audit
 - `RELEASE_NOTES_0.1.0.md`: public notes for the first stable release
 - `RELEASE_EVIDENCE_0.1.0.md`: exact local acceptance evidence
+- `RELEASE_EVIDENCE_0.2.0-RC1.md`: exact 0.2 release-candidate evidence
 - `screenshots/`: public authoring and student-view images
 - `M1_IMPLEMENTATION.md` through `M10_IMPLEMENTATION.md`: milestone records
 
