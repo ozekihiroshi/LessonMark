@@ -58,6 +58,7 @@ $string['lessonmarkname'] = 'Name';
 $string['markdownsource'] = 'Markdown source';
 $string['markdownsource_help'] = 'The source is stored unchanged and rendered when viewed. Raw HTML is displayed as text.';
 $string['mathsourceblock'] = 'Formula source';
+$string['mermaidsourceblock'] = 'Mermaid diagram source';
 $string['missingidandcmid'] = 'A course-module id or LessonMark instance id is required.';
 $string['missingpreviewcontext'] = 'A course or LessonMark activity is required to preview this source.';
 $string['modulename'] = 'LessonMark';

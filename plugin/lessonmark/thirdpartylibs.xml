@@ -27,4 +27,12 @@
     <license>MIT</license>
     <repository>https://github.com/ozekihiroshi/ozeki-markdown-documents</repository>
   </library>
+  <library>
+    <location>vendor/mermaid</location>
+    <name>Mermaid</name>
+    <description>Local diagrams-as-code rendering.</description>
+    <version>11.17.2</version>
+    <license>MIT</license>
+    <repository>https://github.com/mermaid-js/mermaid</repository>
+  </library>
 </libraries>

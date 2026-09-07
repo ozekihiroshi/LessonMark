@@ -465,6 +465,12 @@ final class teaching_document_enhancer {
                 $code->setAttribute('class', $languageclass);
                 continue;
             }
+            if ($sourceclass === 'mermaid') {
+                $code->setAttribute('class', 'language-mermaid');
+                $pre->setAttribute('class', 'mod_lessonmark-mermaid-source language-mermaid');
+                $pre->setAttribute('aria-label', get_string('mermaidsourceblock', 'mod_lessonmark'));
+                continue;
+            }
             $language = self::LANGUAGE_ALIASES[$sourceclass] ?? null;
             $pre->setAttribute('class', 'mod_lessonmark-code');
             $code->removeAttribute('class');

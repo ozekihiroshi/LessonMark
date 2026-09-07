@@ -196,6 +196,9 @@ export const init = async config => {
             if (typeof window.ozmdRenderMath === 'function') {
                 await window.ozmdRenderMath(preview);
             }
+            if (typeof window.ozmdRenderMermaid === 'function') {
+                await window.ozmdRenderMermaid(preview);
+            }
             const messages = Array.isArray(result.diagnostics) ? result.diagnostics
                 .map(diagnostic => diagnostic.message)
                 .filter(message => typeof message === 'string' && message) : [];

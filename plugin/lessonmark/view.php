@@ -81,6 +81,10 @@ if (preg_match('/(?:language-(?:math|latex|asciimath)|>(?:math|latex|asciimath):
     ]);
     $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/math/math-render.min.js'));
 }
+if (str_contains($contenthtml, 'language-mermaid')) {
+    $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/mermaid/mermaid.min.js'));
+    $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/mermaid/mermaid-render.js'));
+}
 
 echo $OUTPUT->header();
 if (trim((string) $lessonmark->intro) !== '') {

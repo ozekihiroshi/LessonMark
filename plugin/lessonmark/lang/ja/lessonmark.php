@@ -58,6 +58,7 @@ $string['lessonmarkname'] = '名称';
 $string['markdownsource'] = 'Markdown原稿';
 $string['markdownsource_help'] = 'Markdown原稿を正本として保存し、表示時にレンダリングします。raw HTMLは文字として表示します。';
 $string['mathsourceblock'] = '数式の原稿';
+$string['mermaidsourceblock'] = 'Mermaid図の原稿';
 $string['missingidandcmid'] = 'コースモジュールIDまたはLessonMarkインスタンスIDが必要です。';
 $string['missingpreviewcontext'] = 'プレビューにはコースまたはLessonMark教材が必要です。';
 $string['modulename'] = 'LessonMark';

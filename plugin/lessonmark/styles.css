@@ -1,3 +1,25 @@
+.mod_lessonmark-content .ozmd-mermaid {
+    max-width: 100%;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    text-align: center;
+}
+
+.mod_lessonmark-content .ozmd-mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.mod_lessonmark-content .ozmd-mermaid-error {
+    border-inline-start: 4px solid var(--bs-danger, #dc3545);
+}
+
+@media print {
+    .mod_lessonmark-content .ozmd-mermaid {
+        break-inside: avoid;
+    }
+}
+
 .mod_lessonmark-content .ozmd-math {
     position: relative;
     max-width: 100%;

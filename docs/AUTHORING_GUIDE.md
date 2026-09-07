@@ -185,6 +185,26 @@ a formula is invalid, its original code remains visible.
 The syntax is shared with Ozeki Markdown Documents. `math:` is the documented
 LaTeX prefix; `latex:` is also accepted for source compatibility.
 
+## Mermaid diagrams (0.2 alpha)
+
+Use a `mermaid` fenced block:
+
+````markdown
+```mermaid
+flowchart LR
+    Draft --> Review --> Publish
+```
+````
+
+LessonMark keeps this fence unchanged as the source of truth and renders it
+locally in Preview and student view. Mermaid uses strict security, disables
+HTML labels, and enforces text and edge limits. It is not downloaded on
+student pages that do not contain a Mermaid fence.
+
+If Mermaid rejects the diagram, LessonMark leaves the original fenced source
+visible so that content is never silently lost. PDF export uses the same
+readable source fallback because browser-generated SVG is not canonical data.
+
 ## Tables
 
 ```markdown

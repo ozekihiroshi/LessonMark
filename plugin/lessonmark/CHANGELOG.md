@@ -1,5 +1,14 @@
 # Change log
 
+## 0.2.0-alpha4 - 2026-09-07
+
+- Added locally bundled Mermaid diagram rendering to author Preview and
+  student display while retaining fenced source as canonical Markdown.
+- Added strict Mermaid security, disabled HTML labels, bounded text and edge
+  processing, responsive output, and source-visible failure behavior.
+- Loaded the Mermaid payload conditionally on student pages and retained
+  readable diagram source in saved-content PDF export.
+
 ## 0.2.0-alpha3 - 2026-09-07
 
 - Added locally bundled LaTeX and AsciiMath rendering in author Preview and

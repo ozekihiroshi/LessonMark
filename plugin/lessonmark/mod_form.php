@@ -165,6 +165,8 @@ class mod_lessonmark_mod_form extends moodleform_mod {
             ],
         ]);
         $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/math/math-render.min.js'));
+        $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/mermaid/mermaid.min.js'));
+        $PAGE->requires->js(new moodle_url('/mod/lessonmark/vendor/mermaid/mermaid-render.js'));
         $PAGE->requires->js_call_amd('mod_lessonmark/editor', 'init', [[
             'endpoint' => (new moodle_url('/mod/lessonmark/preview.php'))->out(false),
             'sourceSelector' => '#id_markdownsource',

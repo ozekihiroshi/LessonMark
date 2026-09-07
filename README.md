@@ -112,6 +112,7 @@ and distribution without turning it into a second editable source of truth.
 - Markdown-first Moodle activity creation and editing;
 - responsive side-by-side Edit/Preview interface with mobile tabs;
 - locally rendered LaTeX and beginner-friendly AsciiMath formulas;
+- locally rendered Mermaid diagrams with strict security and readable fallback;
 - shared sanitised rendering for preview and student display;
 - validated `.md` import and capability-protected Markdown export;
 - same-page RESPONSE, CHOICE, and ANSWER learning blocks;
@@ -177,8 +178,7 @@ the ZIP layout, and produces byte-identical output for the same commit.
 Release 0.1.0 established the Markdown authoring, rendering, File API,
 backup/restore, accessibility, security, and reproducible packaging base. The
 0.2 alpha line adds same-page ungraded self-check blocks, saved-content PDF,
-and locally bundled LaTeX and AsciiMath rendering. Mermaid diagram rendering
-is the next planned milestone. These additions complement rather than reimplement Moodle
+and locally bundled LaTeX, AsciiMath, and Mermaid rendering. These additions complement Moodle
 Quiz and Assignment.
 
 GitHub Actions tests Moodle 5.2 on PHP 8.3 and 8.4, including PHP lint,

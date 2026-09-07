@@ -95,6 +95,24 @@ final class teaching_document_enhancer_test extends \advanced_testcase {
         $this->assertStringContainsString('class="language-asciimath"', $html);
         $this->assertSame([], $document->get_diagnostics());
     }
+
+    /**
+     * Tests that Mermaid source is reserved for the local diagram renderer.
+     */
+    public function test_preserves_mermaid_marker_without_code_diagnostic(): void {
+        $enhancer = new teaching_document_enhancer();
+        $document = $enhancer->enhance(
+            '<pre><code class="language-mermaid">flowchart LR; A--&gt;B</code></pre>'
+        );
+        $html = $document->get_content_html();
+
+        $this->assertStringContainsString(
+            'class="mod_lessonmark-mermaid-source language-mermaid"',
+            $html
+        );
+        $this->assertStringContainsString('class="language-mermaid"', $html);
+        $this->assertSame([], $document->get_diagnostics());
+    }
     /**
      * Tests relative-image and alternative-text diagnostics.
      */
