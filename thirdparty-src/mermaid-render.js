@@ -3,6 +3,8 @@
 
     var initialized = false;
     var diagramCounter = 0;
+    var mermaidWaitMs = 5000;
+    var mermaidPollMs = 50;
 
     function initialize() {
         if (initialized) {
@@ -28,6 +30,27 @@
 
         initialized = true;
         return true;
+    }
+
+    function waitForMermaid() {
+        if (initialize()) {
+            return Promise.resolve(true);
+        }
+
+        return new Promise(function (resolve) {
+            var started = Date.now();
+            var timer = global.setInterval(function () {
+                if (initialize()) {
+                    global.clearInterval(timer);
+                    resolve(true);
+                    return;
+                }
+                if (Date.now() - started >= mermaidWaitMs) {
+                    global.clearInterval(timer);
+                    resolve(false);
+                }
+            }, mermaidPollMs);
+        });
     }
 
     function renderCodeBlock(code) {
@@ -64,22 +87,24 @@
     }
 
     function render(root) {
-        if (!initialize()) {
-            return Promise.resolve();
-        }
+        return waitForMermaid().then(function (available) {
+            if (!available) {
+                return;
+            }
 
-        var scope = root && typeof root.querySelectorAll === 'function'
-            ? root
-            : document;
-        var blocks = Array.prototype.slice.call(
-            scope.querySelectorAll('pre > code.language-mermaid')
-        );
+            var scope = root && typeof root.querySelectorAll === 'function'
+                ? root
+                : document;
+            var blocks = Array.prototype.slice.call(
+                scope.querySelectorAll('pre > code.language-mermaid')
+            );
 
-        return blocks.reduce(function (promise, block) {
-            return promise.then(function () {
-                return renderCodeBlock(block);
-            });
-        }, Promise.resolve());
+            return blocks.reduce(function (promise, block) {
+                return promise.then(function () {
+                    return renderCodeBlock(block);
+                });
+            }, Promise.resolve());
+        });
     }
 
     global.ozmdRenderMermaid = render;

@@ -10,7 +10,7 @@
 - Extended the supported PHP matrix, browser acceptance, reproducible ZIP, and
   installation lifecycle release gates for the 0.2 feature set.
 - Fixed the first author Preview so Mermaid rendering waits briefly for its
-  conditionally loaded browser adapter instead of leaving diagram source visible.
+  conditionally loaded browser runtime and adapter instead of leaving source visible.
 
 ## 0.2.0-alpha4 - 2026-09-07
 
