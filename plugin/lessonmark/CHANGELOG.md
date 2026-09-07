@@ -12,6 +12,8 @@
 - Fixed the first author Preview so Mermaid rendering waits briefly for its
   conditionally loaded browser runtime and adapter instead of leaving source visible.
 
+- Isolated Mermaid's bundled UMD dependencies from Moodle RequireJS to prevent
+  anonymous AMD registration from interrupting browser initialization.
 ## 0.2.0-alpha4 - 2026-09-07
 
 - Added locally bundled Mermaid diagram rendering to author Preview and

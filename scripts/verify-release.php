@@ -88,7 +88,7 @@ foreach ($requiredfiles as $relativepath) {
 $requiredhashes = [
     'vendor/katex/katex.min.css' => '5bc44ab327592b75fcf2d412a1b396ebf20203bfe826a1966fb8ab03f8b08bb4',
     'vendor/math/math-render.min.js' => '4d7aa10d349ebfe7fbba865ae262f26c00d0dc511b2ed13135b6986f7f0e4da0',
-    'vendor/mermaid/mermaid.min.js' => '581ed7d74bd9048d0e3a91363927d72ef22942d7722546b27f7cc29e35390eb8',
+    'vendor/mermaid/mermaid.min.js' => 'c8db409be2b0c005779b367f9e948e9247b9148b8a8c82a15d787481bb33965d',
     'vendor/mermaid/mermaid-render.js' => '402bedf2b2d01f369c56dc13f29a9547a129a91e9cce4c0bd990322b2f6e2a3b',
 ];
 foreach ($requiredhashes as $relativepath => $expectedhash) {
