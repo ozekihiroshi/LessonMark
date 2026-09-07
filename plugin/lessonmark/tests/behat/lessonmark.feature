@@ -48,8 +48,7 @@ Feature: Author and publish a LessonMark teaching resource
     And I wait until "Preview updated." "text" exists
     Then I should see "Updated lesson" in the "[data-region=\"preview-content\"]" "css_element"
     And ".ozmd-math .katex" "css_element" should exist in the "[data-region=\"preview-content\"]" "css_element"
-    And I wait until ".ozmd-mermaid" "css_element" exists
-    And ".ozmd-mermaid svg" "css_element" should exist in the "[data-region=\"preview-content\"]" "css_element"
+    And a rendered LessonMark Mermaid diagram should appear
     And the "Copy LaTeX" "button" should exist
     And the LessonMark source editor should stay aligned with its preview
     And the LessonMark source editor should remain visible while the preview scrolls
@@ -60,7 +59,7 @@ Feature: Author and publish a LessonMark teaching resource
     And I should see "Note"
     And "[role=\"main\"] > h2" "css_element" should not exist
     And ".ozmd-math .katex" "css_element" should exist
-    And ".ozmd-mermaid svg" "css_element" should exist
+    And a rendered LessonMark Mermaid diagram should appear
     And the "Copy LaTeX" "button" should exist
     And the page should meet accessibility standards
 

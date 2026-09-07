@@ -44,6 +44,24 @@ class behat_mod_lessonmark extends behat_base {
     }
 
     /**
+     * Waits for Mermaid to replace its source placeholder with an SVG diagram.
+     *
+     * SVG elements use an XML namespace that is not handled consistently by
+     * the generic nested-selector Behat step, so query the live browser DOM.
+     *
+     * @Then /^a rendered LessonMark Mermaid diagram should appear$/
+     */
+    public function rendered_mermaid_diagram_should_appear(): void {
+        $rendered = $this->getSession()->wait(
+            10000,
+            "document.querySelector('.ozmd-mermaid svg') !== null",
+        );
+        if (!$rendered) {
+            throw new \RuntimeException('A rendered LessonMark Mermaid SVG did not appear within 10 seconds.');
+        }
+    }
+
+    /**
      * Confirms that a tall preview does not push the source textarea down.
      *
      * @Then /^the LessonMark source editor should stay aligned with its preview$/
