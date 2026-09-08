@@ -93,4 +93,19 @@ MD;
         $this->expectException(\invalid_parameter_exception::class);
         $renderer->render(str_repeat('a', moodle_markdown_renderer::MAX_SOURCE_BYTES + 1), \context_system::instance());
     }
+
+    /**
+     * Structural markers disappear, but examples inside code remain readable.
+     */
+    public function test_slide_marker_rendering(): void {
+        $renderer = new moodle_markdown_renderer();
+        $context = \context_system::instance();
+        $html = $renderer->render("# First\n<!-- slide -->\n# Second", $context)->get_content_html();
+        $this->assertStringNotContainsString('slide --', $html);
+        $this->assertStringContainsString('First', $html);
+        $this->assertStringContainsString('Second', $html);
+        $fence = str_repeat(chr(96), 3);
+        $html = $renderer->render($fence . "html\n<!-- slide -->\n" . $fence, $context)->get_content_html();
+        $this->assertStringContainsString('slide --', $html);
+    }
 }

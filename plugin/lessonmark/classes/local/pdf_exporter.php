@@ -75,6 +75,9 @@ final class pdf_exporter {
         $pdf->SetAutoPageBreak(true, 16);
         $pdf->setFontSubsetting(true);
         $pdf->SetFont('kozminproregular', '', 10);
+        // TCPDF switches preformatted blocks to Courier unless this is set.
+        // Use its bundled Japanese font so code and diagram source retain CJK text.
+        $pdf->setDefaultMonospacedFont('kozminproregular');
         $pdf->AddPage();
         $pdf->writeHTML($html, true, false, true, false, '');
         return $pdf->Output('', 'S');

@@ -26,6 +26,7 @@ require_once(__DIR__ . '/../../config.php');
 
 $id = optional_param('id', 0, PARAM_INT);
 $instanceid = optional_param('n', 0, PARAM_INT);
+$present = optional_param('present', false, PARAM_BOOL);
 if ($id) {
     $cm = get_coursemodule_from_id('lessonmark', $id, 0, false, MUST_EXIST);
     $lessonmark = $DB->get_record('lessonmark', ['id' => $cm->instance], '*', MUST_EXIST);
@@ -45,6 +46,12 @@ $PAGE->set_url('/mod/lessonmark/view.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($lessonmark->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
+if ($present) {
+    $PAGE->set_url('/mod/lessonmark/view.php', ['id' => $cm->id, 'present' => 1]);
+    $PAGE->set_pagelayout('embedded');
+    $PAGE->activityheader->disable();
+    $PAGE->requires->js(new moodle_url('/mod/lessonmark/presentation.js'));
+}
 
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
@@ -60,11 +67,28 @@ $event->trigger();
 $renderer = new \mod_lessonmark\local\moodle_markdown_renderer();
 $document = $renderer->render((string) $lessonmark->markdownsource, $context);
 $contenthtml = $document->get_content_html();
+if ($present) {
+    $contenthtml = '';
+    foreach (\mod_lessonmark\local\presentation_source::split((string) $lessonmark->markdownsource) as $index => $source) {
+        $slidehtml = $renderer->render($source, $context)->get_content_html();
+        // Keep repeated heading IDs unique between independently rendered slides.
+        $slidehtml = preg_replace_callback(
+            '/\b(id="|for="|name="|href="#)([^"]*)"/',
+            static fn(array $match): string => $match[1] . 'slide-' . $index . '-' . $match[2] . '"',
+            $slidehtml
+        );
+        $contenthtml .= html_writer::tag('section', $slidehtml, [
+            'class' => 'mod_lessonmark-slide',
+            'tabindex' => '0',
+            'aria-label' => get_string('presentationpage', 'mod_lessonmark') . ' ' . ($index + 1),
+        ]);
+    }
+}
 
 if (str_contains($contenthtml, 'language-')) {
     $PAGE->requires->js_call_amd('mod_lessonmark/syntax-highlighter', 'init', ['.mod_lessonmark-content']);
 }
-if (str_contains($contenthtml, 'data-self-check=')) {
+if (!$present && str_contains($contenthtml, 'data-self-check=')) {
     $PAGE->requires->js_call_amd('mod_lessonmark/self-check', 'init', [[
         'cmid' => (int) $cm->id,
         'userId' => (int) $USER->id,
@@ -87,8 +111,33 @@ if (\mod_lessonmark\local\browser_assets::requires_mermaid($contenthtml)) {
 }
 
 echo $OUTPUT->header();
-if (trim((string) $lessonmark->intro) !== '') {
+if ($present) {
+    echo html_writer::start_div('mod_lessonmark-presentation');
+    echo html_writer::start_div('mod_lessonmark-presentation-controls');
+    foreach (['previous', 'next', 'fullscreen'] as $action) {
+        echo html_writer::tag('button', get_string('presentation' . $action, 'mod_lessonmark'), [
+            'type' => 'button', 'class' => 'btn btn-secondary', 'data-presentation-action' => $action,
+        ]);
+    }
+    echo html_writer::tag('span', '', ['data-presentation-status' => '', 'role' => 'status', 'aria-live' => 'polite']);
+    echo html_writer::link(
+        new moodle_url('/mod/lessonmark/view.php', ['id' => $cm->id]),
+        get_string('presentationreturn', 'mod_lessonmark'),
+        ['class' => 'btn btn-secondary']
+    );
+    echo html_writer::end_div();
+} else {
+    echo html_writer::link(
+        new moodle_url('/mod/lessonmark/view.php', ['id' => $cm->id, 'present' => 1]),
+        get_string('presentation', 'mod_lessonmark'),
+        ['class' => 'btn btn-secondary mb-3']
+    );
+}
+if (!$present && trim((string) $lessonmark->intro) !== '') {
     echo $OUTPUT->box(format_module_intro('lessonmark', $lessonmark, $cm->id), 'generalbox mod_introbox');
 }
 echo html_writer::div($contenthtml, 'mod_lessonmark-content');
+if ($present) {
+    echo html_writer::end_div();
+}
 echo $OUTPUT->footer();

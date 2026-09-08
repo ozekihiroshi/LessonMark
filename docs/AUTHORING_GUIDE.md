@@ -6,6 +6,40 @@ for preview and student display.
 
 ## Basic structure
 
+### Classroom presentation (0.2.0 candidate)
+
+Choose **Presentation** on a saved lesson to show one page at a time without
+Moodle navigation. Separate pages with `<!-- slide -->` on its own line at
+column zero. Example:
+
+````markdown
+# Today's topic
+
+Explain the main idea briefly.
+
+<!-- slide -->
+
+# Worked example
+
+```math
+\frac{a}{b}
+```
+````
+
+The same source appears continuously in normal study view. Structural markers
+are omitted in Preview and PDF, but examples inside code fences remain text.
+Keep each page's Markdown self-contained, including reference-link definitions.
+Ordinary `---` horizontal rules do not split pages. No marker means one page.
+
+Use Previous/Next or left/right keys; Home/End go to the first/last page.
+Arrow keys keep their normal meaning inside inputs and controls. Long pages
+scroll rather than shrinking text; split dense material into more pages.
+Fullscreen requires browser support; **Return to lesson** remains available.
+For now, navigate between slides with the controls, not cross-slide anchors.
+
+Presentation is HTML rendered from saved source, not a PDF viewer. Saved PDF
+export continues to retain math/diagram source rather than browser-rendered graphics.
+
 Use ATX headings, paragraphs, emphasis, links, lists, blockquotes, inline code,
 fenced code blocks, and tables. Keep one H1 for the document title where
 practical and do not skip heading levels merely to obtain a visual size.

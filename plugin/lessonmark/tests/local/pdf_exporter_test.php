@@ -98,4 +98,32 @@ final class pdf_exporter_test extends \advanced_testcase {
         $this->assertSame('Lesson.pdf', pdf_exporter::export_filename('Lesson.pdf'));
         $this->assertSame('lessonmark.pdf', pdf_exporter::export_filename('...'));
     }
+
+    /**
+     * Preformatted code must not fall back to Courier and replace Japanese with question marks.
+     */
+    public function test_pdf_code_retains_japanese_text(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $fence = str_repeat(chr(96), 3);
+        $lessonmark = $this->getDataGenerator()->create_module('lessonmark', [
+            'course' => $course->id,
+            'name' => 'Code font regression',
+            'markdownsource' => $fence . "mermaid\nflowchart LR\n A[レビュー] --> B[公開]\n" . $fence . "\n\n"
+                . $fence . "python\nprint('合格')\n" . $fence,
+        ]);
+        $cm = get_coursemodule_from_instance('lessonmark', $lessonmark->id, $course->id, false, MUST_EXIST);
+        $bytes = (new pdf_exporter())->generate($lessonmark, $course, \context_module::instance($cm->id));
+        // Inspect decompressed PDF text streams, not just the intermediate HTML.
+        preg_match_all('/stream\r?\n(.*?)\r?\nendstream/s', $bytes, $matches);
+        $streams = '';
+        foreach ($matches[1] as $stream) {
+            $decoded = @gzuncompress($stream);
+            $streams .= $decoded === false ? $stream : $decoded;
+        }
+        foreach (['レビュー', '公開', '合格'] as $label) {
+            $this->assertStringContainsString(mb_convert_encoding($label, 'UTF-16BE', 'UTF-8'), $streams);
+        }
+    }
 }

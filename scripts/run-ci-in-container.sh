@@ -27,6 +27,7 @@ nvm use 22.23.2 >/dev/null
 
 (
     cd /workspace
+    node scripts/test-presentation.cjs
     assetbaseline="$cibase/browser-assets-before"
     mkdir -p "$assetbaseline"
     cp -a plugin/lessonmark/vendor/katex "$assetbaseline/katex"

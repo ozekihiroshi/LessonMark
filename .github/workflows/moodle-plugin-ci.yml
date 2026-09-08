@@ -123,6 +123,7 @@ jobs:
 
       - name: Rebuild and audit local browser assets
         run: |
+          node scripts/test-presentation.cjs
           npm ci --no-audit
           npm audit --audit-level=high
           npm run build:assets

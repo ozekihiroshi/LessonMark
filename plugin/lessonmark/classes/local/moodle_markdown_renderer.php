@@ -68,6 +68,7 @@ final class moodle_markdown_renderer implements markdown_renderer_interface {
         if (strlen($source) > self::MAX_SOURCE_BYTES || preg_match('//u', $source) !== 1) {
             throw new \invalid_parameter_exception('Invalid LessonMark source.');
         }
+        $source = implode("\n\n", presentation_source::split($source));
         $normalised = $this->normalizer->neutralise_raw_html($source);
         $html = format_text($normalised, FORMAT_MARKDOWN, [
             'context' => $context,

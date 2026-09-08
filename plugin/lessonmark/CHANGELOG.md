@@ -1,5 +1,14 @@
 # Change log
 
+## Unreleased - 0.2.0 presentation candidate
+
+- Added classroom presentation of saved Markdown with explicit slide markers,
+  previous/next and keyboard navigation, page count, fullscreen request and return.
+- Presentation uses existing access controls and local formula/diagram renderers.
+- Normal display, Preview and PDF omit structural slide markers outside code.
+- Fixed Japanese code and Mermaid source text in saved-content PDFs.
+- RC2 packaging and full release gates remain pending.
+
 ## 0.2.0-rc1 - 2026-09-07
 
 - Added a pinned, self-contained Node build for the local KaTeX, AsciiMath,

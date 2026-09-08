@@ -581,3 +581,62 @@
         min-width: 0;
     }
 }
+
+.mod_lessonmark-presentation {
+    background: #fff;
+    color: #202124;
+    min-height: 100vh;
+    padding: 1rem;
+}
+.mod_lessonmark-presentation-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    padding-bottom: .75rem;
+}
+.mod_lessonmark-presentation .mod_lessonmark-content {
+    max-width: none;
+    margin: 0;
+    font-size: 1.1rem;
+}
+.mod_lessonmark-slide {
+    overflow: auto;
+    max-height: calc(100vh - 8rem);
+    padding: 1rem;
+}
+.mod_lessonmark-slide nav {
+    display: none;
+}
+.mod_lessonmark-presentation .mod_lessonmark-selfcheck__note,
+.mod_lessonmark-presentation [data-action="clear-self-check"] {
+    display: none;
+}
+.mod_lessonmark-slide[hidden] {
+    display: none;
+}
+
+@media (min-width: 55rem) {
+    .mod_lessonmark-presentation .mod_lessonmark-content {
+        font-size: 2vw;
+    }
+}
+
+@media (min-width: 100rem) {
+    .mod_lessonmark-presentation .mod_lessonmark-content {
+        font-size: 2rem;
+    }
+}
+
+@media print {
+    .mod_lessonmark-presentation-controls {
+        display: none;
+    }
+    .mod_lessonmark-slide,
+    .mod_lessonmark-slide[hidden] {
+        display: block;
+        overflow: visible;
+        max-height: none;
+        break-after: page;
+    }
+}

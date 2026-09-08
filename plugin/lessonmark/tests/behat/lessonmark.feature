@@ -87,3 +87,32 @@ Feature: Author and publish a LessonMark teaching resource
     When I press "Save and display"
     Then I should see "\\frac{"
     And I should see "not a diagram"
+
+  @javascript
+  Scenario: Present the same saved document as separate slides
+    Given I am on the "Lesson one" "lessonmark activity editing" page logged in as admin
+    When I set the LessonMark Markdown source to:
+      """
+      # First slide
+
+      Introductory explanation.
+
+      <!-- slide -->
+
+      # Second slide
+
+      Inline formula: `math:\frac{a}{b}`
+      """
+    And I press "Save and display"
+    And I follow "Presentation"
+    Then I should see "1 / 2"
+    And I should see "First slide"
+    And I should not see "Second slide"
+    When I press "Next"
+    Then I should see "2 / 2"
+    And I should see "Second slide"
+    And I should not see "First slide"
+    And ".ozmd-math .katex" "css_element" should exist
+    When I follow "Return to lesson"
+    Then I should see "First slide"
+    And I should see "Second slide"
