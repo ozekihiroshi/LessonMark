@@ -76,3 +76,39 @@ changing the plugin. Server-side HTML, per-slide rendering and PDF generation
 then passed for all 11 activities. This is not browser visual validation.
 Caches were purged and maintenance disabled successfully. AWS, 8085, 8083 and
 8084 were not changed. Restore rehearsal and remaining manual checks are open.
+
+### Recovery rehearsal preparation (blocked before execution)
+
+Prepared `scripts/restore-lab-copy.sh` to restore the matched snapshot into
+new internal-only `lessonmark-recovery-check` containers and dedicated volumes.
+It refuses existing target containers/volumes, publishes no port, runs no cron,
+and compares restored alpha2 inventory with the original. It has NOT run yet.
+All six backup manifest entries were independently rehashed on Windows and
+matched. WSL Docker status and a subsequent `/bin/true` both failed with
+`Wsl/Service/0x8007274c`, preventing execution. No WSL restart, recovery write,
+image fixture insertion or AWS change was performed. Both remaining tests
+are still open; file integrity alone is not proof of successful restoration.
+
+### Recovery and image upgrade results
+
+The owner ran the restore script from the existing WSL terminal and reported
+success. The generated `recovery-check/restored.json` was independently hashed
+and matched `before.json` (8a7c67943b5e06895b695eea995ea47cb9e04b94b8b7a983b44b92b2e65cd8f1).
+This verifies restored alpha2 and all 11 original LessonMark records/identifiers.
+
+WSL tool access recovered. A dedicated synthetic course was added ONLY to
+`lessonmark-recovery-check`, guarded by the exact recovery DB hostname. It
+contains two 80x48 red/blue PNGs, `images/test.png` and `images/確認.png`.
+Both alpha2 and RC2 passed content decoding, managed HTML reference rewriting
+and PDF image embedding checks. The same pinned RC2 ZIP was installed in place.
+The image-upgrade runner exited 0; before/after inventories match byte for byte
+for all 12 activities, including source, complete LessonMark record, course/module
+IDs, image paths, Moodle content hashes and SHA256 of actual image bytes.
+
+Evidence: ignored `build/upgrade-lab/recovery-check/images-before.json` and
+`images-after.json`. The internal-only recovery copy now runs RC2. No port was
+published, no cron was started, and 8095, 8085 and AWS were not modified.
+These checks verify storage and server-side rendering/PDF embedding, not browser
+visual appearance or authenticated pluginfile delivery. No AWS deployment or
+new public release was performed. The separately retained pre-RC2 full backup
+remains unchanged and available for recovery.
