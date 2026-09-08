@@ -48,3 +48,31 @@ and Moodle upgrade output identifies 5.2.2 (20260810 / 2026042002).
 Alpha2 was installed from the staged ZIP, not through the browser upload UI.
 Both ZIPs are staged under `/tmp` in the dedicated web container.
 Fixtures, pre-upgrade backup, RC2 upgrade, recovery and uninstall tests remain.
+
+## User-authored course upgrade result
+
+The owner created 11 LessonMark activities and downloaded a course backup.
+Do not treat these as disposable: the owner intends to reuse this material.
+Future destructive lifecycle checks must use a separate copy or get fresh
+approval for the exact targets, not remove this material from 8095.
+
+Full backup: `build/upgrade-lab/pre-rc2-20260908T075649Z` (ignored, sensitive).
+Contains DB dump, all Moodle code/config, moodledata and backup volume archives,
+runtime environment, image identity, inventory and SHA256SUMS. Taken with
+maintenance enabled and the web container stopped during DB/data capture.
+Archive integrity and hashes passed; restoration has NOT yet been tested.
+
+The exact RC2 ZIP above was installed without uninstalling alpha2. Moodle CLI
+upgrade succeeded and installed version was verified as 2026090802.
+All 11 full LessonMark records, source hashes and course/module IDs matched
+before/after. Inventory SHA256 on both sides:
+`8a7c67943b5e06895b695eea995ea47cb9e04b94b8b7a983b44b92b2e65cd8f1`.
+There were no managed images in these activities; image preservation remains
+a separate test, not a passed check here.
+
+The first CLI rendering check failed because the test harness omitted Moodle
+filelib.php. Adding that dependency to the harness resolved the error without
+changing the plugin. Server-side HTML, per-slide rendering and PDF generation
+then passed for all 11 activities. This is not browser visual validation.
+Caches were purged and maintenance disabled successfully. AWS, 8085, 8083 and
+8084 were not changed. Restore rehearsal and remaining manual checks are open.
