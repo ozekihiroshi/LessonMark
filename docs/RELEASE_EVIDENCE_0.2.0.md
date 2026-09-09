@@ -20,6 +20,24 @@ Date: 2026-09-09. Status: preparation; NOT yet published.
 
 ## Completed acceptance
 
+### Current build 2026090903
+
+- Candidate commit: `d5292f08c72fec35e1d2d62a5b75e813c53ceea1`.
+- CI: https://github.com/ozekihiroshi/LessonMark/actions/runs/34318395331
+- Reproducible ZIP and browser asset audit passed. PHP 8.3 and PHP 8.4 passed
+  all applicable gates; Chrome Behat and accessibility passed on PHP 8.3.
+- ZIP: `build/mod_lessonmark-0.2.0-2026090903.zip`.
+- ZIP SHA-256: `dcf80506a618c6e4d54877ae40c377b1d582f5e4163f07b2ddd9ebbabb032293`.
+- Downloaded Actions archive digest and inner ZIP digest both matched the
+  reported values. Earlier candidate ZIPs are superseded and must not be published.
+- Browser runtime smoke passed for the exact committed math/Mermaid assets,
+  using a fresh loopback origin and `Cache-Control: no-store`. A CSP restricted
+  scripts/fonts/styles to the same origin and prohibited fetch/XHR (`connect-src
+  'none'`). LaTeX, AsciiMath and Japanese Mermaid labels rendered in initial saved
+  content and dynamically inserted Preview-equivalent content (four formulas,
+  two diagrams). This is a component-level browser test, not authenticated Moodle
+  AJAX or course-copy coverage. The temporary Node server was stopped afterward.
+
 - The 8095 user-authored course retained all 11 LessonMark records, source hashes,
   course/module IDs on alpha2-to-RC2 upgrade. See UPGRADE_LAB_RC2.md.
 - Isolated full backup restoration reproduced the alpha2 inventory; a separate
@@ -52,8 +70,8 @@ Date: 2026-09-09. Status: preparation; NOT yet published.
   .md export/import was understood as confirmed. Older records cover source APIs
   and activity duplication separately.
 - Browser print and whole-course copy UI remain untested.
-- Cold-load rendering with external network blocked: previous browser tooling
-  could not perform this runtime check. Local asset design alone is not a pass.
+- Cold-load external-origin-blocked component rendering passed as recorded above.
+  Full authenticated Moodle cold-load/AJAX under a network block remains untested.
 - Final stable ZIP installation/metadata upgrade smoke check.
 - GitHub Release and Moodle Marketplace version submission.
 
