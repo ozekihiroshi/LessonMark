@@ -2,6 +2,8 @@
 
 ## 0.2.0 - 2026-09-09
 
+- Hide Moodle's floating help/footer controls when printing a LessonMark page,
+  preventing the question-mark button from covering diagrams in browser PDFs.
 - Added locally bundled LaTeX, AsciiMath, and Mermaid rendering in Preview,
   saved student display, and classroom presentation, with readable source fallback.
 - Added same-page ungraded RESPONSE, CHOICE, and ANSWER self-check blocks.
@@ -12,7 +14,7 @@
 - Verified alpha2-to-RC2 upgrades retaining existing source, identifiers and images,
   container-recreation persistence, and isolated full-backup recovery.
 - Confirmed an AWS UI upgrade and cross-site course restore with Markdown and
-  diagram display preserved. Runtime behavior is unchanged from RC2.
+  diagram display preserved.
 
 ## 0.2.0-rc2 - 2026-09-08
 
