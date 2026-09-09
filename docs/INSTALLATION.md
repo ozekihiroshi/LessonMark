@@ -27,8 +27,10 @@ For a manual installation, extract the package so that `version.php` is at
 
 After installing or upgrading the 0.2 line, create a test lesson containing an
 inline `math:x^2`, a fenced `asciimath` block, and a fenced `mermaid` flowchart.
-Confirm all three render in Preview and student display with the browser network
-panel set to Offline. Invalid source must remain visible with an error style.
+Confirm all three render in Preview and student display while requests to external
+origins are blocked, keeping the Moodle origin reachable. Start with a cold browser
+cache. Do not select global Offline mode: Moodle page, local assets and Preview
+requests still need the Moodle server. Invalid source must remain visible with an error style.
 Download the saved PDF and confirm formula and diagram source remains readable.
 
 KaTeX, AsciiMath, and Mermaid assets are included in the release ZIP and are

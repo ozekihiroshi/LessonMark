@@ -6,7 +6,17 @@ Date: 2026-09-09. Status: preparation; NOT yet published.
 
 - Release/build: 0.2.0 / 2026090901, stable metadata.
 - Based on RC2 / 2026090802. No PHP/JavaScript/CSS runtime change from RC2.
-- Final commit, hosted CI, ZIP digest, and publication are pending.
+- Candidate commit: `00333eea19c1776a2d1acf572e4bc694f73fbbfb`.
+- Hosted CI: https://github.com/ozekihiroshi/LessonMark/actions/runs/34314877607
+- Reproducible ZIP and asset audit/rebuild passed; npm reported zero vulnerabilities.
+- Candidate ZIP SHA-256:
+  `377071a5f16cfeecd50e44858688cb81c01aa09d8ad8d2acd84ffd91594368e5`.
+- Downloaded CI artifact was checked against its outer archive digest and the
+  inner plugin ZIP digest. Local file: `build/mod_lessonmark-0.2.0.zip` (ignored).
+- PHP 8.3 and PHP 8.4 passed all applicable gates. Chrome Behat and automated
+  accessibility passed on PHP 8.3 (the workflow does not run Behat on PHP 8.4).
+- These identifiers apply to the candidate commit above, not a later evidence-only
+  commit. Publication is pending.
 
 ## Completed acceptance
 
@@ -28,9 +38,10 @@ Date: 2026-09-09. Status: preparation; NOT yet published.
 
 ## Open gates (do not record these as passed)
 
-- Final exact-commit PHP 8.3/8.4, Chrome Behat, asset audit/rebuild and reproducible ZIP.
-- Browser .md export/import round trip, browser print, whole-course copy UI:
-  owner confirmation requested; older records cover APIs/activity duplication only.
+- The owner's response identified browser print and whole-course copy as untested;
+  .md export/import was understood as confirmed. Older records cover source APIs
+  and activity duplication separately.
+- Browser print and whole-course copy UI remain untested.
 - Cold-load rendering with external network blocked: previous browser tooling
   could not perform this runtime check. Local asset design alone is not a pass.
 - Final stable ZIP installation/metadata upgrade smoke check.
