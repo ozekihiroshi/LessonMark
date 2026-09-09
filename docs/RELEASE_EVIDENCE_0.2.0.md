@@ -1,6 +1,6 @@
 # LessonMark 0.2.0 release evidence
 
-Date: 2026-09-09. Status: preparation; NOT yet published.
+Date: 2026-09-09. Status: accepted for publication; publication links recorded below when complete.
 
 ## Previous candidate (superseded; do not publish)
 
@@ -52,14 +52,14 @@ Date: 2026-09-09. Status: preparation; NOT yet published.
   restored successfully. This is not a separate verification of every user role.
 - Existing PHP 8.3/8.4, Chrome Behat, source-transfer API, backup/restore API,
   activity duplication, Japanese PDF regression and responsive UI evidence remains
-  applicable to unchanged RC2 runtime code. Final stable CI must still pass.
+  applicable to unchanged RC2 processing code. Final stable CI passed as recorded above.
 
-## Open gates (do not record these as passed)
+## Print fix history and final owner acceptance
 
 - Current candidate: 0.2.0 / 2026090903. The owner found Moodle's floating `?`
   footer button overlapping a Mermaid node in browser print and Save as PDF.
   Screen rendering was unaffected. A print-only rule now hides `#page-footer`
-  under `#page-mod-lessonmark-view`; visual retest and new exact-commit CI required.
+  under `#page-mod-lessonmark-view`; subsequent CI passed as recorded above.
   The build 2026090901 ZIP and its successful CI above do not cover this change.
 - Build 2026090902 CI failed only CSS lint (`declaration-no-important`). PHP 8.3/8.4
   PHPUnit and Chrome Behat passed. Build 2026090903 removes the unnecessary
@@ -69,11 +69,23 @@ Date: 2026-09-09. Status: preparation; NOT yet published.
 - The owner's response identified browser print and whole-course copy as untested;
   .md export/import was understood as confirmed. Older records cover source APIs
   and activity duplication separately.
-- Browser print and whole-course copy UI remain untested.
+- After receiving the 2026090903 ZIP and local upgrade instructions, the owner
+  reported Moodle's up-to-date completion screen, successful whole-course copy,
+  and correct printing. The final confirmation explicitly states all teaching
+  content and diagrams were copied correctly. This closes the owner-run print
+  and whole-course-copy acceptance, separately from the earlier backup/restore.
+- This is owner-reported acceptance, not an independently captured installed-version
+  screenshot. Automated CI verified the ZIP version and fresh installation.
+
+## Coverage limits and publication
+
 - Cold-load external-origin-blocked component rendering passed as recorded above.
   Full authenticated Moodle cold-load/AJAX under a network block remains untested.
-- Final stable ZIP installation/metadata upgrade smoke check.
-- GitHub Release and Moodle Marketplace version submission.
+  Do not claim that Moodle itself operates without server connectivity.
+- The release tag must target tested commit `d5292f08c72fec35e1d2d62a5b75e813c53ceea1`.
+  Later evidence-only commits do not change plugin files; retain the exact tested
+  ZIP instead of rebuilding with a different commit timestamp.
+- GitHub Release and Moodle Marketplace version submission: pending.
 
 No production data, credentials, SQL dumps, or site backup archives belong in
 the public repository or release ZIP. Existing AWS/local sites are unchanged
