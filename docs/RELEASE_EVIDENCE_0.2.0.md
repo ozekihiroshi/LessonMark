@@ -1,6 +1,6 @@
 # LessonMark 0.2.0 release evidence
 
-Date: 2026-09-09. Status: accepted for publication; publication links recorded below when complete.
+Date: 2026-09-09. Status: GitHub stable release published; Moodle Marketplace update awaits login.
 
 ## Previous candidate (superseded; do not publish)
 
@@ -85,7 +85,16 @@ Date: 2026-09-09. Status: accepted for publication; publication links recorded b
 - The release tag must target tested commit `d5292f08c72fec35e1d2d62a5b75e813c53ceea1`.
   Later evidence-only commits do not change plugin files; retain the exact tested
   ZIP instead of rebuilding with a different commit timestamp.
-- GitHub Release and Moodle Marketplace version submission: pending.
+- GitHub Release: https://github.com/ozekihiroshi/LessonMark/releases/tag/v0.2.0
+  Published stable (not a prerelease) at 2026-09-09 06:47:54 UTC.
+- Public asset: https://github.com/ozekihiroshi/LessonMark/releases/download/v0.2.0/mod_lessonmark.zip
+  Re-downloaded after publication; SHA-256 matched the tested ZIP recorded above.
+- Main was fast-forwarded to the accepted release branch. Tag `v0.2.0` points to
+  the exact tested candidate, not a later evidence-only commit.
+- Moodle Marketplace redirected from moodle.org/plugins to marketplace.moodle.com.
+  The browser was unauthenticated. No new version was submitted and no existing
+  Marketplace metadata was changed. Continue the existing LessonMark submission
+  (historical ticket MMR-188), not a duplicate new-plugin application.
 
 No production data, credentials, SQL dumps, or site backup archives belong in
 the public repository or release ZIP. Existing AWS/local sites are unchanged
