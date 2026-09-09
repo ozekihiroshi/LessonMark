@@ -36,6 +36,10 @@ and locally bundled LaTeX, AsciiMath, and Mermaid rendering. Formulas and
 diagrams use progressive enhancement: invalid or unavailable browser rendering
 keeps readable source. No CDN is required.
 
+Classroom presentation displays the saved lesson as slides with keyboard
+navigation and a fullscreen option. Saved-content PDF includes managed images
+and readable formula/diagram source, not browser-rendered formula/diagram graphics.
+
 Raw HTML is not supported as authoring syntax. LessonMark does not contact an
 external service, require a subscription, or transfer personal data outside
 Moodle.

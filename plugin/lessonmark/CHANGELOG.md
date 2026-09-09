@@ -1,5 +1,19 @@
 # Change log
 
+## 0.2.0 - 2026-09-09
+
+- Added locally bundled LaTeX, AsciiMath, and Mermaid rendering in Preview,
+  saved student display, and classroom presentation, with readable source fallback.
+- Added same-page ungraded RESPONSE, CHOICE, and ANSWER self-check blocks.
+- Added saved-content PDF export and fixed Japanese text in code blocks.
+  PDF retains formula and diagram source rather than browser-rendered graphics.
+- Added classroom presentation with explicit slide markers, keyboard navigation,
+  fullscreen request, and return to the teaching document.
+- Verified alpha2-to-RC2 upgrades retaining existing source, identifiers and images,
+  container-recreation persistence, and isolated full-backup recovery.
+- Confirmed an AWS UI upgrade and cross-site course restore with Markdown and
+  diagram display preserved. Runtime behavior is unchanged from RC2.
+
 ## 0.2.0-rc2 - 2026-09-08
 
 - Added classroom presentation of saved Markdown with explicit slide markers,

@@ -13,8 +13,8 @@ outside one Moodle database. Teachers can still create and maintain the whole
 resource in Moodle without requiring Git, an external editor, Composer, or
 Node.js on the server.
 
-The plugin component is `mod_lessonmark`. Stable release 0.1.0 and the current
-0.2 release candidate target Moodle 5.2 on PHP 8.3 and 8.4.
+The plugin component is `mod_lessonmark`. Version 0.2.0 targets Moodle 5.2 on
+PHP 8.3 and 8.4. See GitHub Releases for published, verified installation ZIPs.
 
 ![LessonMark Markdown editor and preview](docs/screenshots/lessonmark-authoring.png)
 
