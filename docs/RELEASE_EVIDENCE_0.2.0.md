@@ -38,11 +38,16 @@ Date: 2026-09-09. Status: preparation; NOT yet published.
 
 ## Open gates (do not record these as passed)
 
-- Current candidate: 0.2.0 / 2026090902. The owner found Moodle's floating `?`
+- Current candidate: 0.2.0 / 2026090903. The owner found Moodle's floating `?`
   footer button overlapping a Mermaid node in browser print and Save as PDF.
   Screen rendering was unaffected. A print-only rule now hides `#page-footer`
   under `#page-mod-lessonmark-view`; visual retest and new exact-commit CI required.
   The build 2026090901 ZIP and its successful CI above do not cover this change.
+- Build 2026090902 CI failed only CSS lint (`declaration-no-important`). PHP 8.3/8.4
+  PHPUnit and Chrome Behat passed. Build 2026090903 removes the unnecessary
+  `!important`; the page/footer ID selector scopes print hiding to LessonMark.
+- The owner later reported no question-mark overlay in print, including on AWS;
+  the deployed build was not established, so this is not attributed to the fix.
 - The owner's response identified browser print and whole-course copy as untested;
   .md export/import was understood as confirmed. Older records cover source APIs
   and activity duplication separately.

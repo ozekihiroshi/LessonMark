@@ -30,7 +30,7 @@ Upload `mod_lessonmark.zip` through Site administration > Plugins > Install plug
 and complete Moodle's normal upgrade. Do not uninstall the existing plugin first:
 uninstall removes its activities and managed files.
 
-The stable build is `2026090902`, higher than RC2 (`2026090802`). It also hides
+The stable build is `2026090903`, higher than RC2 (`2026090802`). It also hides
 Moodle's fixed help/footer controls in browser print output. Docker deployments must retain
 updated plugin code across Web/Cron container recreation; this is an operator
 configuration concern, not a requirement to use a particular deployment overlay.
