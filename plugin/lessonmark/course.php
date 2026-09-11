@@ -1,6 +1,18 @@
 <?php
 // This file is part of Moodle - https://moodle.org/
-// Licensed under the GNU GPL v3 or later: https://www.gnu.org/copyleft/gpl.html
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Continuous course presentation shell. Each frame request checks access again.
@@ -8,6 +20,7 @@
  * @copyright 2026 Hiroshi Ozeki
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 require_once(__DIR__ . '/../../config.php');
 
 $id = required_param('id', PARAM_INT);
@@ -43,8 +56,11 @@ echo html_writer::start_div('mod_lessonmark-course-presentation', [
 ]);
 echo html_writer::start_tag('header', ['class' => 'mod_lessonmark-course-header']);
 echo html_writer::tag('strong', format_string($course->fullname));
-echo html_writer::link(new moodle_url('/course/view.php', ['id' => $course->id]),
-    get_string('coursereturn', 'mod_lessonmark'), ['class' => 'btn btn-secondary']);
+echo html_writer::link(
+    new moodle_url('/course/view.php', ['id' => $course->id]),
+    get_string('coursereturn', 'mod_lessonmark'),
+    ['class' => 'btn btn-secondary']
+);
 echo html_writer::end_tag('header');
 echo html_writer::start_div('mod_lessonmark-course-toolbar');
 echo html_writer::tag('label', get_string('courselessons', 'mod_lessonmark'), ['for' => 'lessonmark-course-outline']);

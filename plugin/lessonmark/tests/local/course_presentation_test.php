@@ -1,6 +1,18 @@
 <?php
 // This file is part of Moodle - https://moodle.org/
-// Licensed under the GNU GPL v3 or later: https://www.gnu.org/copyleft/gpl.html
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Playlist access and ordering tests.
@@ -19,10 +31,11 @@ final class course_presentation_test extends \advanced_testcase {
      * Playlist follows sections, not creation order, and excludes nonlisted modules.
      */
     public function test_order_and_visibility(): void {
-        global $CFG;
+        global $CFG, $DB;
         require_once($CFG->dirroot . '/course/lib.php');
         $this->resetAfterTest();
         $this->setAdminUser();
+        set_config('allowstealth', 1);
         $generator = $this->getDataGenerator();
         $course = $generator->create_course(['numsections' => 3]);
         $later = $generator->create_module('lessonmark', ['course' => $course->id, 'section' => 2]);
@@ -30,9 +43,12 @@ final class course_presentation_test extends \advanced_testcase {
         $second = $generator->create_module('lessonmark', ['course' => $course->id, 'section' => 1]);
         $generator->create_module('page', ['course' => $course->id, 'section' => 1]);
         $generator->create_module('lessonmark', ['course' => $course->id, 'visible' => 0]);
-        $generator->create_module('lessonmark', ['course' => $course->id, 'visibleoncoursepage' => 0]);
+        $stealth = $generator->create_module('lessonmark', ['course' => $course->id]);
+        $DB->set_field('course_modules', 'visibleoncoursepage', 0, ['id' => $stealth->cmid]);
+        rebuild_course_cache($course->id, true);
         $generator->create_module('lessonmark', ['course' => $course->id, 'section' => 3]);
-        set_section_visible($course->id, 3, 0);
+        $section = get_fast_modinfo($course)->get_section_info(3);
+        \core_courseformat\formatactions::section($course->id)->set_visibility($section, 0);
         $ids = array_map(static fn($cm): int => (int) $cm->id, course_presentation::modules($course));
         $this->assertSame([(int) $first->cmid, (int) $second->cmid, (int) $later->cmid], $ids);
     }

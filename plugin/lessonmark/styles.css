@@ -640,6 +640,20 @@
     background: #fff;
     color: #202124;
 }
+
+/* Keep the launch action readable even with a very pale theme primary colour. */
+.mod_lessonmark-course-launch.btn {
+    border-color: #205f99;
+    background: #205f99;
+    color: #fff;
+}
+.mod_lessonmark-course-launch.btn:hover,
+.mod_lessonmark-course-launch.btn:focus,
+.mod_lessonmark-course-launch.btn:active {
+    border-color: #184b7a;
+    background: #184b7a;
+    color: #fff;
+}
 .mod_lessonmark-course-header,
 .mod_lessonmark-course-toolbar {
     display: flex;

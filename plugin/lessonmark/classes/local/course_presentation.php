@@ -1,6 +1,18 @@
 <?php
 // This file is part of Moodle - https://moodle.org/
-// Licensed under the GNU GPL v3 or later: https://www.gnu.org/copyleft/gpl.html
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
  * Course presentation playlist.
@@ -28,8 +40,10 @@ final class course_presentation {
             foreach ($ids as $id) {
                 $cm = $modinfo->get_cm($id);
                 $section = $modinfo->get_section_info($cm->sectionnum);
-                if ($cm->modname !== 'lessonmark' || !$cm->visible || !$cm->visibleoncoursepage ||
-                        !$section->visible || !$cm->uservisible || $cm->deletioninprogress) {
+                if (
+                    $cm->modname !== 'lessonmark' || !$cm->visible || !$cm->visibleoncoursepage ||
+                    !$section->visible || !$cm->uservisible || $cm->deletioninprogress
+                ) {
                     continue;
                 }
                 if (has_capability('mod/lessonmark:view', \context_module::instance($cm->id))) {
