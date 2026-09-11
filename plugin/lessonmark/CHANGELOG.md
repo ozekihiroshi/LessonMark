@@ -1,5 +1,15 @@
 # Change log
 
+## 0.3.0-alpha1 - development
+
+- Added continuous course presentation through accessible, visible, course-listed
+  LessonMark activities, including explicit slides inside each activity.
+- Added lesson selection, position labels and a persistent fullscreen shell.
+- Restore slide focus after fullscreen requests so arrow navigation works immediately.
+- Refined screen typography, tables, code and focus indicators without changing Markdown source.
+- Added playlist access/completion tests and cross-lesson browser regression coverage.
+- Release validation is in progress; this is not a production release.
+
 ## 0.2.0 - 2026-09-09
 
 - Hide Moodle's floating help/footer controls when printing a LessonMark page,

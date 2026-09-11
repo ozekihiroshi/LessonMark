@@ -1,6 +1,6 @@
 {
     "name": "moodle-mod_lessonmark-assets",
-    "version": "0.2.0",
+    "version": "0.3.0-alpha1",
     "private": true,
     "description": "Reproducible build tooling for LessonMark local browser assets.",
     "license": "GPL-3.0-or-later",

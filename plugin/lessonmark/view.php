@@ -112,7 +112,7 @@ if (\mod_lessonmark\local\browser_assets::requires_mermaid($contenthtml)) {
 
 echo $OUTPUT->header();
 if ($present) {
-    echo html_writer::start_div('mod_lessonmark-presentation');
+    echo html_writer::start_div('mod_lessonmark-presentation', ['data-cmid' => (string) $cm->id]);
     echo html_writer::start_div('mod_lessonmark-presentation-controls');
     foreach (['previous', 'next', 'fullscreen'] as $action) {
         echo html_writer::tag('button', get_string('presentation' . $action, 'mod_lessonmark'), [
@@ -127,6 +127,16 @@ if ($present) {
     );
     echo html_writer::end_div();
 } else {
+    foreach (\mod_lessonmark\local\course_presentation::modules($course) as $listedmodule) {
+        if ((int) $listedmodule->id === (int) $cm->id) {
+            echo html_writer::link(
+                new moodle_url('/mod/lessonmark/course.php', ['id' => $cm->id]),
+                get_string('coursepresentation', 'mod_lessonmark'),
+                ['class' => 'btn btn-primary mb-3 mr-2']
+            );
+            break;
+        }
+    }
     echo html_writer::link(
         new moodle_url('/mod/lessonmark/view.php', ['id' => $cm->id, 'present' => 1]),
         get_string('presentation', 'mod_lessonmark'),

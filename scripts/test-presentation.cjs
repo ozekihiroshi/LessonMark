@@ -11,7 +11,8 @@ async function main() {
     const next = button();
     const fullscreen = button();
     const status = {};
-    const slides = Array.from({length: 3}, () => ({hidden: false, focus() {}}));
+    let focused = null;
+    const slides = Array.from({length: 3}, (_, index) => ({hidden: false, focus() { focused = index; }}));
     const controls = {previous, next, fullscreen};
     const root = {
         handlers: {},
@@ -45,8 +46,21 @@ async function main() {
     assert.equal(status.textContent, '3 / 3');
     key('Home');
     assert.equal(status.textContent, '1 / 3');
+    root.requestFullscreen = async() => { document.fullscreenElement = root; };
+    focused = 'button';
+    await fullscreen.handlers.click();
+    assert.equal(focused, 0);
+    key('ArrowRight');
+    assert.equal(status.textContent, '2 / 3');
+    document.exitFullscreen = async() => { document.fullscreenElement = null; };
+    focused = 'button';
+    await fullscreen.handlers.click();
+    assert.equal(focused, 1);
+    root.requestFullscreen = async() => { throw Error('Denied'); };
+    key('Home');
     await fullscreen.handlers.click();
     assert.equal(fullscreen.disabled, true);
+    assert.equal(focused, 0);
     next.handlers.click();
     assert.equal(status.textContent, '2 / 3');
     console.log('Presentation controller: navigation, bounds, input keys, fullscreen denial passed.');

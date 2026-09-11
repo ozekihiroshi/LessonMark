@@ -10,6 +10,13 @@ does not itself contact an AI service or send lesson content outside Moodle.
 
 ## Features
 
+Development note: 0.3.0-alpha1 adds **Course presentation**. Start from a visible
+LessonMark activity; use Left/Right to navigate slides and lessons in course order.
+Use `<!-- slide -->` on its own line to split a lesson. Hidden, stealth and inaccessible
+activities and other activity types are not included. Only the current lesson is loaded.
+Course-wide printing/export is not provided; use the existing individual lesson view.
+This development version is still undergoing release validation.
+
 - create and edit Markdown inside Moodle without converting the saved source to HTML;
 - responsive split Edit/Preview UI with keyboard-operable mobile tabs;
 - one-time validated UTF-8 `.md` import, source export, and saved-content PDF download;

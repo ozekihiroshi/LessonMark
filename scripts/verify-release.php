@@ -57,6 +57,10 @@ if (preg_match('/\$plugin->maturity\s*=\s*' . $expectedmaturity . ';/', $version
 }
 
 $requiredfiles = [
+    'course.php',
+    'course-presentation.js',
+    'presentation.js',
+    'classes/local/course_presentation.php',
     'README.md',
     'export_pdf.php',
     'classes/local/pdf_exporter.php',

@@ -621,13 +621,234 @@
     display: none;
 }
 
-@media (min-width: 55rem) {
+/* Quiet focus indication for the canvas, not for its interactive descendants. */
+.mod_lessonmark-presentation .mod_lessonmark-slide:focus,
+.mod_lessonmark-presentation .mod_lessonmark-slide:focus-visible {
+    outline: 1px solid #d8dee7;
+    outline-offset: -1px;
+    box-shadow: none;
+}
+
+.mod_lessonmark-course-presentation {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    color: #202124;
+}
+.mod_lessonmark-course-header,
+.mod_lessonmark-course-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+.mod_lessonmark-course-header {
+    justify-content: space-between;
+    background: #f8f9fa;
+}
+.mod_lessonmark-course-toolbar select {
+    width: auto;
+    max-width: 45%;
+}
+.mod_lessonmark-course-toolbar [data-course-status] {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+}
+.mod_lessonmark-course-presentation iframe {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    background: #fff;
+}
+.mod_lessonmark-presentation-framed {
+    padding: .5rem;
+}
+.mod_lessonmark-presentation-framed .mod_lessonmark-slide {
+    max-height: calc(100vh - 2rem);
+}
+.mod_lessonmark-presentation-controls[hidden] {
+    display: none;
+}
+
+@media screen {
+    /* Shared teaching typography: the source and renderer remain unchanged. */
+    .mod_lessonmark-content {
+        max-width: 62rem;
+        color: #283442;
+        background: #fff;
+        line-height: 1.85;
+    }
+
+    .mod_lessonmark-content h1,
+    .mod_lessonmark-content h2,
+    .mod_lessonmark-content h3,
+    .mod_lessonmark-content h4,
+    .mod_lessonmark-content h5,
+    .mod_lessonmark-content h6 {
+        margin-block: 1.6em .65em;
+        color: #1e3045;
+        font-weight: 700;
+        line-height: 1.4;
+    }
+
+    .mod_lessonmark-content h1 {
+        border-bottom: 2px solid #dce6f0;
+        font-size: 2em;
+    }
+
+    .mod_lessonmark-content h2 {
+        padding-inline-start: .65em;
+        border-inline-start: 3px solid #3975aa;
+        border-bottom: 1px solid #e5ebf1;
+        font-size: 1.5em;
+    }
+
+    .mod_lessonmark-content h3 {
+        font-size: 1.2em;
+    }
+
+    .mod_lessonmark-content h4,
+    .mod_lessonmark-content h5,
+    .mod_lessonmark-content h6 {
+        font-size: 1em;
+    }
+
+    .mod_lessonmark-content a {
+        color: #205f99;
+        text-decoration: underline;
+    }
+
+    .mod_lessonmark-content li::marker {
+        color: #526c85;
+    }
+
+    .mod_lessonmark-content blockquote:not(.mod_lessonmark-callout) {
+        margin-inline: 0;
+        padding-inline: 1em;
+        border-inline-start: 3px solid #c4d2df;
+        color: #4b6074;
+    }
+
+    .mod_lessonmark-content :not(pre) > code {
+        border-color: #e1e7ed;
+        background: #f2f5f8;
+        color: #31465c;
+    }
+
+    .mod_lessonmark-content .mod_lessonmark-code {
+        padding: 1em 1.2em;
+        border-color: #dce4ec;
+        border-radius: .5rem;
+        background: #f5f7fa;
+        color: #283442;
+        font-size: .86em;
+        line-height: 1.65;
+    }
+
+    .mod_lessonmark-content .mod_lessonmark-toc {
+        border-color: #dce6f0;
+        background: #f5f8fc;
+    }
+
+    .mod_lessonmark-content .mod_lessonmark-toc__title {
+        color: #314f6e;
+    }
+
+    .mod_lessonmark-content .mod_lessonmark-callout {
+        margin-block: 1.2em;
+        padding: .8em 1em;
+        border-radius: .4rem;
+    }
+
+    .mod_lessonmark-content .mod_lessonmark-table th,
+    .mod_lessonmark-content .mod_lessonmark-table td {
+        padding: .65em .85em;
+        border-color: #dce4ec;
+    }
+
+    .mod_lessonmark-content .mod_lessonmark-table thead th {
+        background: #edf3f9;
+        color: #263e56;
+    }
+
+    .mod_lessonmark-content .mod_lessonmark-table tbody tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    .mod_lessonmark-content .ozmd-mermaid,
+    .mod_lessonmark-content .ozmd-math-display {
+        margin-block: 1.4em;
+        padding-block: .5em;
+    }
+
+    .mod_lessonmark-content img {
+        margin-inline: auto;
+    }
+
+    .mod_lessonmark-editor__preview {
+        max-width: none;
+    }
+
+    .mod_lessonmark-presentation .mod_lessonmark-content {
+        max-width: none;
+        line-height: 1.65;
+        font-size: 1.25rem;
+    }
+
+    .mod_lessonmark-presentation .mod_lessonmark-slide {
+        padding: 1em 1.5em;
+    }
+
+    .mod_lessonmark-slide > :first-child,
+    .mod_lessonmark-slide > nav + h1,
+    .mod_lessonmark-slide > nav + h2 {
+        margin-top: 0;
+    }
+
+    .mod_lessonmark-course-header {
+        color: #314f6e;
+        background: #f5f8fc;
+    }
+
+    .mod_lessonmark-course-header .btn,
+    .mod_lessonmark-course-toolbar .btn {
+        padding: .35rem .7rem;
+        border-radius: .4rem;
+    }
+
+    .mod_lessonmark-course-toolbar [data-course-action="next"] {
+        border-color: #205f99;
+        background: #205f99;
+        color: #fff;
+    }
+
+    .mod_lessonmark-course-toolbar [data-course-status] {
+        color: #4b6074;
+        font-size: .9rem;
+    }
+}
+
+@media screen and (max-width: 40rem) {
+    .mod_lessonmark-presentation .mod_lessonmark-slide {
+        padding: .6em;
+    }
+}
+
+@media screen and (min-width: 55rem) {
     .mod_lessonmark-presentation .mod_lessonmark-content {
         font-size: 2vw;
     }
 }
 
-@media (min-width: 100rem) {
+@media screen and (min-width: 100rem) {
     .mod_lessonmark-presentation .mod_lessonmark-content {
         font-size: 2rem;
     }

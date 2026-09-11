@@ -116,3 +116,52 @@ Feature: Author and publish a LessonMark teaching resource
     When I follow "Return to lesson"
     Then I should see "First slide"
     And I should see "Second slide"
+
+  @javascript
+  Scenario: Continue across lessons and return to the previous lesson's last slide
+    Given the following "activities" exist:
+      | activity   | name       | course | idnumber | markdownsource |
+      | lessonmark | Lesson two | C1     | LM2      | # Final lesson |
+    And I am on the "Lesson one" "lessonmark activity editing" page logged in as admin
+    When I set the LessonMark Markdown source to:
+      """
+      # First slide
+
+      <!-- slide -->
+
+      # Second slide
+
+      Inline formula: `math:\frac{a}{b}`
+
+      ```mermaid
+      flowchart LR
+          Draft --> Publish
+      ```
+      """
+    And I press "Save and display"
+    And I follow "Course presentation"
+    And I wait until "Lesson 1 / 2 · Slide 1 / 2" "text" exists
+    Then I should see "Lesson 1 / 2 · Slide 1 / 2"
+    When I press "Next"
+    And I wait until "Lesson 1 / 2 · Slide 2 / 2" "text" exists
+    Then I should see "Lesson 1 / 2 · Slide 2 / 2"
+    When I switch to "lessonmark-course-frame" iframe
+    Then I should see "Second slide"
+    And ".ozmd-math .katex" "css_element" should exist
+    And a rendered LessonMark Mermaid diagram should appear
+    When I switch to the main frame
+    When I press "Next"
+    And I wait until "Lesson 2 / 2 · Slide 1 / 1" "text" exists
+    Then I should see "Lesson 2 / 2 · Slide 1 / 1"
+    When I switch to "lessonmark-course-frame" iframe
+    Then I should see "Final lesson"
+    When I switch to the main frame
+    When I press "Previous"
+    And I wait until "Lesson 1 / 2 · Slide 2 / 2" "text" exists
+    Then I should see "Lesson 1 / 2 · Slide 2 / 2"
+    When I switch to "lessonmark-course-frame" iframe
+    Then I should see "Second slide"
+    And a rendered LessonMark Mermaid diagram should appear
+    When I switch to the main frame
+    When I follow "Return to course"
+    Then I should see "Course 1"
