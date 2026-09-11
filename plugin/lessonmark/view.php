@@ -132,7 +132,7 @@ if ($present) {
             echo html_writer::link(
                 new moodle_url('/mod/lessonmark/course.php', ['id' => $cm->id]),
                 get_string('coursepresentation', 'mod_lessonmark'),
-                ['class' => 'btn btn-primary mod_lessonmark-course-launch mb-3 mr-2']
+                ['class' => 'btn btn-secondary mod_lessonmark-course-launch mb-3 mr-2']
             );
             break;
         }
