@@ -40,6 +40,7 @@ final class pdf_exporter_test extends \advanced_testcase {
             'course' => $course->id,
             'name' => 'PDF lesson',
             'markdownsource' => "# PDF lesson\n\n"
+                . "<!-- slide -->\n\n## Official questions\n\n### Image page\n\n"
                 . "![Pixel](@@PLUGINFILE@@/pixel.png)\n\n"
                 . "> [!RESPONSE]\n> Explain.\n\n"
                 . "> [!ANSWER]\n> **Answer:** Evidence.",
@@ -56,7 +57,25 @@ final class pdf_exporter_test extends \advanced_testcase {
             'mimetype' => 'image/png',
         ], base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='));
 
-        $bytes = (new pdf_exporter())->generate($lessonmark, $course, $context);
+        $exporter = new pdf_exporter();
+        $document = (new moodle_markdown_renderer())->render($lessonmark->markdownsource, $context);
+        $html = $exporter->prepare_html($document->get_content_html(), 'PDF lesson', 'PDF course', $context);
+        $this->assertStringNotContainsString('slide --', $html);
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html);
+        $xpath = new \DOMXPath($dom);
+        $groups = $xpath->query('//div[@class="lessonmark-pdf-figure" and @nobr="true"]');
+        $this->assertCount(1, $groups);
+        $this->assertSame('Official questions', $groups[0]->getElementsByTagName('h2')[0]->textContent);
+        $this->assertSame('Image page', $groups[0]->getElementsByTagName('h3')[0]->textContent);
+        $image = $groups[0]->getElementsByTagName('img')[0];
+        $this->assertSame('0.265mm', $image->getAttribute('width'));
+        $this->assertSame('0.265mm', $image->getAttribute('height'));
+        $this->assertStringContainsString('Evidence.', $html);
+        $this->assertCount(1, $xpath->query('//div[@class="lessonmark-pdf-answer" and @nobr="true"]'));
+        $this->assertCount(1, $xpath->query('//div[@class="lessonmark-pdf-response" and @nobr="true"]'));
+
+        $bytes = $exporter->generate($lessonmark, $course, $context);
         $this->assertStringStartsWith('%PDF-', $bytes);
         $this->assertStringContainsString('/Subtype /Image', $bytes);
         $this->assertGreaterThan(1000, strlen($bytes));
@@ -89,6 +108,10 @@ final class pdf_exporter_test extends \advanced_testcase {
         $this->assertStringContainsString('language-mermaid', $html);
         $this->assertStringContainsString('flowchart LR; A--&gt;B', $html);
         $this->assertStringNotContainsString('<svg', $html);
+
+        $longanswer = '<details><summary>Answer</summary><p>' . str_repeat('Long answer. ', 100) . '</p></details>';
+        $longhtml = (new pdf_exporter())->prepare_html($longanswer, 'Long', 'Course', $context);
+        $this->assertStringNotContainsString('nobr="true"', $longhtml);
     }
 
     /**

@@ -82,3 +82,22 @@ This development branch is not yet a release or an installed upgrade.
   Japanese text, code, callout and table in document/presentation layouts using the actual CSS.
 - Purged caches on 8083 only. Actual Moodle theme integration, mobile and print regression
   checks remain pending; the browser available to the agent was at the login page.
+
+### Actual-course PDF follow-up — 2026-09-12
+
+- Course 19, activity 437 on 8083 was checked at 390px and 768px widths.
+  Course controls remained available, five page images loaded, and Next/Right changed slides.
+- The supplied PDF was a TCPDF export, not browser printing. The visible marker was a
+  source typo (`<!- slide -->` at line 93), not an unhandled valid slide separator.
+  With explicit owner approval, only that typo was corrected; a pre-edit source backup was kept.
+- PDF image paragraphs now stay with adjacent headings using TCPDF's `nobr` grouping.
+  Raster dimensions are explicitly bounded to 170mm wide / 210mm high without upscaling,
+  reserving heading space. Nested image-level `page-break-inside:avoid` was removed because
+  it interfered with TCPDF's outer no-break transaction.
+- Short answer/response blocks stay together; long answers remain breakable.
+- Regenerated the 11-page real-course PDF and visually inspected all pages. The five
+  booklet headings now share pages with their images; the malformed marker is gone.
+  PHP syntax and real-course HTML assertions passed. PHPUnit regression assertions were
+  added, but the updated PHPUnit/CI suite has not yet been run.
+- Browser printing and packaged ZIP upgrade acceptance remain pending. These changes
+  are only in the 8083 source-mounted development environment, not AWS or the 8095 site.

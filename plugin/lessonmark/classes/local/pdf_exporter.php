@@ -119,6 +119,7 @@ final class pdf_exporter {
         $this->replace_response_controls($dom, $root);
         $this->remove_nonprint_controls($root);
         $this->localise_images($dom, $root, $context);
+        $this->keep_image_headings_together($dom, $root);
         $this->remove_unsafe_links($root);
 
         $body = '';
@@ -138,7 +139,7 @@ final class pdf_exporter {
             . '.lessonmark-pdf-answer{border-left:2pt solid #245ca6;background-color:#f2f6fc;padding:7pt;}'
             . '.lessonmark-pdf-response{border:0.5pt solid #8a94a3;background-color:#fafafa;padding:7pt;}'
             . '.lessonmark-pdf-meta{font-size:8.5pt;color:#5f6368;border-bottom:0.5pt solid #c8cdd3;}'
-            . 'img{max-width:170mm;height:auto;page-break-inside:avoid;}'
+            . 'img{max-width:170mm;height:auto;}'
             . '</style>'
             . '<h1>' . $escapetitle . '</h1>'
             . '<p class="lessonmark-pdf-meta">' . $escapecourse . '<br>'
@@ -187,6 +188,15 @@ final class pdf_exporter {
                 }
                 $replacement->appendChild($child);
             }
+            // Keep short text answers together; long answers must remain splittable.
+            if (
+                \core_text::strlen($replacement->textContent) <= 600
+                && $replacement->getElementsByTagName('img')->length === 0
+                && $replacement->getElementsByTagName('table')->length === 0
+                && $replacement->getElementsByTagName('pre')->length === 0
+            ) {
+                $replacement->setAttribute('nobr', 'true');
+            }
             $details->parentNode->replaceChild($replacement, $details);
         }
     }
@@ -209,6 +219,9 @@ final class pdf_exporter {
                 continue;
             }
             $container->setAttribute('class', 'lessonmark-pdf-response');
+            if (\core_text::strlen($container->textContent) <= 300) {
+                $container->setAttribute('nobr', 'true');
+            }
             $container->removeAttribute('data-self-check');
             foreach (iterator_to_array($container->getElementsByTagName('input')) as $input) {
                 if (!$input instanceof \DOMElement || !$input->parentNode instanceof \DOMNode) {
@@ -294,12 +307,62 @@ final class pdf_exporter {
             if (!str_starts_with($mimetype, 'image/')) {
                 throw new \coding_exception('A LessonMark PDF image has an invalid MIME type.');
             }
+            $bytes = $file->get_content();
+            $size = @getimagesizefromstring($bytes);
+            if ($size !== false && $size[0] > 0 && $size[1] > 0) {
+                // TCPDF does not honour CSS max-width. Reserve space for headings
+                // as well as the image, and never enlarge small raster originals.
+                $scale = min(25.4 / 96, 170 / $size[0], 210 / $size[1]);
+                $image->setAttribute('width', sprintf('%.3Fmm', $size[0] * $scale));
+                $image->setAttribute('height', sprintf('%.3Fmm', $size[1] * $scale));
+            }
             $image->setAttribute(
                 'src',
-                'data:' . $mimetype . ';base64,' . base64_encode($file->get_content())
+                'data:' . $mimetype . ';base64,' . base64_encode($bytes)
             );
             $image->removeAttribute('srcset');
             $image->removeAttribute('loading');
+        }
+    }
+
+    /**
+     * Keeps an image-only paragraph with its immediately preceding headings.
+     *
+     * TCPDF supports nobr, but ignores page-break-after:avoid. Do not group
+     * arbitrary text or tables, which may themselves require several pages.
+     *
+     * @param \DOMDocument $dom Printable document.
+     * @param \DOMElement $root Printable document root.
+     */
+    private function keep_image_headings_together(\DOMDocument $dom, \DOMElement $root): void {
+        foreach (iterator_to_array($root->getElementsByTagName('p')) as $paragraph) {
+            if (trim($paragraph->textContent) !== '' || $paragraph->getElementsByTagName('img')->length !== 1) {
+                continue;
+            }
+            $nodes = [$paragraph];
+            $previous = $paragraph->previousSibling;
+            $headings = 0;
+            while ($previous !== null) {
+                if ($previous instanceof \DOMText && trim($previous->textContent) === '') {
+                    array_unshift($nodes, $previous);
+                } else if ($previous instanceof \DOMElement && preg_match('/^h[1-6]$/i', $previous->tagName)) {
+                    array_unshift($nodes, $previous);
+                    $headings++;
+                } else {
+                    break;
+                }
+                $previous = $previous->previousSibling;
+            }
+            if ($headings === 0) {
+                continue;
+            }
+            $group = $dom->createElement('div');
+            $group->setAttribute('nobr', 'true');
+            $group->setAttribute('class', 'lessonmark-pdf-figure');
+            $paragraph->parentNode->insertBefore($group, $nodes[0]);
+            foreach ($nodes as $node) {
+                $group->appendChild($node);
+            }
         }
     }
 
