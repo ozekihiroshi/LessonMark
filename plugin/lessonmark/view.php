@@ -67,6 +67,7 @@ $event->trigger();
 $renderer = new \mod_lessonmark\local\moodle_markdown_renderer();
 $document = $renderer->render((string) $lessonmark->markdownsource, $context);
 $contenthtml = $document->get_content_html();
+$PAGE->requires->js(new moodle_url('/mod/lessonmark/browser-print.js'));
 if ($present) {
     $contenthtml = '';
     foreach (\mod_lessonmark\local\presentation_source::split((string) $lessonmark->markdownsource) as $index => $source) {
@@ -140,7 +141,7 @@ if ($present) {
     echo html_writer::link(
         new moodle_url('/mod/lessonmark/view.php', ['id' => $cm->id, 'present' => 1]),
         get_string('presentation', 'mod_lessonmark'),
-        ['class' => 'btn btn-secondary mb-3']
+        ['class' => 'btn btn-secondary mod_lessonmark-presentation-launch mb-3']
     );
 }
 if (!$present && trim((string) $lessonmark->intro) !== '') {

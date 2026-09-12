@@ -101,3 +101,17 @@ This development branch is not yet a release or an installed upgrade.
   added, but the updated PHPUnit/CI suite has not yet been run.
 - Browser printing and packaged ZIP upgrade acceptance remain pending. These changes
   are only in the 8083 source-mounted development environment, not AWS or the 8095 site.
+
+### Browser print correction — 2026-09-12
+
+- The supplied Chrome/Skia 13-page PDF revealed visible launch/reset controls,
+  closed ANSWER disclosures and the first image separated from its heading.
+- Added a view-only print controller: beforeprint opens disclosures and temporarily
+  groups image-only paragraphs with adjacent headings; afterprint restores prior
+  open/closed states and document structure, including repeated/cancelled printing.
+- Print CSS hides launch/reset/completion controls, bounds grouped image height to
+  210mm and keeps heading/image groups together. Screen styling is unchanged.
+- Added the print controller regression test to hosted and local CI, and the new
+  browser asset to package validation. Node print/presentation/course tests passed.
+- 8083 caches purged. Actual browser-print PDF retest is still required; no updated
+  ZIP has yet been installed in 8085. Its pre-upgrade backup is complete.

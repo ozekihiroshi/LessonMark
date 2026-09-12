@@ -60,6 +60,7 @@ $requiredfiles = [
     'course.php',
     'course-presentation.js',
     'presentation.js',
+    'browser-print.js',
     'classes/local/course_presentation.php',
     'README.md',
     'export_pdf.php',

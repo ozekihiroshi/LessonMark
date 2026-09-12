@@ -16,8 +16,37 @@
 
 @media print {
     /* Moodle's fixed help/footer controls must not overlay printed lessons. */
-    #page-mod-lessonmark-view #page-footer {
+    #page-mod-lessonmark-view #page-footer,
+    #page-mod-lessonmark-view .activity-header,
+    .mod_lessonmark-course-launch,
+    .mod_lessonmark-presentation-launch,
+    .mod_lessonmark-selfcheck button,
+    .mod_lessonmark-selfcheck__note,
+    .mod_lessonmark-content .ozmd-math-copy {
         display: none;
+    }
+
+    .mod_lessonmark-print-figure {
+        break-inside: avoid;
+    }
+
+    .mod_lessonmark-print-figure img {
+        max-width: 100%;
+        max-height: 210mm;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .mod_lessonmark-content h1,
+    .mod_lessonmark-content h2,
+    .mod_lessonmark-content h3,
+    .mod_lessonmark-content h4 {
+        break-after: avoid;
+    }
+
+    .mod_lessonmark-selfcheck__answer > summary {
+        list-style: none;
     }
 
     .mod_lessonmark-content .ozmd-mermaid {

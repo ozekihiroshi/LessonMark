@@ -125,6 +125,7 @@ jobs:
         run: |
           node scripts/test-presentation.cjs
           node scripts/test-course-presentation.cjs
+          node scripts/test-browser-print.cjs
           npm ci --no-audit
           npm audit --audit-level=high
           npm run build:assets
