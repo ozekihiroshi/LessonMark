@@ -58,9 +58,13 @@ final class pdf_exporter_test extends \advanced_testcase {
         ], base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='));
 
         $exporter = new pdf_exporter();
-        $document = (new moodle_markdown_renderer())->render($lessonmark->markdownsource, $context);
+        $document = (new moodle_markdown_renderer())->render_with_print_breaks(
+            $lessonmark->markdownsource,
+            $context
+        );
         $html = $exporter->prepare_html($document->get_content_html(), 'PDF lesson', 'PDF course', $context);
         $this->assertStringNotContainsString('slide --', $html);
+        $this->assertStringNotContainsString('mod_lessonmark-print-page-break', $html);
         $dom = new \DOMDocument();
         @$dom->loadHTML($html);
         $xpath = new \DOMXPath($dom);
@@ -74,10 +78,13 @@ final class pdf_exporter_test extends \advanced_testcase {
         $this->assertStringContainsString('Evidence.', $html);
         $this->assertCount(1, $xpath->query('//div[@class="lessonmark-pdf-answer" and @nobr="true"]'));
         $this->assertCount(1, $xpath->query('//div[@class="lessonmark-pdf-response" and @nobr="true"]'));
+        $this->assertCount(1, $xpath->query('//br[@pagebreak="true"]'));
 
         $bytes = $exporter->generate($lessonmark, $course, $context);
         $this->assertStringStartsWith('%PDF-', $bytes);
         $this->assertStringContainsString('/Subtype /Image', $bytes);
+        preg_match_all('/\/Type\s*\/Page\b/', $bytes, $pages);
+        $this->assertCount(2, $pages[0]);
         $this->assertGreaterThan(1000, strlen($bytes));
     }
 

@@ -6,7 +6,8 @@ This is browser-rendered HTML, not a PDF viewer or PowerPoint exporter.
 - Standalone `<!-- slide -->` at column zero separates slides, except inside
   backtick/tilde fences. Indented, quoted, inline or escaped examples remain text.
 - Empty segments are ignored; an empty document still has one page. No marker
-  means one slide. Normal display/Preview/PDF omit structural markers.
+  means one slide. Normal display and Preview omit structural markers; browser
+  printing and saved PDF export use valid markers as page breaks.
 - Each slide is an independent Markdown block: close lists/fences and keep
   reference definitions within the slide. No automatic splitting or shrinking.
 - Presentation inherits course login, module availability and view capability.

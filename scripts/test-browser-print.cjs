@@ -3,6 +3,10 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 
+const css = fs.readFileSync(path.join(__dirname, '../plugin/lessonmark/styles.css'), 'utf8');
+assert.match(css, /\.mod_lessonmark-print-page-break\s*\{[^}]*break-before:\s*page;/s);
+assert.match(css, /\.mod_lessonmark-slide \+ \.mod_lessonmark-slide\s*\{[^}]*break-before:\s*page;/s);
+
 const listeners = {};
 const answers = [{open: false}, {open: true}];
 const heading = {tagName: 'H3', previousElementSibling: null, before: group => { wrapper = group; }};

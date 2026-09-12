@@ -1,14 +1,16 @@
 # Change log
 
-## 0.3.0-alpha1 - development
+## 0.3.0-alpha1 - 2026-09-12
 
 - Added continuous course presentation through accessible, visible, course-listed
   LessonMark activities, including explicit slides inside each activity.
 - Added lesson selection, position labels and a persistent fullscreen shell.
 - Restore slide focus after fullscreen requests so arrow navigation works immediately.
 - Refined screen typography, tables, code and focus indicators without changing Markdown source.
+- Use explicit `<!-- slide -->` boundaries as page breaks in browser printing
+  and saved-content PDF export while retaining continuous on-screen reading.
 - Added playlist access/completion tests and cross-lesson browser regression coverage.
-- Release validation is in progress; this is not a production release.
+- This alpha is intended for evaluation before a stable 0.3 release.
 
 ## 0.2.0 - 2026-09-09
 

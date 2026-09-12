@@ -27,7 +27,8 @@ Explain the main idea briefly.
 ````
 
 The same source appears continuously in normal study view. Structural markers
-are omitted in Preview and PDF, but examples inside code fences remain text.
+are omitted from the visible lesson and start a new page in browser printing
+and **Download saved PDF**. Examples inside code fences remain ordinary text.
 Keep each page's Markdown self-contained, including reference-link definitions.
 Ordinary `---` horizontal rules do not split pages. No marker means one page.
 
@@ -104,7 +105,8 @@ included. Save first when the download must contain the latest edit.
 **Download saved PDF** produces a portable reading copy from the same saved
 source. Moodle-managed teaching images are embedded, ANSWER disclosures are
 expanded, and RESPONSE or CHOICE controls become blank printable working
-areas. Browser-local answers and unsaved editor changes are not included.
+areas. Each `<!-- slide -->` boundary starts a new PDF page. Browser-local
+answers and unsaved editor changes are not included.
 Remote images are not fetched into the PDF.
 
 ## Callouts

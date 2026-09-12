@@ -108,4 +108,30 @@ MD;
         $html = $renderer->render($fence . "html\n<!-- slide -->\n" . $fence, $context)->get_content_html();
         $this->assertStringContainsString('slide --', $html);
     }
+
+    /**
+     * Valid slide markers become print-only boundaries without splitting the document.
+     */
+    public function test_slide_marker_print_break_rendering(): void {
+        $renderer = new moodle_markdown_renderer();
+        $context = \context_system::instance();
+        $document = $renderer->render_with_print_breaks(
+            "# First\n\nIntro.\n\n<!-- slide -->\n\n# Second\n\nContinue.",
+            $context
+        );
+        $html = $document->get_content_html();
+
+        $this->assertStringNotContainsString('slide --', $html);
+        $this->assertStringNotContainsString('LESSONMARKPRINTPAGEBREAK', $html);
+        $this->assertSame(1, substr_count($html, 'mod_lessonmark-print-page-break'));
+        $this->assertCount(2, $document->get_toc());
+
+        $fence = str_repeat(chr(96), 3);
+        $html = $renderer->render_with_print_breaks(
+            $fence . "html\n<!-- slide -->\n" . $fence,
+            $context
+        )->get_content_html();
+        $this->assertStringContainsString('slide --', $html);
+        $this->assertStringNotContainsString('mod_lessonmark-print-page-break', $html);
+    }
 }

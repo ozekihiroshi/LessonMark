@@ -65,7 +65,7 @@ $event->add_record_snapshot('lessonmark', $lessonmark);
 $event->trigger();
 
 $renderer = new \mod_lessonmark\local\moodle_markdown_renderer();
-$document = $renderer->render((string) $lessonmark->markdownsource, $context);
+$document = $renderer->render_with_print_breaks((string) $lessonmark->markdownsource, $context);
 $contenthtml = $document->get_content_html();
 $PAGE->requires->js(new moodle_url('/mod/lessonmark/browser-print.js'));
 if ($present) {

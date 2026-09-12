@@ -885,6 +885,11 @@
 }
 
 @media print {
+    .mod_lessonmark-print-page-break {
+        display: block;
+        break-before: page;
+        page-break-before: always;
+    }
     .mod_lessonmark-presentation-controls {
         display: none;
     }
@@ -893,6 +898,9 @@
         display: block;
         overflow: visible;
         max-height: none;
-        break-after: page;
+    }
+    .mod_lessonmark-slide + .mod_lessonmark-slide {
+        break-before: page;
+        page-break-before: always;
     }
 }

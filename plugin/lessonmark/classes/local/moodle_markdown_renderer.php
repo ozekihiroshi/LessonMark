@@ -65,10 +65,41 @@ final class moodle_markdown_renderer implements markdown_renderer_interface {
      * @return rendered_document Rendered document.
      */
     public function render(string $source, \context $context): rendered_document {
+        return $this->render_source($source, $context, false);
+    }
+
+    /**
+     * Renders continuous study content while retaining explicit print page breaks.
+     *
+     * The structural marker itself remains absent from learner-visible HTML. A
+     * neutral element is emitted only at valid slide boundaries, so the browser
+     * and PDF exporter can apply pagination without splitting the Markdown into
+     * independently rendered documents.
+     *
+     * @param string $source Markdown source.
+     * @param \context $context Moodle context.
+     * @return rendered_document Rendered document.
+     */
+    public function render_with_print_breaks(string $source, \context $context): rendered_document {
+        return $this->render_source($source, $context, true);
+    }
+
+    /**
+     * Renders source with optional print-only boundary elements.
+     *
+     * @param string $source Markdown source.
+     * @param \context $context Moodle context.
+     * @param bool $printbreaks Whether slide boundaries become print page breaks.
+     * @return rendered_document Rendered document.
+     */
+    private function render_source(string $source, \context $context, bool $printbreaks): rendered_document {
         if (strlen($source) > self::MAX_SOURCE_BYTES || preg_match('//u', $source) !== 1) {
             throw new \invalid_parameter_exception('Invalid LessonMark source.');
         }
-        $source = implode("\n\n", presentation_source::split($source));
+        $slides = presentation_source::split($source);
+        $sentinel = 'LESSONMARKPRINTPAGEBREAK' . hash('sha256', $source);
+        $separator = $printbreaks ? "\n\n{$sentinel}\n\n" : "\n\n";
+        $source = implode($separator, $slides);
         $normalised = $this->normalizer->neutralise_raw_html($source);
         $html = format_text($normalised, FORMAT_MARKDOWN, [
             'context' => $context,
@@ -80,8 +111,17 @@ final class moodle_markdown_renderer implements markdown_renderer_interface {
         ]);
         $safehtml = clean_text($html, FORMAT_HTML, ['allowid' => false]);
         $document = $this->enhancer->enhance($safehtml);
+        $contenthtml = $document->get_content_html();
+        if ($printbreaks && count($slides) > 1) {
+            $replacement = '<div class="mod_lessonmark-print-page-break" aria-hidden="true"></div>';
+            $contenthtml = preg_replace(
+                '~<p>\s*' . preg_quote($sentinel, '~') . '\s*</p>~',
+                $replacement,
+                $contenthtml
+            ) ?? $contenthtml;
+        }
         $content = content_files::rewrite_urls(
-            $document->get_content_html(),
+            $contenthtml,
             $context,
             $this->draftitemid
         );

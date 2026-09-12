@@ -59,7 +59,7 @@ final class pdf_exporter {
         require_once($CFG->libdir . '/pdflib.php');
 
         $renderer = new moodle_markdown_renderer();
-        $document = $renderer->render((string) $lessonmark->markdownsource, $context);
+        $document = $renderer->render_with_print_breaks((string) $lessonmark->markdownsource, $context);
         $title = format_string($lessonmark->name, true, ['context' => $context]);
         $coursename = format_string($course->fullname, true, ['context' => \context_course::instance($course->id)]);
         $html = $this->prepare_html($document->get_content_html(), $title, $coursename, $context);
@@ -118,6 +118,7 @@ final class pdf_exporter {
         $this->expand_answers($dom, $root);
         $this->replace_response_controls($dom, $root);
         $this->remove_nonprint_controls($root);
+        $this->replace_print_page_breaks($dom, $root);
         $this->localise_images($dom, $root, $context);
         $this->keep_image_headings_together($dom, $root);
         $this->remove_unsafe_links($root);
@@ -277,6 +278,33 @@ final class pdf_exporter {
             foreach (iterator_to_array($notes) as $note) {
                 $note->parentNode?->removeChild($note);
             }
+        }
+    }
+
+    /**
+     * Converts browser print boundaries into TCPDF's explicit page-break form.
+     *
+     * @param \DOMDocument $dom Printable document.
+     * @param \DOMElement $root Printable document root.
+     * @return void
+     */
+    private function replace_print_page_breaks(\DOMDocument $dom, \DOMElement $root): void {
+        $xpath = new \DOMXPath($dom);
+        $breaks = $xpath->query(
+            './/*[contains(concat(" ", normalize-space(@class), " "), '
+                . '" mod_lessonmark-print-page-break ")]',
+            $root
+        );
+        if ($breaks === false) {
+            return;
+        }
+        foreach (iterator_to_array($breaks) as $break) {
+            if (!$break instanceof \DOMElement || !$break->parentNode instanceof \DOMNode) {
+                continue;
+            }
+            $replacement = $dom->createElement('br');
+            $replacement->setAttribute('pagebreak', 'true');
+            $break->parentNode->replaceChild($replacement, $break);
         }
     }
 
